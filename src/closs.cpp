@@ -6,9 +6,9 @@
 
 volatile public_code_t publicCode = 0;
 
-closs_room_error::closs_room_error(const string &__arg) : runtime_error(__arg) {}
+closs_room_error::closs_room_error(const string &arg) : runtime_error(arg) {}
 
-closs_room_error::closs_room_error(const char *__arg) : runtime_error(__arg) {}
+closs_room_error::closs_room_error(const char *arg) : runtime_error(arg) {}
 
 Tile::Tile(TilePos pos, SDL_Surface *img) {
 	m_code = get_public_code();
@@ -23,6 +23,16 @@ SDL_Rect Tile::srcrect() const {
 bool Tile::operator==(const Tile &tile) const {
 	return m_code == tile.m_code;
 }
+
+bool Tile::send_req(SDL_Keycode direction, vector<Tile *> *space) const {
+	for (auto tile: *space) {
+		tile->acq_req({this, direction});
+	}
+}
+
+bool Tile::is_independent() const { return false; }
+
+bool Tile::acq_req(const Tile::Movement_Request &req) const { return true; }
 
 Room::Room(int each, TilePos size) {
 	for (size_t h = 0; h != size.h; h++) {
@@ -69,8 +79,8 @@ void Room::move(TileType tile, const TilePos &dest) {
 	add(tile);
 }
 
-void Room::move(TileType tile, const direction &dir) {
-	auto dest = tile->m_pos + dir_pos_map[dir];
+void Room::move(TileType tile, SDL_Keycode dir) {
+	auto dest = tile->m_pos + key_pos_map[dir];
 	dest.w %= m_size.w;
 	dest.h %= m_size.h;
 	move(tile, dest);
@@ -97,6 +107,10 @@ Space_iter find_tile(SpaceConst space, TileConst tile) {
 
 Cyan::Cyan(TilePos pos, SDL_Surface *m_img) : Tile(pos, m_img) {}
 
+bool Cyan::is_independent() const { return true; }
+
+bool Cyan::acq_req(const Movement_Request &req) const { Tile::acq_req(req); }
+
 TileType construct_undefined(TilePos pos, SDL_Surface *img) {
 	return new Tile(pos, img);
 }
@@ -107,7 +121,7 @@ TileType construct_cyan(TilePos pos, SDL_Surface *img) {
 
 tile_types_map_t tile_type_map = {
 		{tile_undefined, construct_undefined},
-		{tile_cyan, construct_cyan}
+		{tile_cyan,      construct_cyan}
 };
 
 

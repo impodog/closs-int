@@ -13,13 +13,18 @@ extern volatile public_code_t publicCode;
 
 class closs_room_error : public runtime_error {
 public:
-	explicit closs_room_error(const string &__arg);
+	explicit closs_room_error(const string &arg);
 	
-	explicit closs_room_error(const char *__arg);
+	explicit closs_room_error(const char *arg);
 };
+
 
 class Tile {
 public:
+	struct Movement_Request {
+		const Tile *sender;
+		SDL_Keycode direction;
+	};
 	public_code_t m_code;
 	TilePos m_pos;
 	SDL_Surface *m_img;
@@ -29,6 +34,12 @@ public:
 	SDL_Rect srcrect() const;
 	
 	bool operator==(const Tile &tile) const;
+	
+	bool send_req(SDL_Keycode direction, vector<Tile *> *space) const;
+	
+	virtual bool is_independent() const;
+	
+	virtual bool acq_req(const Movement_Request &req) const;
 };
 
 using TileType = Tile *;
@@ -41,6 +52,11 @@ using SpaceConst = const Space *;
 using Lane = vector<SpaceType>;
 using LaneType = Lane *;
 using LaneConst = const Lane *;
+
+struct Movement_Request {
+	TileConst sender;
+	SDL_Keycode direction;
+};
 
 class Room : public vector<vector<SpaceType> *> {
 public:
@@ -59,7 +75,7 @@ public:
 	
 	void move(TileType tile, const TilePos &dest);
 	
-	void move(TileType tile, const direction &dir);
+	void move(TileType tile, SDL_Keycode dir);
 	
 	DisplayPos total_size() const;
 };
@@ -85,6 +101,10 @@ Space::iterator find_tile(SpaceConst space, TileConst tile);
 class Cyan : public Tile {
 public:
 	Cyan(TilePos pos, SDL_Surface *m_img);
+	
+	bool is_independent() const override;
+	
+	bool acq_req(const Movement_Request &req) const override;
 };
 
 TileType construct_undefined(TilePos pos, SDL_Surface *img);

@@ -4,7 +4,7 @@ void do_all_init() {
 	init_default_user();
 	load_user();
 	init_img_map();
-	init_key_down_map();
+	init_key_map();
 }
 
 void do_all_free() {
@@ -13,8 +13,8 @@ void do_all_free() {
 }
 
 int main() {
-	Display display;
 	do_all_init();
+	Display display;
 	auto room = OPEN_CLOSS_ROOM("test.json");
 	display.change_room(room);
 	do {

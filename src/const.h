@@ -40,6 +40,11 @@
 #define KEY_SHIFT_DOWN SDLK_s
 #define KEY_SHIFT_RIGHT SDLK_d
 
+#define KEY_MOVE_UP SDLK_UP
+#define KEY_MOVE_LEFT SDLK_LEFT
+#define KEY_MOVE_DOWN SDLK_DOWN
+#define KEY_MOVE_RIGHT SDLK_RIGHT
+
 using namespace std;
 using namespace chrono;
 using namespace nlohmann;
@@ -61,12 +66,6 @@ struct Pos2D {
 using TilePos = Pos2D<size_t>;
 using DisplayPos = Pos2D<int>;
 
-enum direction {
-	dir_up = 1,
-	dir_left,
-	dir_down,
-	dir_right
-};
-using DirPos_Vec = unordered_map<direction, DisplayPos>;
-extern DirPos_Vec dir_pos_map;
+using key_pos_map_t = unordered_map<SDL_Keycode, DisplayPos>;
+extern key_pos_map_t key_pos_map;
 #endif //CLOSS_INT_CONST_H

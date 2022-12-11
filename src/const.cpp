@@ -4,9 +4,9 @@
 
 #include "const.h"
 
-DirPos_Vec dir_pos_map = {
-		{dir_up,    {-1, 0}},
-		{dir_left,  {0,  -1}},
-		{dir_down,  {1,  0}},
-		{dir_right, {0,  1}}
+key_pos_map_t key_pos_map = {
+		{KEY_MOVE_UP, {0, -1}},
+		{KEY_MOVE_LEFT, {-1, 0}},
+		{KEY_MOVE_DOWN, {0, 1}},
+		{KEY_MOVE_RIGHT, {1, 0}}
 };

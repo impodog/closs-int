@@ -10,7 +10,7 @@
 #undef main
 
 #define ROOM_EACH m_room->m_each
-#define KEY_UP(codes) init_key_down_map(codes)
+#define KEY_UP(codes) init_key_map(codes)
 #define KEY_DOWN(codes) key_down(codes)
 struct img_info {
 	SDL_Texture *texture;
@@ -20,21 +20,24 @@ using img_vec_t = unordered_map<SDL_Surface *, img_info>;
 using key_down_map_t = unordered_map<SDL_Keycode, bool>;
 
 extern key_down_map_t key_down_map;
+extern key_down_map_t key_click_map;
 
-void init_key_down_map();
+void init_key_map();
 
-void init_key_down_map(SDL_Keycode code, ...);
+void init_key_map(SDL_Keycode code, ...);
 
-void init_key_down_map(SDL_Keycode begin, SDL_Keycode end);
+void init_key_map(SDL_Keycode begin, SDL_Keycode end);
 
 void key_down(SDL_Keycode code, ...);
 
-bool key(SDL_Keycode code);
+bool key_d(SDL_Keycode code);
+
+bool key_c(SDL_Keycode code);
 
 class Display {
 public:
 	bool m_loop = true, m_gaming = false;
-	Uint32 m_delay = 30;
+	Uint32 m_delay;
 	double stretch_ratio;
 	system_clock::time_point m_last;
 	
@@ -49,6 +52,8 @@ public:
 	Display();
 	
 	~Display();
+	
+	void apply_settings();
 	
 	void collect_loop_info();
 	
