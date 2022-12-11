@@ -9,17 +9,24 @@
 #define WIDTH 2000
 #define HEIGHT 1125
 
+#define PATH_BEGIN "../"
+#define DEFAULT_JSON "default.json"
+#define USER_JSON "SAVE.json"
+
 #include "iostream"
 #include "vector"
 #include "unordered_map"
 #include "cmath"
 #include "chrono"
+#include "json.hpp"
+#include "fstream"
 #include "SDL.h"
 #include "SDL_image.h"
 #include "SDL_ttf.h"
 
 using namespace std;
 using namespace chrono;
+using namespace nlohmann;
 
 const SDL_Color WHITE{255, 255, 255, 255};
 const SDL_Color BLACK{0, 0, 0, 255};

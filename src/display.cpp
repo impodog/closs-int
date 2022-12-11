@@ -46,8 +46,8 @@ void Display::change_room(RoomType room) {
 }
 
 SDL_Rect Display::tile_rect(const Tile &tile) const {
-	DisplayPos half_rect{(m_each + tile.m_size.w) / 2, (m_each + tile.m_size.h) / 2};
-	return {(int) (m_each * tile.m_pos.w + half_rect.w), (int) (m_each * tile.m_pos.h + half_rect.h),
+	DisplayPos half_rect{(ROOM_EACH + tile.m_size.w) / 2, (ROOM_EACH + tile.m_size.h) / 2};
+	return {(int) (ROOM_EACH * tile.m_pos.w + half_rect.w), (int) (ROOM_EACH * tile.m_pos.h + half_rect.h),
 	        half_rect.w, half_rect.h};
 }
 

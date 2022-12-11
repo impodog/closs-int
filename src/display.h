@@ -5,9 +5,11 @@
 #ifndef CLOSS_INT_DISPLAY_H
 #define CLOSS_INT_DISPLAY_H
 
-#include "closs.h"
+#include "loader.h"
 
 #undef main
+
+#define ROOM_EACH m_room->m_each
 
 class Display {
 public:
@@ -20,7 +22,6 @@ public:
 	SDL_Event event;
 	
 	DisplayPos m_room_pos;
-	int m_each = 50;
 	RoomType m_room;
 	
 	Display();

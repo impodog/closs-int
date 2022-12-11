@@ -38,9 +38,10 @@ using LaneConst = const Lane *;
 
 class Room : vector<vector<SpaceType> *> {
 public:
+	int m_each;
 	TilePos m_size;
 	
-	explicit Room(TilePos size);
+	explicit Room(int each, TilePos size);
 	
 	~Room();
 	

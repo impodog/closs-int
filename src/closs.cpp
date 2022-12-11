@@ -21,7 +21,7 @@ bool Tile::operator==(const Tile &tile) const {
 	return m_code == tile.m_code;
 }
 
-Room::Room(TilePos size) {
+Room::Room(int each, TilePos size) {
 	for (size_t h = 0; h != size.h; h++) {
 		auto lane = new Lane;
 		
@@ -30,18 +30,22 @@ Room::Room(TilePos size) {
 		
 		push_back(lane);
 	}
+	m_each = each;
 	m_size = size;
 }
 
 Room::~Room() {
 	for (size_t h = 0; h != m_size.h; h++) {
 		auto lane = vector::at(h);
+		//cout << "height" << h << " ptr" << lane << endl;
 		for (size_t w = 0; w != m_size.w; w++) {
-			delete *lane->end();
+			//cout << "    width" << w << " ptr" << lane->back() << endl;
+			delete lane->back();
 			lane->pop_back();
 		}
 		delete lane;
 	}
+	//vector::~vector();
 }
 
 SpaceType Room::at(const TilePos &pos) {
