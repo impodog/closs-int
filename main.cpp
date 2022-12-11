@@ -4,6 +4,7 @@ void do_all_init() {
 	init_default_user();
 	load_user();
 	init_img_map();
+	init_key_down_map();
 }
 
 void do_all_free() {

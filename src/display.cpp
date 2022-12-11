@@ -4,6 +4,33 @@
 
 #include "display.h"
 
+key_down_map_t key_down_map;
+
+void init_key_down_map() {
+	init_key_down_map(0, 8, 9, 13, 27);
+	init_key_down_map(32, 64);
+	init_key_down_map(91, 127);
+	init_key_down_map(1073741881, 1073742106);
+}
+
+void init_key_down_map(SDL_Keycode code, ...) {
+	key_down_map[code] = false;
+}
+
+void init_key_down_map(SDL_Keycode begin, SDL_Keycode end) {
+	for (SDL_Keycode i = begin; i != end; i++) {
+		key_down_map[i] = false;
+	}
+}
+
+void key_down(SDL_Keycode code, ...) {
+	key_down_map[code] = true;
+}
+
+bool key(SDL_Keycode code) {
+	return key_down_map[code];
+}
+
 Display::Display() {
 	window = SDL_CreateWindow(TITLE,
 	                          SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
@@ -30,21 +57,16 @@ void Display::collect_loop_info() {
 			m_gaming = m_loop = false;
 			break;
 		case SDL_KEYDOWN:
-			switch (event.key.keysym.sym) {
-				case SDLK_w:
-					m_room_pos.h -= USER_SENSITIVITY;
-					break;
-				case SDLK_a:
-					m_room_pos.w -= USER_SENSITIVITY;
-					break;
-				case SDLK_s:
-					m_room_pos.h += USER_SENSITIVITY;
-					break;
-				case SDLK_d:
-					m_room_pos.w += USER_SENSITIVITY;
-					break;
-			}
+			KEY_DOWN(event.key.keysym.sym);
+			break;
+		case SDL_KEYUP:
+			KEY_UP(event.key.keysym.sym);
+			break;
 	}
+	if (key(KEY_SHIFT_UP)) m_room_pos.h -= USER_SENSITIVITY;
+	if (key(KEY_SHIFT_LEFT)) m_room_pos.w -= USER_SENSITIVITY;
+	if (key(KEY_SHIFT_DOWN)) m_room_pos.h += USER_SENSITIVITY;
+	if (key(KEY_SHIFT_RIGHT)) m_room_pos.w += USER_SENSITIVITY;
 }
 
 void Display::switch_color(const SDL_Color &color) const {
@@ -76,7 +98,7 @@ SDL_Rect Display::get_rect(const SDL_Surface *img, const TilePos &pos) const {
 	DisplayPos double_edge_rect{(int) ((ROOM_EACH - img->w * stretch_ratio)),
 	                            (int) ((ROOM_EACH - img->h * stretch_ratio))};
 	return {(int) ((double) (ROOM_EACH * pos.w + double_edge_rect.w / 2.0 + m_room_pos.w)),
-	        (int) ((double) (ROOM_EACH * pos.h + double_edge_rect.h / 2.0roo + m_room_pos.h)),
+	        (int) ((double) (ROOM_EACH * pos.h + double_edge_rect.h / 2.0d + m_room_pos.h)),
 	        ROOM_EACH - double_edge_rect.w, ROOM_EACH - double_edge_rect.h};
 }
 

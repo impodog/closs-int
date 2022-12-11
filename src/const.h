@@ -5,6 +5,17 @@
 #ifndef CLOSS_INT_CONST_H
 #define CLOSS_INT_CONST_H
 
+#include "iostream"
+#include "vector"
+#include "unordered_map"
+#include "cmath"
+#include "chrono"
+#include "json.hpp"
+#include "fstream"
+#include "SDL.h"
+#include "SDL_image.h"
+#include "SDL_ttf.h"
+
 #define TITLE "Closs : Inside the Tapes"
 #define SCR_WIDTH 2000
 #define SCR_HEIGHT 1125
@@ -24,16 +35,10 @@
 #define ROOM_K_HEIGHT "height"
 #define ROOM_K_CONTENT "content"
 
-#include "iostream"
-#include "vector"
-#include "unordered_map"
-#include "cmath"
-#include "chrono"
-#include "json.hpp"
-#include "fstream"
-#include "SDL.h"
-#include "SDL_image.h"
-#include "SDL_ttf.h"
+#define KEY_SHIFT_UP SDLK_w
+#define KEY_SHIFT_LEFT SDLK_a
+#define KEY_SHIFT_DOWN SDLK_s
+#define KEY_SHIFT_RIGHT SDLK_d
 
 using namespace std;
 using namespace chrono;
