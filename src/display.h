@@ -15,16 +15,22 @@ class Display {
 public:
 	bool m_loop = true, m_gaming = false;
 	Uint32 m_delay = 1 / 30;
+	double stretch_ratio;
 	system_clock::time_point m_last;
 	
 	SDL_Window *window;
 	SDL_Renderer *renderer;
 	SDL_Event event;
 	
+	SDL_Texture *m_background = nullptr;
+	SDL_Rect m_background_srcrect;
+	
 	DisplayPos m_room_pos;
 	RoomType m_room;
 	
 	Display();
+	
+	~Display();
 	
 	void collect_loop_info();
 	
@@ -39,6 +45,8 @@ public:
 	SDL_Rect tile_rect(const Tile &tile) const;
 	
 	void render_copy_tile(const Tile &tile) const;
+	
+	void render_copy_room() const;
 };
 
 

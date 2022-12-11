@@ -1,1 +1,4 @@
-{"unlock": [1, 1]}
+{
+  "unlock": [1, 1],
+  "sensitivity" : 10
+}

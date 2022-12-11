@@ -33,7 +33,7 @@ link_directories(
 
 add_executable(Closs_InT
         main.cpp
-        src/display.cpp src/display.h src/const.cpp src/const.h src/closs.cpp src/closs.h src/loader.cpp src/loader.h)
+        src/display.cpp src/display.h src/const.cpp src/const.h src/closs.cpp src/closs.h src/loader.cpp src/loader.h src/img.cpp src/img.h)
 
 target_link_libraries(Closs_InT
         SDL2

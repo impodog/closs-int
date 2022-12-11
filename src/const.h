@@ -6,12 +6,23 @@
 #define CLOSS_INT_CONST_H
 
 #define TITLE "Closs : Inside the Tapes"
-#define WIDTH 2000
-#define HEIGHT 1125
+#define SCR_WIDTH 2000
+#define SCR_HEIGHT 1125
+#define TILE_BACK_SEP 5
+#define TILE_BACK_SEP2 (2*TILE_BACK_SEP)
+#define STANDARD_EACH 50
 
 #define PATH_BEGIN "../"
 #define DEFAULT_JSON "default.json"
 #define USER_JSON "SAVE.json"
+#define ROOMS_PATH PATH_BEGIN "rooms/"
+#define CLOSS_ROOMS_PATH ROOMS_PATH "Closs/"
+#define IMG_PATH PATH_BEGIN "img/"
+
+#define ROOM_K_EACH "each"
+#define ROOM_K_WIDTH "width"
+#define ROOM_K_HEIGHT "height"
+#define ROOM_K_CONTENT "content"
 
 #include "iostream"
 #include "vector"
@@ -30,6 +41,7 @@ using namespace nlohmann;
 
 const SDL_Color WHITE{255, 255, 255, 255};
 const SDL_Color BLACK{0, 0, 0, 255};
+const SDL_Color TILE_BACK_COLOR{100, 100, 100, 255};
 
 template<typename T1>
 struct Pos2D {

@@ -6,11 +6,14 @@
 
 volatile public_code_t publicCode = 0;
 
-Tile::Tile(const TilePos &pos, SDL_Surface *img, DisplayPos size) {
+closs_room_error::closs_room_error(const string &__arg) : runtime_error(__arg) {}
+
+closs_room_error::closs_room_error(const char *__arg) : runtime_error(__arg) {}
+
+Tile::Tile(TilePos pos, SDL_Surface *img) {
 	m_code = get_public_code();
 	m_pos = pos;
 	m_img = img;
-	m_size = size;
 }
 
 SDL_Rect Tile::srcrect() const {
@@ -35,17 +38,16 @@ Room::Room(int each, TilePos size) {
 }
 
 Room::~Room() {
-	for (size_t h = 0; h != m_size.h; h++) {
-		auto lane = vector::at(h);
-		//cout << "height" << h << " ptr" << lane << endl;
-		for (size_t w = 0; w != m_size.w; w++) {
-			//cout << "    width" << w << " ptr" << lane->back() << endl;
-			delete lane->back();
-			lane->pop_back();
+	for (auto lane: *this) {
+		for (auto space: *lane) {
+			for (auto tile: *space) {
+				delete tile;
+			}
+			delete space;
 		}
 		delete lane;
 	}
-	//vector::~vector();
+	clear();
 }
 
 SpaceType Room::at(const TilePos &pos) {
@@ -74,6 +76,10 @@ void Room::move(TileType tile, const direction &dir) {
 	move(tile, dest);
 }
 
+DisplayPos Room::total_size() const {
+	return {(int) (m_each * m_size.w), (int) (m_each * m_size.h)};
+}
+
 public_code_t get_public_code() {
 	return publicCode++;
 }
@@ -88,3 +94,11 @@ Space_iter find_tile(SpaceConst space, TileConst tile) {
 	}
 	throw out_of_range("No such tile found in space");
 }
+
+TileType construct_undefined(TilePos pos, SDL_Surface *img) {
+	return new Tile(pos, img);
+}
+
+tile_types_map_t tile_type_map = {
+		{tile_undefined, construct_undefined}
+};

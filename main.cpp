@@ -1,19 +1,32 @@
 #include "src/display.h"
 
-int main() {
-	Display display;
-	auto room = new Room(50, {5, 4});
+void do_all_init() {
 	init_default_user();
 	load_user();
+	init_img_map();
+}
+
+void do_all_free() {
+	save_user();
+	free_img_map();
+}
+
+int main() {
+	Display display;
+	do_all_init();
+	auto room = OPEN_CLOSS_ROOM("test.json");
+	display.change_room(room);
 	do {
 		display.switch_color_fill(BLACK);
 		
 		display.collect_loop_info();
 		
+		display.render_copy_room();
+		
 		display.present();
 	} while (display.m_loop);
-	save_user();
-	delete room;
+	close_room(room);
+	do_all_free();
 	return 0;
 }
 /*
