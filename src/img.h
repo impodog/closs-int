@@ -17,4 +17,6 @@ void free_img_map();
 
 void set_white_as_colorkey(SDL_Surface *surface, ...);
 
+SDL_Rect get_srcrect(const SDL_Surface *surface);
+
 #endif //CLOSS_INT_IMG_H

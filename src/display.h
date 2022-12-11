@@ -10,6 +10,11 @@
 #undef main
 
 #define ROOM_EACH m_room->m_each
+struct img_info {
+	SDL_Texture *texture;
+	SDL_Rect srcrect;
+};
+using img_vec_t = unordered_map<SDL_Surface *, img_info>;
 
 class Display {
 public:
@@ -22,9 +27,7 @@ public:
 	SDL_Renderer *renderer;
 	SDL_Event event;
 	
-	SDL_Texture *m_background = nullptr;
-	SDL_Rect m_background_srcrect;
-	
+	img_vec_t img_vec;
 	DisplayPos m_room_pos;
 	RoomType m_room;
 	
@@ -44,9 +47,17 @@ public:
 	
 	SDL_Rect tile_rect(const Tile &tile) const;
 	
-	void render_copy_tile(const Tile &tile) const;
+	SDL_Rect get_rect(const SDL_Surface *img, const TilePos &pos) const;
 	
-	void render_copy_room() const;
+	void render_copy_tile(const Tile &tile);
+	
+	void render_copy_img(SDL_Surface *img, const TilePos &pos);
+	
+	void render_copy_room();
+	
+	void clear_img_vec();
+	
+	img_info &find_info(SDL_Surface *surface);
 };
 
 

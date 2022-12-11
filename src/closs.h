@@ -65,8 +65,10 @@ public:
 };
 
 enum tile_types {
-	tile_undefined = -1,
-	tile_empty = 0
+	tile_background = -2,
+	tile_undefined,
+	tile_empty,
+	tile_cyan
 };
 
 using RoomType = Room *;
@@ -80,7 +82,14 @@ public_code_t get_public_code();
 
 Space::iterator find_tile(SpaceConst space, TileConst tile);
 
+class Cyan : public Tile {
+public:
+	Cyan(TilePos pos, SDL_Surface *m_img);
+};
+
 TileType construct_undefined(TilePos pos, SDL_Surface *img);
+
+TileType construct_cyan(TilePos pos, SDL_Surface *img);
 
 
 #endif //CLOSS_INT_CLOSS_H

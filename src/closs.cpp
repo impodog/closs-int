@@ -95,10 +95,20 @@ Space_iter find_tile(SpaceConst space, TileConst tile) {
 	throw out_of_range("No such tile found in space");
 }
 
+Cyan::Cyan(TilePos pos, SDL_Surface *m_img) : Tile(pos, m_img) {}
+
 TileType construct_undefined(TilePos pos, SDL_Surface *img) {
 	return new Tile(pos, img);
 }
 
+TileType construct_cyan(TilePos pos, SDL_Surface *img) {
+	return new Cyan(pos, img);
+}
+
 tile_types_map_t tile_type_map = {
-		{tile_undefined, construct_undefined}
+		{tile_undefined, construct_undefined},
+		{tile_cyan, construct_cyan}
 };
+
+
+

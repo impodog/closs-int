@@ -61,47 +61,64 @@ void Display::present() const {
 }
 
 void Display::change_room(RoomType room) {
-	auto total_size = room->total_size();
-	m_background_srcrect = {0, 0, total_size.w, total_size.h};
 	m_room = room;
+	auto total_size = m_room->total_size();
 	m_room_pos = {0, 0};
-	// draw m_background
-	if (m_background != nullptr) SDL_DestroyTexture(m_background);
-	auto background_surf = SDL_CreateRGBSurface(SDL_SWSURFACE, total_size.w, total_size.h, 32, 0, 0, 0, 0);
-	auto color = SDL_MapRGB(background_surf->format, TILE_BACK_COLOR.r, TILE_BACK_COLOR.g, TILE_BACK_COLOR.b);
-	for (size_t h = 0; h != m_room->m_size.h; h++) {
-		for (size_t w = 0; w != m_room->m_size.w; w++) {
-			cout << "w" << w << "h" << h << endl;
-			SDL_Rect current = {(int) (ROOM_EACH * w - TILE_BACK_SEP), (int) (ROOM_EACH * h - TILE_BACK_SEP),
-			                    ROOM_EACH - TILE_BACK_SEP2, ROOM_EACH - TILE_BACK_SEP2};
-		}
-	}
-	m_background = SDL_CreateTextureFromSurface(renderer, background_surf);
 	stretch_ratio = (double) (m_room->m_each) / STANDARD_EACH / 1.5;
+	clear_img_vec();
 }
 
 SDL_Rect Display::tile_rect(const Tile &tile) const {
-	DisplayPos half_rect{(int) ((ROOM_EACH + tile.m_img->w * stretch_ratio) / 2),
-	                     (int) ((ROOM_EACH + tile.m_img->h * stretch_ratio) / 2)};
-	return {(int) ((double) (ROOM_EACH * tile.m_pos.w + half_rect.w + m_room_pos.w)),
-	        (int) ((double) (ROOM_EACH * tile.m_pos.h + half_rect.h + m_room_pos.h)),
-	        half_rect.w, half_rect.h};
+	return get_rect(tile.m_img, tile.m_pos);
 }
 
-void Display::render_copy_tile(const Tile &tile) const {
-	SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, tile.m_img);
-	SDL_Rect srcrect = tile.srcrect(), dstrect = tile_rect(tile);
-	SDL_RenderCopy(renderer, texture, &srcrect, &dstrect);
+SDL_Rect Display::get_rect(const SDL_Surface *img, const TilePos &pos) const {
+	DisplayPos double_edge_rect{(int) ((ROOM_EACH - img->w * stretch_ratio)),
+	                            (int) ((ROOM_EACH - img->h * stretch_ratio))};
+	return {(int) ((double) (ROOM_EACH * pos.w + double_edge_rect.w / 2.0 + m_room_pos.w)),
+	        (int) ((double) (ROOM_EACH * pos.h + double_edge_rect.h / 2.0roo + m_room_pos.h)),
+	        ROOM_EACH - double_edge_rect.w, ROOM_EACH - double_edge_rect.h};
 }
 
-void Display::render_copy_room() const {
-	SDL_Rect dstrect = {m_room_pos.w, m_room_pos.h, m_background_srcrect.w, m_background_srcrect.h};
-	SDL_RenderCopy(renderer, m_background, &m_background_srcrect, &dstrect);
+void Display::render_copy_tile(const Tile &tile) {
+	render_copy_img(tile.m_img, tile.m_pos);
+}
+
+void Display::render_copy_img(SDL_Surface *img, const TilePos &pos) {
+	auto info = find_info(img);
+	SDL_Rect dstrect = get_rect(img, pos);
+	SDL_RenderCopy(renderer, info.texture, &info.srcrect, &dstrect);
+}
+
+void Display::render_copy_room() {
+	size_t w, h = 0;
 	for (const auto &lane: *m_room) {
+		w = 0;
 		for (const auto &space: *lane) {
+			render_copy_img(types_img_map[tile_background], {w, h});
 			for (const auto &tile: *space) {
 				render_copy_tile(*tile);
 			}
+			w++;
 		}
+		h++;
 	}
 }
+
+void Display::clear_img_vec() {
+	if (!img_vec.empty()) {
+		for (auto pair: img_vec) {
+			SDL_DestroyTexture(pair.second.texture);
+		}
+		img_vec.clear();
+	}
+}
+
+img_info &Display::find_info(SDL_Surface *surface) {
+	try {
+		return img_vec.at(surface);
+	} catch (const out_of_range &) {
+		return (img_vec[surface] = {SDL_CreateTextureFromSurface(renderer, surface), get_srcrect(surface)});
+	}
+}
+

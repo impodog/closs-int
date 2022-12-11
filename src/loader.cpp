@@ -76,6 +76,7 @@ RoomType json_to_room(const json &room_json) {
 			// read the code
 			for (int code: json_space) {
 				if (code) {
+					if (code <= -2) throw closs_room_error("codes <= -2 shouldn't be used in level jsons");
 					auto type_code = (tile_types) code;
 					try {
 						space->push_back(
