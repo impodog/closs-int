@@ -5,8 +5,10 @@
 #ifndef CLOSS_INT_CONST_H
 #define CLOSS_INT_CONST_H
 
+#include <utility>
 #include "iostream"
 #include "vector"
+#include "map"
 #include "unordered_map"
 #include "cmath"
 #include "chrono"
@@ -33,6 +35,8 @@
 #define ROOM_K_EACH "each"
 #define ROOM_K_WIDTH "width"
 #define ROOM_K_HEIGHT "height"
+#define ROOM_K_TITLE "title"
+#define ROOM_K_INTRO "intro"
 #define ROOM_K_CONTENT "content"
 
 #define KEY_SHIFT_UP SDLK_w
@@ -44,6 +48,8 @@
 #define KEY_MOVE_LEFT SDLK_LEFT
 #define KEY_MOVE_DOWN SDLK_DOWN
 #define KEY_MOVE_RIGHT SDLK_RIGHT
+
+#define MOVEMENT_KEYS {KEY_MOVE_UP,KEY_MOVE_LEFT,KEY_MOVE_DOWN,KEY_MOVE_RIGHT}
 
 using namespace std;
 using namespace chrono;
@@ -66,6 +72,13 @@ struct Pos2D {
 using TilePos = Pos2D<size_t>;
 using DisplayPos = Pos2D<int>;
 
+using c_str = const char *;
+struct title_content {
+	string title, content;
+};
+using intro_map_t = map<title_content, size_t>;
+
 using key_pos_map_t = unordered_map<SDL_Keycode, DisplayPos>;
 extern key_pos_map_t key_pos_map;
+
 #endif //CLOSS_INT_CONST_H

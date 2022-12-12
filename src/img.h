@@ -9,7 +9,22 @@
 
 using types_img_map_t = unordered_map<tile_types, SDL_Surface *>;
 
+using FontType = TTF_Font *;
+
+using Font_Map = unordered_map<int, FontType>;
+
+class Font_Family : public Font_Map {
+private:
+	string m_file;
+public:
+	explicit Font_Family(string file);
+	
+	FontType at(int size);
+};
+
 extern types_img_map_t types_img_map;
+
+extern Font_Family arial;
 
 void init_img_map();
 

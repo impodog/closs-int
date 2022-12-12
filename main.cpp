@@ -22,7 +22,10 @@ int main() {
 		
 		display.collect_loop_info();
 		
+		display.play_room();
+		
 		display.render_copy_room();
+		
 		
 		display.present();
 	} while (display.m_loop);

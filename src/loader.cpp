@@ -42,7 +42,7 @@ RoomType open_room(const string &room_path) {
 }
 
 int get_default_each(size_t w, size_t h) {
-	return (int) min(SCR_WIDTH / w, SCR_HEIGHT / h);
+	return max((int) min(SCR_WIDTH / w, SCR_HEIGHT / h), 20);
 }
 
 RoomType json_to_room(const json &room_json) {

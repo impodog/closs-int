@@ -17,7 +17,6 @@ struct img_info {
 	SDL_Rect srcrect;
 };
 using img_vec_t = unordered_map<SDL_Surface *, img_info>;
-using key_down_map_t = unordered_map<SDL_Keycode, bool>;
 
 extern key_down_map_t key_down_map;
 extern key_down_map_t key_click_map;
@@ -56,6 +55,8 @@ public:
 	void apply_settings();
 	
 	void collect_loop_info();
+	
+	void play_room();
 	
 	void switch_color(const SDL_Color &color) const;
 	

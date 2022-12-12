@@ -42,7 +42,7 @@ Display::Display() {
 	window = SDL_CreateWindow(TITLE,
 	                          SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
 	                          SCR_WIDTH, SCR_HEIGHT,
-	                          SDL_WINDOW_MAXIMIZED);
+	                          0);
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 	apply_settings();
 	collect_loop_info();
@@ -77,8 +77,13 @@ void Display::collect_loop_info() {
 	}
 	if (key_d(KEY_SHIFT_UP)) m_room_pos.h -= USER_SENSITIVITY;
 	if (key_d(KEY_SHIFT_LEFT)) m_room_pos.w -= USER_SENSITIVITY;
-	if (key_c(KEY_SHIFT_DOWN)) m_room_pos.h += USER_SENSITIVITY;
+	if (key_d(KEY_SHIFT_DOWN)) m_room_pos.h += USER_SENSITIVITY;
 	if (key_d(KEY_SHIFT_RIGHT)) m_room_pos.w += USER_SENSITIVITY;
+}
+
+void Display::play_room() {
+	m_room->move_independents(key_c);
+	m_room->do_pending_moves();
 }
 
 void Display::switch_color(const SDL_Color &color) const {
@@ -155,5 +160,6 @@ img_info &Display::find_info(SDL_Surface *surface) {
 		return (img_vec[surface] = {SDL_CreateTextureFromSurface(renderer, surface), get_srcrect(surface)});
 	}
 }
+
 
 

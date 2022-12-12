@@ -6,6 +6,20 @@
 
 types_img_map_t types_img_map;
 
+Font_Family::Font_Family(string file) {
+	m_file = std::move(file);
+}
+
+FontType Font_Family::at(int size) {
+	try {
+		return Font_Map::at(size);
+	} catch (const out_of_range &) {
+		return ((*this)[size] = TTF_OpenFont(m_file.c_str(), size));
+	}
+}
+
+Font_Family arial("arial");
+
 void init_img_map() {
 	IMG_Init(IMG_INIT_PNG);
 	
