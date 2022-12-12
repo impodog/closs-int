@@ -65,8 +65,8 @@ class Room : public vector<vector<SpaceType> *> {
 public:
 	int m_each;
 	
-	string title;
-	intro_map_t intro_map;
+	string m_title;
+	help_map_t m_help_map;
 	
 	TilePos m_size;
 	pending_movements_t m_pending;
@@ -102,7 +102,9 @@ enum tile_types {
 	tile_background = -2,
 	tile_undefined,
 	tile_empty,
-	tile_cyan
+	tile_cyan,
+	tile_box,
+	tile_box2
 };
 
 using RoomType = Room *;
@@ -129,9 +131,14 @@ public:
 	direction_t respond_keys(key_predicate_t predicate) const override;
 };
 
-TileType construct_undefined(TilePos pos, SDL_Surface *img);
-
-TileType construct_cyan(TilePos pos, SDL_Surface *img);
+class Box : public Tile {
+public:
+	Box(TilePos pos, SDL_Surface *m_img);
+	
+	bool is_independent() const override;
+	
+	direction_t acq_req(const Movement_Request &req) const override;
+};
 
 
 #endif //CLOSS_INT_CLOSS_H

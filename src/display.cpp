@@ -5,6 +5,7 @@
 #include "display.h"
 
 key_down_map_t key_down_map;
+key_down_map_t key_clicking_map;
 key_down_map_t key_click_map;
 
 void init_key_map() {
@@ -12,30 +13,35 @@ void init_key_map() {
 	init_key_map(32, 64);
 	init_key_map(91, 127);
 	init_key_map(1073741881, 1073742106);
+	key_click_map = key_down_map_t(key_down_map);
 }
 
-void init_key_map(SDL_Keycode code, ...) {
-	key_down_map[code] = key_click_map[code] = false;
+void init_key_map(direction_t code, ...) {
+	key_down_map[code] = key_clicking_map[code] = false;
 }
 
-void init_key_map(SDL_Keycode begin, SDL_Keycode end) {
-	for (SDL_Keycode i = begin; i != end; i++) {
-		key_down_map[i] = key_click_map[i] = false;
+void init_key_map(direction_t begin, direction_t end) {
+	for (direction_t i = begin; i != end; i++) {
+		key_down_map[i] = key_clicking_map[i] = false;
 	}
 }
 
-void key_down(SDL_Keycode code, ...) {
-	key_click_map[code] = key_down_map[code];
+void key_down(direction_t code, ...) {
+	key_clicking_map[code] = key_down_map[code];
 	key_down_map[code] = true;
 }
 
-bool key_d(SDL_Keycode code) {
+bool key_d(direction_t code) {
 	return key_down_map[code];
 }
 
-bool key_c(SDL_Keycode code) {
-	auto click = key_click_map[code];
-	return (key_click_map[code] = key_down_map[code]) != click;
+bool key_clicking(direction_t code) {
+	auto click = key_clicking_map[code];
+	return (key_clicking_map[code] = key_down_map[code]) != click;
+}
+
+bool key_c(direction_t code) {
+	return key_click_map.at(code);
 }
 
 Display::Display() {
@@ -75,13 +81,17 @@ void Display::collect_loop_info() {
 			KEY_UP(event.key.keysym.sym);
 			break;
 	}
+	refresh_key_m();
+}
+
+void Display::play_room() {
 	if (key_d(KEY_SHIFT_UP)) m_room_pos.h -= USER_SENSITIVITY;
 	if (key_d(KEY_SHIFT_LEFT)) m_room_pos.w -= USER_SENSITIVITY;
 	if (key_d(KEY_SHIFT_DOWN)) m_room_pos.h += USER_SENSITIVITY;
 	if (key_d(KEY_SHIFT_RIGHT)) m_room_pos.w += USER_SENSITIVITY;
-}
-
-void Display::play_room() {
+	
+	move_room_to_visible();
+	
 	m_room->move_independents(key_c);
 	m_room->do_pending_moves();
 }
@@ -102,7 +112,10 @@ void Display::present() const {
 void Display::change_room(RoomType room) {
 	m_room = room;
 	auto total_size = m_room->total_size();
+	DisplayPos m_room_edge = {SCR_WIDTH - total_size.w, SCR_HEIGHT - total_size.h};
 	m_room_pos = {0, 0};
+	m_room_min = {min(m_room_edge.w, 0), min(m_room_edge.h, 0)};
+	m_room_max = {max(m_room_edge.w, 0), max(m_room_edge.h, 0)};
 	stretch_ratio = (double) (m_room->m_each) / STANDARD_EACH / 1.5;
 	clear_img_vec();
 }
@@ -158,6 +171,17 @@ img_info &Display::find_info(SDL_Surface *surface) {
 		return img_vec.at(surface);
 	} catch (const out_of_range &) {
 		return (img_vec[surface] = {SDL_CreateTextureFromSurface(renderer, surface), get_srcrect(surface)});
+	}
+}
+
+void Display::move_room_to_visible() {
+	m_room_pos.w = min(max(m_room_pos.w, m_room_min.w), m_room_max.w);
+	m_room_pos.h = min(max(m_room_pos.h, m_room_min.h), m_room_max.h);
+}
+
+void Display::refresh_key_m() {
+	for (auto pair: key_click_map) {
+		key_click_map[pair.first] = key_clicking(pair.first);
 	}
 }
 

@@ -42,7 +42,7 @@ RoomType open_room(const string &room_path) {
 }
 
 int get_default_each(size_t w, size_t h) {
-	return max((int) min(SCR_WIDTH / w, SCR_HEIGHT / h), 20);
+	return max((int) min(SCR_WIDTH / w, SCR_HEIGHT / h), MIN_EACH);
 }
 
 RoomType json_to_room(const json &room_json) {
@@ -59,6 +59,7 @@ RoomType json_to_room(const json &room_json) {
 	try {
 		each = room_json.at(ROOM_K_EACH);
 		if (each == -1) throw out_of_range("user explicitly using default \"each\" value");
+		else if (each < MIN_EACH) throw closs_room_error("room \"each\" shouldn't be lower than " + to_string(MIN_EACH));
 	} catch
 			(const out_of_range &) {
 		each = get_default_each(w, h);

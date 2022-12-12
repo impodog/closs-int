@@ -24,22 +24,28 @@ void init_img_map() {
 	IMG_Init(IMG_INIT_PNG);
 	
 	// load graphics
-	auto img_tile_background = IMG_Load(IMG_PATH "tile_background.png");
-	auto img_undefined = IMG_Load(IMG_PATH "undefined.png");
-	auto img_cyan = IMG_Load(IMG_PATH "cyan.png");
+	auto img_tile_background = IMG_Load(IMG_PATH "tile_background.png"),
+			img_undefined = IMG_Load(IMG_PATH "undefined.png"),
+			img_cyan = IMG_Load(IMG_PATH "cyan.png"),
+			img_box = IMG_Load(IMG_PATH "box.png"),
+			img_box2 = IMG_Load(IMG_PATH "box2.png");
 	// old graphics
 	auto img_old_box = IMG_Load(IMG_PATH "old_box.png");
 	
 	// set color keys
 	set_white_as_colorkey(
 			img_undefined,
-			img_old_box
+			img_old_box,
+			img_box,
+			img_box2
 	);
 	
 	// put into image map
 	types_img_map[tile_background] = img_tile_background;
 	types_img_map[tile_undefined] = img_undefined;
 	types_img_map[tile_cyan] = img_cyan;
+	types_img_map[tile_box] = img_box;
+	types_img_map[tile_box2] = img_box2;
 }
 
 void free_img_map() {

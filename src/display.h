@@ -19,6 +19,7 @@ struct img_info {
 using img_vec_t = unordered_map<SDL_Surface *, img_info>;
 
 extern key_down_map_t key_down_map;
+extern key_down_map_t key_clicking_map;
 extern key_down_map_t key_click_map;
 
 void init_key_map();
@@ -31,7 +32,7 @@ void key_down(SDL_Keycode code, ...);
 
 bool key_d(SDL_Keycode code);
 
-bool key_c(SDL_Keycode code);
+bool key_clicking(SDL_Keycode code);
 
 class Display {
 public:
@@ -45,7 +46,7 @@ public:
 	SDL_Event event;
 	
 	img_vec_t img_vec;
-	DisplayPos m_room_pos;
+	DisplayPos m_room_pos, m_room_min, m_room_max;
 	RoomType m_room;
 	
 	Display();
@@ -77,6 +78,10 @@ public:
 	void render_copy_room();
 	
 	void clear_img_vec();
+	
+	void move_room_to_visible();
+	
+	static void refresh_key_m();
 	
 	img_info &find_info(SDL_Surface *surface);
 };

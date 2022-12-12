@@ -24,6 +24,7 @@
 #define TILE_BACK_SEP 5
 #define TILE_BACK_SEP2 (2*TILE_BACK_SEP)
 #define STANDARD_EACH 50
+#define MIN_EACH 128
 
 #define PATH_BEGIN "../"
 #define DEFAULT_JSON "default.json"
@@ -35,8 +36,8 @@
 #define ROOM_K_EACH "each"
 #define ROOM_K_WIDTH "width"
 #define ROOM_K_HEIGHT "height"
-#define ROOM_K_TITLE "title"
-#define ROOM_K_INTRO "intro"
+#define ROOM_K_TITLE "m_title"
+#define ROOM_K_HELP "help"
 #define ROOM_K_CONTENT "content"
 
 #define KEY_SHIFT_UP SDLK_w
@@ -73,10 +74,10 @@ using TilePos = Pos2D<size_t>;
 using DisplayPos = Pos2D<int>;
 
 using c_str = const char *;
-struct title_content {
+struct title_with_content {
 	string title, content;
 };
-using intro_map_t = map<title_content, size_t>;
+using help_map_t = map<title_with_content, size_t>;
 
 using key_pos_map_t = unordered_map<SDL_Keycode, DisplayPos>;
 extern key_pos_map_t key_pos_map;

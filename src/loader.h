@@ -6,7 +6,7 @@
 #define CLOSS_INT_LOADER_H
 
 #define OPEN_CLOSS_ROOM(path) open_room("Closs/" path)
-#define USER_SENSITIVITY (int)((int)current_user.at("sensitivity") * stretch_ratio)
+#define USER_SENSITIVITY (int)((int)current_user.at("sensitivity"))
 
 #include "img.h"
 

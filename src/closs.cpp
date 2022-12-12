@@ -156,12 +156,23 @@ Cyan::Cyan(TilePos pos, SDL_Surface *m_img) : Tile(pos, m_img) {}
 
 bool Cyan::is_independent() const { return true; }
 
+
 direction_t Cyan::acq_req(const Movement_Request &req) const { return Tile::acq_req(req); }
 
 direction_t Cyan::respond_keys(key_predicate_t predicate) const {
 	auto pending = find_keys(predicate, MOVEMENT_KEYS);
 	if (pending.empty()) return 0;
 	return pending[0];
+}
+
+Box::Box(TilePos pos, SDL_Surface *m_img) : Tile(pos, m_img) {}
+
+bool Box::is_independent() const {
+	return Tile::is_independent();
+}
+
+direction_t Box::acq_req(const Movement_Request &req) const {
+	return req.direction;
 }
 
 TileType construct_undefined(TilePos pos, SDL_Surface *img) {
@@ -172,11 +183,14 @@ TileType construct_cyan(TilePos pos, SDL_Surface *img) {
 	return new Cyan(pos, img);
 }
 
+TileType construct_box(TilePos pos, SDL_Surface *img) {
+	return new Box(pos, img);
+}
+
 tile_types_map_t tile_type_map = {
 		{tile_undefined, construct_undefined},
-		{tile_cyan,      construct_cyan}
+		{tile_cyan,      construct_cyan},
+		{tile_box,       construct_box}
 };
-
-
 
 
