@@ -30,7 +30,7 @@ void init_img_map();
 
 void free_img_map();
 
-void set_white_as_colorkey(SDL_Surface *surface, ...);
+void set_white_as_colorkey(const vector<SDL_Surface *> &surfaces);
 
 SDL_Rect get_srcrect(const SDL_Surface *surface);
 

@@ -33,12 +33,12 @@ void init_img_map() {
 	auto img_old_box = IMG_Load(IMG_PATH "old_box.png");
 	
 	// set color keys
-	set_white_as_colorkey(
-			img_undefined,
-			img_old_box,
-			img_box,
-			img_box2
-	);
+	set_white_as_colorkey({
+			                      img_undefined,
+			                      img_old_box,
+			                      img_box,
+			                      img_box2
+	                      });
 	
 	// put into image map
 	types_img_map[tile_background] = img_tile_background;
@@ -54,8 +54,9 @@ void free_img_map() {
 	types_img_map.clear();
 }
 
-void set_white_as_colorkey(SDL_Surface *surface, ...) {
-	SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format, 255, 255, 255));
+void set_white_as_colorkey(const vector<SDL_Surface *>& surfaces) {
+	for (auto surface: surfaces)
+		SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format, 255, 255, 255));
 }
 
 SDL_Rect get_srcrect(const SDL_Surface *surface) {
