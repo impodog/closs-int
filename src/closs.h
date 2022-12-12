@@ -64,6 +64,8 @@ using pending_movements_t = unordered_map<TileType, TilePos>;
 class Room : public vector<vector<SpaceType> *> {
 public:
 	int m_each;
+	size_t steps = 0;
+	bool is_winning = false;
 	
 	string m_title;
 	help_map_t m_help_map;
@@ -104,7 +106,7 @@ enum tile_types {
 	tile_empty,
 	tile_cyan,
 	tile_box,
-	tile_box2
+	tile_wall
 };
 
 using RoomType = Room *;
@@ -134,6 +136,15 @@ public:
 class Box : public Tile {
 public:
 	Box(TilePos pos, SDL_Surface *m_img);
+	
+	bool is_independent() const override;
+	
+	direction_t acq_req(const Movement_Request &req) const override;
+};
+
+class Wall : public Tile {
+public:
+	Wall(TilePos pos, SDL_Surface *m_img);
 	
 	bool is_independent() const override;
 	

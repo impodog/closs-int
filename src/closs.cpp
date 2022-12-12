@@ -82,8 +82,8 @@ bool Room::send_req_from(TileType tile, direction_t dir) {
 	Movement_Request req = {tile, dir};
 	for (auto dest_tile: *space) {
 		direction_t dest_dir = dest_tile->acq_req(req);
-		if (dest_dir > 0) send_req_from(dest_tile, dest_dir);
-		else if (dest_dir < 0) result = false;
+		if (dest_dir > 0) result &= send_req_from(dest_tile, dest_dir);
+		else if (result && dest_dir < 0) result = false;
 	}
 	if (result) pending_move(tile, dir);
 	return result;
@@ -115,12 +115,19 @@ DisplayPos Room::total_size() const {
 }
 
 void Room::move_independents(key_predicate_t predicate) {
+	bool next_step_flag = true;
 	for (auto lane: *this) {
 		for (auto space: *lane) {
 			for (auto tile: *space) {
 				if (tile->is_independent()) {
 					auto dir = tile->respond_keys(predicate);
-					if (dir > 0) send_req_from(tile, dir);
+					if (dir > 0) {
+						send_req_from(tile, dir);
+						if (next_step_flag) {
+							next_step_flag = false;
+							steps++;
+						}
+					}
 				}
 			}
 		}
@@ -175,6 +182,17 @@ direction_t Box::acq_req(const Movement_Request &req) const {
 	return req.direction;
 }
 
+Wall::Wall(TilePos pos, SDL_Surface *m_img) : Tile(pos, m_img) {}
+
+bool Wall::is_independent() const {
+	return Tile::is_independent();
+}
+
+direction_t Wall::acq_req(const Movement_Request &req) const {
+	return -1;
+}
+
+
 TileType construct_undefined(TilePos pos, SDL_Surface *img) {
 	return new Tile(pos, img);
 }
@@ -187,10 +205,15 @@ TileType construct_box(TilePos pos, SDL_Surface *img) {
 	return new Box(pos, img);
 }
 
+TileType construct_wall(TilePos pos, SDL_Surface *img) {
+	return new Wall(pos, img);
+}
+
 tile_types_map_t tile_type_map = {
 		{tile_undefined, construct_undefined},
 		{tile_cyan,      construct_cyan},
-		{tile_box,       construct_box}
+		{tile_box,       construct_box},
+		{tile_wall,      construct_wall}
 };
 
 
