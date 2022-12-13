@@ -94,6 +94,7 @@ void Display::play_room() {
 	
 	m_room->move_independents(key_c);
 	m_room->do_pending_moves();
+	m_room->end_of_step();
 }
 
 void Display::switch_color(const SDL_Color &color) const {

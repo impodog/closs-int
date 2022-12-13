@@ -29,6 +29,7 @@ void init_img_map() {
 			img_cyan = IMG_Load(IMG_PATH "cyan.png"),
 			img_box = IMG_Load(IMG_PATH "box.png"),
 			img_wall = IMG_Load(IMG_PATH "wall.png"),
+			img_dest = IMG_Load(IMG_PATH "dest.png"),
 			img_box2 = IMG_Load(IMG_PATH "box2.png");
 	// old graphics
 	auto img_old_box = IMG_Load(IMG_PATH "old_box.png");
@@ -39,6 +40,7 @@ void init_img_map() {
 			                      img_old_box,
 			                      img_box,
 			                      img_wall,
+			                      img_dest,
 			                      img_box2
 	                      });
 	
@@ -48,6 +50,7 @@ void init_img_map() {
 	types_img_map[tile_cyan] = img_cyan;
 	types_img_map[tile_box] = img_box;
 	types_img_map[tile_wall] = img_wall;
+	types_img_map[tile_destination] = img_dest;
 }
 
 void free_img_map() {

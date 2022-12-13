@@ -36,7 +36,7 @@
 #define ROOM_K_EACH "each"
 #define ROOM_K_WIDTH "width"
 #define ROOM_K_HEIGHT "height"
-#define ROOM_K_TITLE "m_title"
+#define ROOM_K_TITLE "title"
 #define ROOM_K_HELP "help"
 #define ROOM_K_CONTENT "content"
 
@@ -74,12 +74,13 @@ using TilePos = Pos2D<size_t>;
 using DisplayPos = Pos2D<int>;
 
 using c_str = const char *;
-struct title_with_content {
-	string title, content;
-};
-using help_map_t = map<title_with_content, size_t>;
+
+using help_map_t = map<string, string>;
 
 using key_pos_map_t = unordered_map<SDL_Keycode, DisplayPos>;
 extern key_pos_map_t key_pos_map;
+
+using usable_languages_t = const map<string, string>;
+extern usable_languages_t usable_languages;
 
 #endif //CLOSS_INT_CONST_H

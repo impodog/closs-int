@@ -22,17 +22,28 @@ public:
 	explicit closs_room_error(const char *arg);
 };
 
+enum tile_types {
+	tile_background = -2,
+	tile_undefined,
+	tile_empty = 0,
+	tile_cyan,
+	tile_box,
+	tile_wall,
+	tile_destination
+};
+
 class Tile {
 public:
 	struct Movement_Request {
 		const Tile *sender;
 		direction_t direction;
 	};
-	public_code_t m_code;
+	public_code_t m_pubCode;
 	TilePos m_pos;
 	SDL_Surface *m_img;
+	tile_types m_type;
 	
-	Tile(TilePos pos, SDL_Surface *m_img);
+	Tile(TilePos pos, SDL_Surface *m_img, tile_types type);
 	
 	SDL_Rect srcrect() const;
 	
@@ -73,9 +84,13 @@ public:
 	TilePos m_size;
 	pending_movements_t m_pending;
 	
+	Space m_dest;
+	
 	explicit Room(int each, TilePos size);
 	
 	~Room();
+	
+	void refresh_dest();
 	
 	SpaceType at(const TilePos &pos);
 	
@@ -85,7 +100,7 @@ public:
 	
 	TilePos get_dest(TileType tile, direction_t dir) const;
 	
-	bool send_req_from(TileType tile, direction_t dir);
+	bool send_req_from(TileType tile, direction_t dir, int8_t times = 1);
 	
 	void pending_move(TileType tile, direction_t dir);
 	
@@ -97,21 +112,15 @@ public:
 	
 	void move_independents(key_predicate_t predicate);
 	
+	void end_of_step();
+	
 	DisplayPos total_size() const;
 };
 
-enum tile_types {
-	tile_background = -2,
-	tile_undefined,
-	tile_empty,
-	tile_cyan,
-	tile_box,
-	tile_wall
-};
 
 using RoomType = Room *;
 
-using tile_constructor_t = TileType (*)(TilePos, SDL_Surface *img);
+using tile_constructor_t = TileType (*)(TilePos, SDL_Surface *img, tile_types type);
 using tile_types_map_t = map<tile_types, tile_constructor_t>;
 
 extern tile_types_map_t tile_type_map;
@@ -122,9 +131,18 @@ Space::iterator find_tile(SpaceConst space, TileConst tile);
 
 direction_vec_t find_keys(key_predicate_t predicate, const direction_vec_t &wanted_keys);
 
+class Destination : public Tile {
+public:
+	tile_types m_req;
+	
+	explicit Destination(TilePos pos, SDL_Surface *img, tile_types type);
+	
+	bool detect_requirement(SpaceConst space) const;
+};
+
 class Cyan : public Tile {
 public:
-	Cyan(TilePos pos, SDL_Surface *m_img);
+	Cyan(TilePos pos, SDL_Surface *m_img, tile_types type);
 	
 	bool is_independent() const override;
 	
@@ -135,18 +153,14 @@ public:
 
 class Box : public Tile {
 public:
-	Box(TilePos pos, SDL_Surface *m_img);
-	
-	bool is_independent() const override;
+	Box(TilePos pos, SDL_Surface *m_img, tile_types type);
 	
 	direction_t acq_req(const Movement_Request &req) const override;
 };
 
 class Wall : public Tile {
 public:
-	Wall(TilePos pos, SDL_Surface *m_img);
-	
-	bool is_independent() const override;
+	Wall(TilePos pos, SDL_Surface *m_img, tile_types type);
 	
 	direction_t acq_req(const Movement_Request &req) const override;
 };
