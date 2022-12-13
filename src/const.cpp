@@ -12,6 +12,6 @@ key_pos_map_t key_pos_map = {
 };
 
 usable_languages_t usable_languages = {
-		{"en", "English"},
+		{"en",    "English"},
 		{"zh_cn", "Simplified Chinese"}
 };

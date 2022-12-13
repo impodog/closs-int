@@ -11,7 +11,7 @@
       "Intro": "这是一个测试关"
     }
   },
-  "each" : 128,
+  "each" : 1000,
   "height" : 4,
   "width" : 4,
   "content" : [

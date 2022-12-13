@@ -106,6 +106,11 @@ void Display::switch_color_fill(const SDL_Color &color) const {
 	SDL_RenderClear(renderer);
 }
 
+void Display::switch_color_fill(const SDL_Color &color, const SDL_Rect &dstrect) const {
+	switch_color(color);
+	SDL_RenderFillRect(renderer, &dstrect);
+}
+
 void Display::present() const {
 	SDL_RenderPresent(renderer);
 }
@@ -113,7 +118,7 @@ void Display::present() const {
 void Display::change_room(RoomType room) {
 	m_room = room;
 	auto total_size = m_room->total_size();
-	DisplayPos m_room_edge = {SCR_WIDTH - total_size.w, SCR_HEIGHT - total_size.h};
+	DisplayPos m_room_edge = {SCR_WIDTH - total_size.w, RESERVED_HEIGHT - total_size.h};
 	m_room_pos = {0, 0};
 	m_room_min = {min(m_room_edge.w, 0), min(m_room_edge.h, 0)};
 	m_room_max = {max(m_room_edge.w, 0), max(m_room_edge.h, 0)};
@@ -156,6 +161,7 @@ void Display::render_copy_room() {
 		}
 		h++;
 	}
+	switch_color_fill(BLACK, {0, RESERVED_HEIGHT, SCR_WIDTH, RESERVED_FROM_B});
 }
 
 void Display::clear_img_vec() {
@@ -185,6 +191,7 @@ void Display::refresh_key_m() {
 		key_click_map[pair.first] = key_clicking(pair.first);
 	}
 }
+
 
 
 

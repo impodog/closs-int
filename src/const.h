@@ -26,12 +26,18 @@
 #define STANDARD_EACH 50
 #define MIN_EACH 128
 
+#define RESERVED_HEIGHT 1000
+#define RESERVED_FROM_B (SCR_HEIGHT - RESERVED_HEIGHT)
+
 #define PATH_BEGIN "../"
-#define DEFAULT_JSON "default.json"
-#define USER_JSON "SAVE.json"
 #define ROOMS_PATH PATH_BEGIN "rooms/"
 #define CLOSS_ROOMS_PATH ROOMS_PATH "Closs/"
 #define IMG_PATH PATH_BEGIN "img/"
+#define USER_PATH PATH_BEGIN "user/"
+#define DEFAULT_JSON_NAME "default.json"
+#define USER_JSON_NAME "user.json"
+#define DEFAULT_JSON_PATH PATH_BEGIN "user/" DEFAULT_JSON_NAME
+#define USER_JSON_PATH PATH_BEGIN "user/" USER_JSON_NAME
 
 #define ROOM_K_EACH "each"
 #define ROOM_K_WIDTH "width"
@@ -82,5 +88,6 @@ extern key_pos_map_t key_pos_map;
 
 using usable_languages_t = const map<string, string>;
 extern usable_languages_t usable_languages;
+
 
 #endif //CLOSS_INT_CONST_H

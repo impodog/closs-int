@@ -7,14 +7,14 @@
 json default_user, current_user;
 
 void init_default_user() {
-	ifstream default_json(PATH_BEGIN "user/" DEFAULT_JSON, ios::in);
+	ifstream default_json(DEFAULT_JSON_PATH, ios::in);
 	if (!default_json.is_open())
-		throw runtime_error("cannot open " PATH_BEGIN "user/" DEFAULT_JSON);
+		throw runtime_error("cannot open " DEFAULT_JSON_PATH);
 	default_json >> default_user;
 }
 
 void load_user() {
-	ifstream user_file(PATH_BEGIN "user/" USER_JSON, ios::in);
+	ifstream user_file(USER_JSON_PATH, ios::in);
 	if (user_file.is_open())
 		user_file >> current_user;
 	else
@@ -22,7 +22,7 @@ void load_user() {
 }
 
 void save_user() {
-	ofstream user_file(PATH_BEGIN "user/" USER_JSON, ios::out);
+	ofstream user_file(USER_JSON_PATH, ios::out);
 	user_file << current_user;
 }
 

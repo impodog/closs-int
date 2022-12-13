@@ -63,6 +63,8 @@ public:
 	
 	void switch_color_fill(const SDL_Color &color) const;
 	
+	void switch_color_fill(const SDL_Color &color, const SDL_Rect &dstrect) const;
+	
 	void present() const;
 	
 	void change_room(RoomType room);

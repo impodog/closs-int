@@ -67,3 +67,7 @@ void set_white_as_colorkey(const vector<SDL_Surface *> &surfaces) {
 SDL_Rect get_srcrect(const SDL_Surface *surface) {
 	return {0, 0, surface->w, surface->h};
 }
+
+uint32_t MapRGB(SDL_Surface *surface, const SDL_Color &color) {
+	return SDL_MapRGB(surface->format, color.r, color.g, color.b);
+}
