@@ -1,0 +1,14 @@
+{
+  "language" : {
+    "en" : "Language [<   >] : ",
+    "zh_cn" : "语言 [<   >] :"
+  },
+  "sensitivity" : {
+    "en" : "Scrolling Sensitivity [<   >] : ",
+    "zh_cn" : "滑动敏感度 [<   >]: "
+  },
+  "to_lobby" : {
+    "en" : "Back to Lobby",
+    "zh_cn" : "返回主界面"
+  }
+}

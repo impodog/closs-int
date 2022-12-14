@@ -6,14 +6,17 @@
 #define CLOSS_INT_LOADER_H
 
 #define OPEN_CLOSS_ROOM(path) open_room("Closs/" path)
-#define USER_SENSITIVITY (int)((int)current_user.at("sensitivity"))
-#define USER_LANG (string)current_user.at("language")
+#define USER_SENSITIVITY (int)((int)current_user.at(USER_K_SENSITIVITY))
+#define USER_LANG (string)current_user.at(USER_K_LANGUAGE)
 
-#include "img.h"
+#include "closs.h"
 
 extern json default_user, current_user;
+extern json txt_settings, txt_lobby;
 
 void init_default_user();
+
+void init_txt();
 
 void load_user();
 
@@ -34,5 +37,9 @@ RoomType json_to_room(const json &room_json);
 json room_to_json(RoomType room);
 
 void close_room(RoomType room);
+
+void shift_language(bool down);
+
+void shift_sensitivity(bool down);
 
 #endif //CLOSS_INT_LOADER_H

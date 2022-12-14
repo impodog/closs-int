@@ -18,7 +18,9 @@
 #include "SDL_image.h"
 #include "SDL_ttf.h"
 
-#define TITLE "Closs : Inside the Tapes"
+#define VERSION "v0.0.1"
+
+#define TITLE "Closs : Inside the Tapes " VERSION
 #define SCR_WIDTH 2000
 #define SCR_HEIGHT 1125
 #define TILE_BACK_SEP 5
@@ -26,12 +28,27 @@
 #define STANDARD_EACH 50
 #define MIN_EACH 128
 
+#define DESTINATION_SIZE 20
+#define SELECTION_DEFAULT_EACH 50
+#define SETTINGS_EACH 60
+#define SETTINGS_SIZE 40
+#define LOBBY_EACH 100
+#define LOBBY_SIZE 60
+
 #define RESERVED_HEIGHT 1000
 #define RESERVED_FROM_B (SCR_HEIGHT - RESERVED_HEIGHT)
 
+#define MAX_SENSITIVITY 100
+#define MIN_SENSITIVITY 1
+
+
 #define PATH_BEGIN "../"
+
 #define ROOMS_PATH PATH_BEGIN "rooms/"
 #define CLOSS_ROOMS_PATH ROOMS_PATH "Closs/"
+#define SETTINGS_PATH ROOMS_PATH "settings.json"
+#define LOBBY_PATH ROOMS_PATH "lobby.json"
+
 #define IMG_PATH PATH_BEGIN "img/"
 #define USER_PATH PATH_BEGIN "user/"
 #define DEFAULT_JSON_NAME "default.json"
@@ -39,12 +56,32 @@
 #define DEFAULT_JSON_PATH PATH_BEGIN "user/" DEFAULT_JSON_NAME
 #define USER_JSON_PATH PATH_BEGIN "user/" USER_JSON_NAME
 
+#define TTF_PATH PATH_BEGIN "ttf/"
+#define ARIAL_PATH TTF_PATH "arial.ttf"
+#define CONSOLAS_PATH TTF_PATH "consolas.ttf"
+#define SIMHEI_PATH TTF_PATH "simhei.ttf"
+
+
 #define ROOM_K_EACH "each"
 #define ROOM_K_WIDTH "width"
 #define ROOM_K_HEIGHT "height"
 #define ROOM_K_TITLE "title"
 #define ROOM_K_HELP "help"
 #define ROOM_K_CONTENT "content"
+
+
+#define USER_K_LANGUAGE "language"
+#define USER_K_SENSITIVITY "sensitivity"
+
+
+#define SETTINGS_K_LANGUAGE "language"
+#define SETTINGS_K_SENSITIVITY "sensitivity"
+#define SETTINGS_K_TO_LOBBY "to_lobby"
+
+#define LOBBY_K_PLAY "play"
+#define LOBBY_K_SETTINGS "settings"
+#define LOBBY_K_QUIT "quit"
+
 
 #define KEY_SHIFT_UP SDLK_w
 #define KEY_SHIFT_LEFT SDLK_a
@@ -58,13 +95,19 @@
 
 #define MOVEMENT_KEYS {KEY_MOVE_UP,KEY_MOVE_LEFT,KEY_MOVE_DOWN,KEY_MOVE_RIGHT}
 
+#define KEY_SETTINGS SDLK_q
+#define KEY_CONFIRM SDLK_c
+
+
 using namespace std;
 using namespace chrono;
 using namespace nlohmann;
 
 const SDL_Color WHITE{255, 255, 255, 255};
 const SDL_Color BLACK{0, 0, 0, 255};
-const SDL_Color TILE_BACK_COLOR{100, 100, 100, 255};
+const SDL_Color RED{255, 0, 0, 255};
+const SDL_Color GREEN{0, 255, 0, 255};
+const SDL_Color BLUE{0, 0, 255, 255};
 
 template<typename T1>
 struct Pos2D {
@@ -79,15 +122,33 @@ struct Pos2D {
 using TilePos = Pos2D<size_t>;
 using DisplayPos = Pos2D<int>;
 
+enum tile_types {
+	tile_background = -2,
+	tile_undefined,
+	tile_empty = 0,
+	tile_cyan,
+	tile_box,
+	tile_wall,
+	tile_destination
+};
+
 using c_str = const char *;
 
 using help_map_t = map<string, string>;
 
-using key_pos_map_t = unordered_map<SDL_Keycode, DisplayPos>;
+using key_pos_map_t = const unordered_map<SDL_Keycode, DisplayPos>;
 extern key_pos_map_t key_pos_map;
 
-using usable_languages_t = const map<string, string>;
+using usable_languages_t = const vector<string>;
 extern usable_languages_t usable_languages;
+
+using type_names_t = const unordered_map<tile_types, string>;
+extern type_names_t type_names;
+
+
+SDL_Rect get_srcrect(const SDL_Surface *surface);
+
+SDL_Rect get_dstrect(const DisplayPos &pos, const SDL_Surface *surface);
 
 
 #endif //CLOSS_INT_CONST_H

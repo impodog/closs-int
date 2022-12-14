@@ -1,17 +1,17 @@
 {
   "title" : {
     "en":"Test Level",
-    "zh-cn": "测试关"
+    "zh_cn": "测试关"
   },
   "help" : {
     "en": {
       "Intro": "This is a test level"
     },
-    "zh-cn": {
+    "zh_cn": {
       "Intro": "这是一个测试关"
     }
   },
-  "each" : 1000,
+  "each" : 300,
   "height" : 4,
   "width" : 4,
   "content" : [

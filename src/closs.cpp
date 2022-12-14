@@ -10,11 +10,14 @@ closs_room_error::closs_room_error(const string &arg) : runtime_error(arg) {}
 
 closs_room_error::closs_room_error(const char *arg) : runtime_error(arg) {}
 
+closs_page_error::closs_page_error(const string &arg) : runtime_error(arg) {}
+
+closs_page_error::closs_page_error(const char *arg) : runtime_error(arg) {}
+
 Tile::Tile(TilePos pos, SDL_Surface *img, tile_types type) {
 	m_pubCode = get_public_code();
 	m_pos = pos;
 	m_img = img;
-	m_type = type;
 }
 
 SDL_Rect Tile::srcrect() const {
@@ -30,6 +33,11 @@ bool Tile::is_independent() const { return false; }
 direction_t Tile::acq_req(const Tile::Movement_Request &req) const { return 0; }
 
 direction_t Tile::respond_keys(key_predicate_t predicate) const { return 0; }
+
+void Tile::show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
+                           double stretch_ratio) const {}
+
+tile_types Tile::get_type() const { return tile_undefined; }
 
 Room::Room(int each, TilePos size) {
 	for (size_t h = 0; h != size.h; h++) {
@@ -61,7 +69,7 @@ void Room::refresh_dest() {
 	for (auto lane: *this)
 		for (auto space: *lane)
 			for (auto tile: *space)
-				if (tile->m_type == tile_destination)
+				if (tile->get_type() == tile_destination)
 					m_dest.push_back(tile);
 }
 
@@ -85,8 +93,8 @@ TilePos Room::get_dest(TileType tile, direction_t dir) const {
 	return dest;
 }
 
-bool Room::send_req_from(TileType tile, direction_t dir, int8_t times) {
-	if (times < 0) return false;
+bool Room::send_req_from(TileType tile, direction_t dir, uint8_t times) {
+	if (times == 0) return false;
 	bool result = true;
 	auto space = at(get_dest(tile, dir));
 	Movement_Request req = {tile, dir};
@@ -179,10 +187,12 @@ Destination::Destination(TilePos pos, SDL_Surface *img, tile_types type) : Tile(
 	m_req = type;
 }
 
+tile_types Destination::get_type() const { return tile_destination; }
+
 bool Destination::detect_requirement(SpaceConst space) const {
 	bool satisfied = false;
 	for (auto tile: *space) {
-		if (tile->m_type == m_req) {
+		if (tile->get_type() == m_req) {
 			satisfied = true;
 			break;
 		}
@@ -190,30 +200,17 @@ bool Destination::detect_requirement(SpaceConst space) const {
 	return satisfied;
 }
 
-Cyan::Cyan(TilePos pos, SDL_Surface *m_img, tile_types type) : Tile(pos, m_img, type) {}
-
-bool Cyan::is_independent() const { return true; }
-
-direction_t Cyan::acq_req(const Movement_Request &req) const { return req.direction; }
-
-direction_t Cyan::respond_keys(key_predicate_t predicate) const {
-	auto pending = find_keys(predicate, MOVEMENT_KEYS);
-	if (pending.empty()) return 0;
-	return pending[0];
+void Destination::show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
+                                  double stretch_ratio) const {
+	auto surface = TTF_RenderText_Solid(consolas.sized(FONT_SIZE(DESTINATION_SIZE)),
+	                                    type_names.at(m_req).c_str(),
+	                                    WHITE);
+	DisplayPos show_pos = {center.w - surface->w / 2, center.h - surface->h / 2};
+	auto texture = SDL_CreateTextureFromSurface(renderer, surface);
+	auto srcrect = get_srcrect(surface), dstrect = get_dstrect(show_pos, surface);
+	SDL_RenderCopy(renderer, texture, &srcrect, &dstrect);
+	SDL_FreeSurface(surface);
 }
-
-Box::Box(TilePos pos, SDL_Surface *m_img, tile_types type) : Tile(pos, m_img, type) {}
-
-direction_t Box::acq_req(const Movement_Request &req) const {
-	return req.direction;
-}
-
-Wall::Wall(TilePos pos, SDL_Surface *m_img, tile_types type) : Tile(pos, m_img, type) {}
-
-direction_t Wall::acq_req(const Movement_Request &req) const {
-	return -1;
-}
-
 
 TileType construct_undefined(TilePos pos, SDL_Surface *img, tile_types type) {
 	return new Tile(pos, img, type);
@@ -243,4 +240,33 @@ tile_types_map_t tile_type_map = {
 		{tile_destination, construct_dest}
 };
 
+Cyan::Cyan(TilePos pos, SDL_Surface *m_img, tile_types type) : Tile(pos, m_img, type) {}
+
+bool Cyan::is_independent() const { return true; }
+
+tile_types Cyan::get_type() const { return tile_cyan; }
+
+direction_t Cyan::acq_req(const Movement_Request &req) const { return req.direction; }
+
+direction_t Cyan::respond_keys(key_predicate_t predicate) const {
+	auto pending = find_keys(predicate, MOVEMENT_KEYS);
+	if (pending.empty()) return 0;
+	return pending[0];
+}
+
+Box::Box(TilePos pos, SDL_Surface *m_img, tile_types type) : Tile(pos, m_img, type) {}
+
+tile_types Box::get_type() const { return tile_box; }
+
+direction_t Box::acq_req(const Movement_Request &req) const {
+	return req.direction;
+}
+
+Wall::Wall(TilePos pos, SDL_Surface *m_img, tile_types type) : Tile(pos, m_img, type) {}
+
+tile_types Wall::get_type() const { return tile_wall; }
+
+direction_t Wall::acq_req(const Movement_Request &req) const {
+	return -1;
+}
 

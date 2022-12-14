@@ -5,12 +5,18 @@
 #include "loader.h"
 
 json default_user, current_user;
+json txt_settings, txt_lobby;
 
 void init_default_user() {
-	ifstream default_json(DEFAULT_JSON_PATH, ios::in);
-	if (!default_json.is_open())
-		throw runtime_error("cannot open " DEFAULT_JSON_PATH);
-	default_json >> default_user;
+	ifstream default_file(DEFAULT_JSON_PATH, ios::in);
+	default_file >> default_user;
+}
+
+void init_txt() {
+	auto settings_file = ifstream(SETTINGS_PATH, ios::in);
+	settings_file >> txt_settings;
+	auto lobby_file = ifstream(LOBBY_PATH, ios::in);
+	lobby_file >> txt_lobby;
 }
 
 void load_user() {
@@ -51,12 +57,12 @@ RoomType create_room(const json &room_json) {
 	// Get width and height
 	w = room_json.at(ROOM_K_WIDTH);
 	h = room_json.at(ROOM_K_HEIGHT);
-	// Get each(-1 or none for default)
+	// Get m_each(-1 or none for default)
 	try {
 		each = room_json.at(ROOM_K_EACH);
-		if (each == -1) throw out_of_range("user explicitly using default \"each\" value");
+		if (each == -1) throw out_of_range("user explicitly using default \"m_each\" value");
 		else if (each < MIN_EACH)
-			throw closs_room_error("room \"each\" shouldn't be lower than " + to_string(MIN_EACH));
+			throw closs_room_error("room \"m_each\" shouldn't be lower than " + to_string(MIN_EACH));
 	} catch
 			(const out_of_range &) {
 		each = get_default_each(w, h);
@@ -83,7 +89,7 @@ void load_json_space(const json &json_space, const TilePos &pos, SpaceType space
 			type_arg = code = json_tile;
 		else {
 			if (json_tile.size() != 2)
-				throw closs_room_error("arrayed(typed) tiles are only allowed to be at size of 2");
+				throw closs_room_error("arrayed(typed) tiles are only allowed to be sized size of 2");
 			code = json_tile[0];
 			type_arg = json_tile[1];
 		}
@@ -126,5 +132,25 @@ RoomType json_to_room(const json &room_json) {
 
 void close_room(RoomType room) {
 	delete room;
+}
+
+void shift_language(bool down) {
+	auto iter = std::find(usable_languages.begin(), usable_languages.end(), current_user.at(USER_K_LANGUAGE));
+	if (down) {
+		iter++;
+		if (iter == usable_languages.end())
+			iter = usable_languages.begin();
+	} else {
+		if (iter == usable_languages.begin())
+			iter = usable_languages.end();
+		iter--;
+	}
+	current_user[USER_K_LANGUAGE] = *iter;
+}
+
+void shift_sensitivity(bool down) {
+	int sense = USER_SENSITIVITY;
+	if (down) { if (sense < MAX_SENSITIVITY) current_user[USER_K_SENSITIVITY] = sense + 1; }
+	else if (sense > MIN_SENSITIVITY) current_user[USER_K_SENSITIVITY] = sense - 1;
 }
 

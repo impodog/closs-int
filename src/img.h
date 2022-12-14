@@ -5,7 +5,9 @@
 #ifndef CLOSS_INT_IMG_H
 #define CLOSS_INT_IMG_H
 
-#include "closs.h"
+#include "const.h"
+
+#define FONT_SIZE(default) (int) (default * stretch_ratio)
 
 using types_img_map_t = unordered_map<tile_types, SDL_Surface *>;
 
@@ -17,22 +19,34 @@ class Font_Family : public Font_Map {
 private:
 	string m_file;
 public:
-	explicit Font_Family(string file);
+	explicit Font_Family(const string &file);
 	
-	FontType at(int size);
+	~Font_Family();
+	
+	FontType sized(int size);
 };
 
 extern types_img_map_t types_img_map;
 
-extern Font_Family arial;
+extern Font_Family arial, consolas, simhei;
 
-void init_img_map();
+using SDL_Surface_ptr = SDL_Surface *;
+extern SDL_Surface_ptr img_arrow, img_settings, img_Closs_InT;
 
-void free_img_map();
+using language_fonts_t = unordered_map<string, Font_Family *>;
+extern language_fonts_t language_fonts;
+
+void init_img();
+
+void free_img();
 
 void set_white_as_colorkey(const vector<SDL_Surface *> &surfaces);
 
+void show_surface(SDL_Renderer *renderer, SDL_Surface *surface, DisplayPos pos);
+
 SDL_Rect get_srcrect(const SDL_Surface *surface);
+
+SDL_Rect get_dstrect(const DisplayPos &pos, const SDL_Surface *surface);
 
 uint32_t MapRGB(SDL_Surface *surface, const SDL_Color &color);
 

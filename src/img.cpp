@@ -4,26 +4,43 @@
 
 #include "img.h"
 
+#include <utility>
+
 types_img_map_t types_img_map;
 
-Font_Family::Font_Family(string file) {
-	m_file = std::move(file);
+Font_Family::Font_Family(const string &file) {
+	m_file = file;
 }
 
-FontType Font_Family::at(int size) {
+Font_Family::~Font_Family() {
+	for (auto pair: *this)
+		TTF_CloseFont(pair.second);
+	Font_Map::~unordered_map();
+}
+
+FontType Font_Family::sized(int size) {
 	try {
 		return Font_Map::at(size);
 	} catch (const out_of_range &) {
-		return ((*this)[size] = TTF_OpenFont(m_file.c_str(), size));
+		auto font = TTF_OpenFont(m_file.c_str(), size);
+		Font_Map::insert({size, font});
+		return font;
 	}
 }
 
-Font_Family arial("arial");
+Font_Family arial(ARIAL_PATH), consolas(CONSOLAS_PATH), simhei(SIMHEI_PATH);
 
-void init_img_map() {
+SDL_Surface_ptr img_arrow, img_settings, img_Closs_InT;
+
+language_fonts_t language_fonts = {
+		{"en",    &arial},
+		{"zh_cn", &simhei}
+};
+
+void init_img() {
 	IMG_Init(IMG_INIT_PNG);
 	
-	// load graphics
+	// load tile graphics
 	auto img_tile_background = IMG_Load(IMG_PATH "tile_background.png"),
 			img_undefined = IMG_Load(IMG_PATH "undefined.png"),
 			img_cyan = IMG_Load(IMG_PATH "cyan.png"),
@@ -31,6 +48,10 @@ void init_img_map() {
 			img_wall = IMG_Load(IMG_PATH "wall.png"),
 			img_dest = IMG_Load(IMG_PATH "dest.png"),
 			img_box2 = IMG_Load(IMG_PATH "box2.png");
+	// load global graphics
+	img_arrow = IMG_Load(IMG_PATH "arrow.png");
+	img_settings = IMG_Load(IMG_PATH "settings.png");
+	img_Closs_InT = IMG_Load(IMG_PATH "Closs_InT.png");
 	// old graphics
 	auto img_old_box = IMG_Load(IMG_PATH "old_box.png");
 	
@@ -41,7 +62,10 @@ void init_img_map() {
 			                      img_box,
 			                      img_wall,
 			                      img_dest,
-			                      img_box2
+			                      img_box2,
+			                      img_arrow,
+			                      img_settings,
+								  img_Closs_InT
 	                      });
 	
 	// put into image map
@@ -53,7 +77,7 @@ void init_img_map() {
 	types_img_map[tile_destination] = img_dest;
 }
 
-void free_img_map() {
+void free_img() {
 	for (auto pair: types_img_map)
 		SDL_FreeSurface(pair.second);
 	types_img_map.clear();
@@ -64,8 +88,11 @@ void set_white_as_colorkey(const vector<SDL_Surface *> &surfaces) {
 		SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format, 255, 255, 255));
 }
 
-SDL_Rect get_srcrect(const SDL_Surface *surface) {
-	return {0, 0, surface->w, surface->h};
+void show_surface(SDL_Renderer *renderer, SDL_Surface *surface, DisplayPos pos) {
+	SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
+	auto srcrect = get_srcrect(surface), dstrect = get_dstrect(pos, surface);
+	SDL_RenderCopy(renderer, texture, &srcrect, &dstrect);
+	SDL_DestroyTexture(texture);
 }
 
 uint32_t MapRGB(SDL_Surface *surface, const SDL_Color &color) {

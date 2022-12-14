@@ -1,34 +1,37 @@
 #include "src/display.h"
 
 void do_all_init() {
+	SDL_Init(SDL_INIT_EVERYTHING);
+	TTF_Init();
 	init_default_user();
 	load_user();
-	init_img_map();
+	init_img();
 	init_key_map();
+	init_txt();
+	init_pages();
+	init_display();
 }
 
 void do_all_free() {
 	save_user();
-	free_img_map();
+	free_img();
+	free_pages();
+	free_display();
 }
 
 int main() {
 	do_all_init();
-	Display display;
 	auto room = OPEN_CLOSS_ROOM("test.json");
-	display.change_room(room);
+	//display->change_room(room);
 	do {
-		display.switch_color_fill(BLACK);
+		display->switch_color_fill(BLACK);
 		
-		display.collect_loop_info();
+		display->collect_loop_info();
 		
-		display.play_room();
+		display->process_content();
 		
-		display.render_copy_room();
-		
-		
-		display.present();
-	} while (display.m_loop);
+		display->present();
+	} while (display->m_loop);
 	close_room(room);
 	do_all_free();
 	return 0;

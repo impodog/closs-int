@@ -1,0 +1,14 @@
+{
+  "play": {
+    "en": "Play",
+    "zh_cn": "开始"
+  },
+  "settings" : {
+    "en" : "Settings",
+    "zh_cn" : "设置"
+  },
+  "quit" : {
+    "en" : "Quit",
+    "zh_cn" : "退出"
+  }
+}
