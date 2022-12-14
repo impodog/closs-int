@@ -8,11 +8,12 @@
 #define OPEN_CLOSS_ROOM(path) open_room("Closs/" path)
 #define USER_SENSITIVITY (int)((int)current_user.at(USER_K_SENSITIVITY))
 #define USER_LANG (string)current_user.at(USER_K_LANGUAGE)
+#define USER_FRAMERATE (int)current_user.at(USER_K_FRAMERATE)
 
 #include "closs.h"
 
 extern json default_user, current_user;
-extern json txt_settings, txt_lobby;
+extern json txt_settings, txt_lobby, txt_in_game;
 
 void init_default_user();
 
@@ -41,5 +42,15 @@ void close_room(RoomType room);
 void shift_language(bool down);
 
 void shift_sensitivity(bool down);
+
+void shift_framerate(bool down);
+
+string get_room_path();
+
+SDL_Surface *create_text(const json &txt, int size, const SDL_Color &color = WHITE, const string &addition = "");
+
+SDL_Surface *create_text(const json &txt, int size, bool b, const string &addition = "");
+
+SDL_Surface *create_text(const string &str, int size, const SDL_Color &color);
 
 #endif //CLOSS_INT_LOADER_H

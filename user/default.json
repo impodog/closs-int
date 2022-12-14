@@ -1,6 +1,7 @@
 {
-  "unlock": [1, 1],
-  "sensitivity" : 1,
-  "framerate" : 30,
-  "language":"en"
+  "room": 1,
+  "unlocked": 1,
+  "sensitivity": 1,
+  "framerate": 30,
+  "language": "en"
 }

@@ -31,7 +31,7 @@ extern types_img_map_t types_img_map;
 extern Font_Family arial, consolas, simhei;
 
 using SDL_Surface_ptr = SDL_Surface *;
-extern SDL_Surface_ptr img_arrow, img_settings, img_Closs_InT;
+extern SDL_Surface_ptr img_arrow, img_settings, img_Closs_InT, img_help;
 
 using language_fonts_t = unordered_map<string, Font_Family *>;
 extern language_fonts_t language_fonts;
@@ -42,7 +42,7 @@ void free_img();
 
 void set_white_as_colorkey(const vector<SDL_Surface *> &surfaces);
 
-void show_surface(SDL_Renderer *renderer, SDL_Surface *surface, DisplayPos pos);
+void show_surface(SDL_Renderer *renderer, SDL_Surface *surface, const DisplayPos &pos);
 
 SDL_Rect get_srcrect(const SDL_Surface *surface);
 

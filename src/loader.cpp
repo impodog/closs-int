@@ -5,7 +5,7 @@
 #include "loader.h"
 
 json default_user, current_user;
-json txt_settings, txt_lobby;
+json txt_settings, txt_lobby, txt_in_game;
 
 void init_default_user() {
 	ifstream default_file(DEFAULT_JSON_PATH, ios::in);
@@ -17,6 +17,8 @@ void init_txt() {
 	settings_file >> txt_settings;
 	auto lobby_file = ifstream(LOBBY_PATH, ios::in);
 	lobby_file >> txt_lobby;
+	auto in_game_file = ifstream(IN_GAME_PATH, ios::in);
+	in_game_file >> txt_in_game;
 }
 
 void load_user() {
@@ -69,15 +71,8 @@ RoomType create_room(const json &room_json) {
 	}
 	// create object
 	auto room = new Room(each, {w, h});
-	const auto &title = room_json.at(ROOM_K_TITLE);
-	const auto &help_map = room_json.at(ROOM_K_HELP);
-	if (title.is_string()) room->m_title = title;
-	else room->m_title = title.at(USER_LANG);
-	try {
-		room->m_help_map = help_map.get<help_map_t>();
-	} catch (const exception &) {
-		room->m_help_map = help_map[USER_LANG].get<help_map_t>();
-	}
+	room->m_title = room_json.at(ROOM_K_TITLE);
+	room->m_help_map = room_json.at(ROOM_K_HELP);
 	return room;
 }
 
@@ -152,5 +147,29 @@ void shift_sensitivity(bool down) {
 	int sense = USER_SENSITIVITY;
 	if (down) { if (sense < MAX_SENSITIVITY) current_user[USER_K_SENSITIVITY] = sense + 1; }
 	else if (sense > MIN_SENSITIVITY) current_user[USER_K_SENSITIVITY] = sense - 1;
+}
+
+void shift_framerate(bool down) {
+	int framerate = USER_FRAMERATE;
+	if (down) { if (framerate < MAX_FRAMERATE) current_user[USER_K_FRAMERATE] = framerate + 1; }
+	else if (framerate > MIN_FRAMERATE) current_user[USER_K_FRAMERATE] = framerate - 1;
+}
+
+string get_room_path() {
+	return CLOSS_ROOMS_PATH + to_string(current_user.at(USER_K_ROOM)) + ".json";
+}
+
+SDL_Surface *create_text(const json &txt, int size, const SDL_Color &color, const string &addition) {
+	return TTF_RenderUTF8_Solid(language_fonts.at(USER_LANG)->sized(size),
+	                            ((string) txt.at(USER_LANG) + addition).c_str(), color);
+}
+
+SDL_Surface *create_text(const json &txt, int size, bool b, const string &addition) {
+	return create_text(txt, size, b ? GREEN : WHITE, addition);
+}
+
+SDL_Surface *create_text(const string &str, int size, const SDL_Color &color) {
+	return TTF_RenderUTF8_Solid(language_fonts.at(USER_LANG)->sized(size),
+	                            str.c_str(), color);
 }
 

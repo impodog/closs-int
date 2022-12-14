@@ -79,8 +79,7 @@ public:
 	size_t steps = 0;
 	bool is_winning = false;
 	
-	string m_title;
-	help_map_t m_help_map;
+	json m_title, m_help_map;
 	
 	TilePos m_size;
 	pending_movements_t m_pending;

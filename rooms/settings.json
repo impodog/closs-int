@@ -1,14 +1,26 @@
 {
-  "language" : {
-    "en" : "Language [<   >] : ",
-    "zh_cn" : "语言 [<   >] :"
+  "language": {
+    "en": "Language [<   >] : ",
+    "zh_cn": "语言 [<   >] : "
   },
-  "sensitivity" : {
-    "en" : "Scrolling Sensitivity [<   >] : ",
-    "zh_cn" : "滑动敏感度 [<   >]: "
+  "sensitivity": {
+    "en": "Scrolling Sensitivity [1<<  >>300] : ",
+    "zh_cn": "滑动敏感度 [1<<   >>300] : "
   },
-  "to_lobby" : {
-    "en" : "Back to Lobby",
-    "zh_cn" : "返回主界面"
+  "framerate": {
+    "en": "Framerate Upper Limit [20<<  >>150] (Apply Required) : ",
+    "zh_cn": "帧率上限 [20<<  >>150] (需要应用) : "
+  },
+  "apply": {
+    "en": "Apply Settings",
+    "zh_cn": "应用此设置"
+  },
+  "to_lobby": {
+    "en": "Apply and Return to Lobby",
+    "zh_cn": "应用并返回主界面"
+  },
+  "to_game": {
+    "en": "Apply and Return to Game",
+    "zh_cn": "应用并返回游戏"
   }
 }

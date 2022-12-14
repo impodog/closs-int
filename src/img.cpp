@@ -30,7 +30,7 @@ FontType Font_Family::sized(int size) {
 
 Font_Family arial(ARIAL_PATH), consolas(CONSOLAS_PATH), simhei(SIMHEI_PATH);
 
-SDL_Surface_ptr img_arrow, img_settings, img_Closs_InT;
+SDL_Surface_ptr img_arrow, img_settings, img_Closs_InT, img_help;
 
 language_fonts_t language_fonts = {
 		{"en",    &arial},
@@ -52,6 +52,7 @@ void init_img() {
 	img_arrow = IMG_Load(IMG_PATH "arrow.png");
 	img_settings = IMG_Load(IMG_PATH "settings.png");
 	img_Closs_InT = IMG_Load(IMG_PATH "Closs_InT.png");
+	img_help = IMG_Load(IMG_PATH "help.png");
 	// old graphics
 	auto img_old_box = IMG_Load(IMG_PATH "old_box.png");
 	
@@ -65,7 +66,8 @@ void init_img() {
 			                      img_box2,
 			                      img_arrow,
 			                      img_settings,
-								  img_Closs_InT
+			                      img_Closs_InT,
+			                      img_help
 	                      });
 	
 	// put into image map
@@ -81,6 +83,10 @@ void free_img() {
 	for (auto pair: types_img_map)
 		SDL_FreeSurface(pair.second);
 	types_img_map.clear();
+	SDL_FreeSurface(img_settings);
+	SDL_FreeSurface(img_arrow);
+	SDL_FreeSurface(img_Closs_InT);
+	SDL_FreeSurface(img_help);
 }
 
 void set_white_as_colorkey(const vector<SDL_Surface *> &surfaces) {
@@ -88,7 +94,7 @@ void set_white_as_colorkey(const vector<SDL_Surface *> &surfaces) {
 		SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format, 255, 255, 255));
 }
 
-void show_surface(SDL_Renderer *renderer, SDL_Surface *surface, DisplayPos pos) {
+void show_surface(SDL_Renderer *renderer, SDL_Surface *surface, const DisplayPos &pos) {
 	SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
 	auto srcrect = get_srcrect(surface), dstrect = get_dstrect(pos, surface);
 	SDL_RenderCopy(renderer, texture, &srcrect, &dstrect);

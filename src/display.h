@@ -13,6 +13,7 @@
 #define KEY_UP(codes) init_key_map(codes)
 #define KEY_DOWN(codes) key_down(codes)
 #define IS_GAMING (m_page == nullptr)
+
 struct img_info {
 	SDL_Texture *texture;
 	SDL_Rect srcrect;
@@ -44,8 +45,6 @@ bool key_d(SDL_Keycode code);
 bool key_clicking(SDL_Keycode code);
 
 bool key_c(direction_t code);
-
-SDL_Surface *create_text(const json &txt, int size, bool b, const string &addition = "");
 
 SDL_Surface *create_settings_text(const string &setting, const string &from_user, bool b);
 
@@ -94,6 +93,20 @@ using Selection_Page_Type = Selection_Page *;
 using Selection_Page_Const = const Selection_Page *;
 
 extern Selection_Page_Type page_settings, page_lobby;
+
+class Text_Page : public Page {
+public:
+	SDL_Surface *m_title, *m_help;
+	DisplayPos m_title_pos;
+	
+	Text_Page(SDL_Surface *title, json &help_map);
+	
+	~Text_Page();
+	
+	void show() override;
+	
+	void process() override;
+};
 
 class Display {
 public:
@@ -145,11 +158,17 @@ public:
 	
 	DisplayPos show_img(SDL_Surface *img, const TilePos &pos);
 	
+	void show_room_title() const;
+	
+	void show_room_winning() const;
+	
 	void show_room();
 	
 	void show_reservation_line() const;
 	
 	void clear_img_vec();
+	
+	void clear_room();
 	
 	void move_room_to_visible();
 	
@@ -161,5 +180,7 @@ public:
 
 using DisplayType = Display *;
 extern DisplayType display;
+
+void start_game();
 
 #endif //CLOSS_INT_DISPLAY_H

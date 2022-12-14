@@ -14,33 +14,63 @@ Selection_Page_Type page_settings, page_lobby;
 void init_pages() {
 	page_settings = new Selection_Page{img_settings,
 	                                   {
-			                                   [](bool b) {
+			                                   [](bool b) { // 1 language
 				                                   return create_settings_text(SETTINGS_K_LANGUAGE, USER_K_LANGUAGE, b);
 			                                   },
-			                                   [](bool b) {
+			                                   [](bool b) { // 2 sensitivity
 				                                   return create_settings_text(SETTINGS_K_SENSITIVITY,
 				                                                               USER_K_SENSITIVITY,
 				                                                               b);
 			                                   },
-			                                   [](bool b) {
+			                                   [](bool b) { // 3 framerate
+				                                   return create_settings_text(SETTINGS_K_FRAMERATE, USER_K_FRAMERATE,
+				                                                               b);
+			                                   },
+			                                   [](bool b) { // 4 apply
+				                                   return create_settings_text(SETTINGS_K_APPLY, "", b);
+			                                   },
+			                                   [](bool b) { // 5 to_lobby
 				                                   return create_settings_text(SETTINGS_K_TO_LOBBY, "", b);
+			                                   },
+			                                   [](bool b) { // 6 to_game
+				                                   return create_settings_text(SETTINGS_K_TO_GAME, "", b);
 			                                   }
 	                                   },
 	                                   {
-			                                   [] {
+			                                   [] { // 1 language
 				                                   if (key_c(KEY_MOVE_RIGHT))
 					                                   shift_language(true);
 				                                   else if (key_c(KEY_MOVE_LEFT))
 					                                   shift_language(false);
 			                                   },
-			                                   [] {
+			                                   [] { // 2 sensitivity
 				                                   if (key_d(KEY_MOVE_RIGHT))
 					                                   shift_sensitivity(true);
 				                                   else if (key_d(KEY_MOVE_LEFT))
 					                                   shift_sensitivity(false);
 			                                   },
-			                                   [] {
-				                                   if (key_c(KEY_CONFIRM)) display->m_page = page_lobby;
+			                                   [] { // 3 framerate
+				                                   if (key_d(KEY_MOVE_RIGHT))
+					                                   shift_framerate(true);
+				                                   else if (key_d(KEY_MOVE_LEFT))
+					                                   shift_framerate(false);
+			                                   },
+			                                   [] { // 4 apply
+				                                   if (key_c(KEY_CONFIRM)) display->apply_settings();
+			                                   },
+			                                   [] { // 5 to_lobby
+				                                   if (key_c(KEY_CONFIRM)) {
+					                                   display->apply_settings();
+					                                   display->m_page = page_lobby;
+					                                   // Also, returning to lobby will clear room
+					                                   display->clear_room();
+				                                   }
+			                                   },
+			                                   [] { // 6 to_game
+				                                   if (key_c(KEY_CONFIRM) && display->m_room != nullptr) {
+					                                   display->apply_settings();
+					                                   display->m_page = nullptr;
+				                                   }
 			                                   }
 	                                   },
 	                                   SETTINGS_EACH
@@ -59,7 +89,7 @@ void init_pages() {
 	                                },
 	                                {
 			                                [] {
-				                                if (key_c(KEY_CONFIRM));//todo
+				                                if (key_c(KEY_CONFIRM)) start_game();
 			                                },
 			                                [] {
 				                                if (key_c(KEY_CONFIRM)) display->m_page = page_settings;
@@ -114,11 +144,6 @@ bool key_c(direction_t code) {
 	return key_click_map.at(code);
 }
 
-SDL_Surface *create_text(const json &txt, int size, bool b, const string &ref) {
-	return TTF_RenderUTF8_Solid(language_fonts.at(USER_LANG)->sized(size),
-	                            ((string) txt.at(USER_LANG) + ref).c_str(), b ? GREEN : WHITE);
-}
-
 SDL_Surface *create_settings_text(const string &setting, const string &from_user, bool b) {
 	return create_text(txt_settings.at(setting), SETTINGS_SIZE, b,
 	                   from_user.empty() ? "" : to_string(current_user.at(from_user)));
@@ -134,6 +159,11 @@ void init_display() {
 
 void free_display() {
 	delete display;
+}
+
+void start_game() {
+	display->change_room(open_room(get_room_path()));
+	display->m_page = nullptr;
 }
 
 
@@ -155,7 +185,7 @@ void Selection_Page::show() {
 		auto surface = m_generators.at(i)(is_selected);
 		auto upper_h = (int) (m_each * (i + 1) + m_title->h);
 		if (is_selected) show_surface(display->renderer, img_arrow, {0, upper_h + (m_each - img_arrow->h) / 2});
-		show_surface(display->renderer, surface, {img_arrow->w, upper_h});
+		show_surface(display->renderer, surface, {img_arrow->w, upper_h + (m_each - surface->h) / 2});
 		SDL_FreeSurface(surface);
 	}
 }
@@ -165,6 +195,43 @@ void Selection_Page::process() {
 	else if (key_c(KEY_MOVE_DOWN)) m_index++;
 	m_index %= m_size;
 	m_processors.at(m_index)();
+}
+
+Text_Page::Text_Page(SDL_Surface *title, json &help_map) {
+	m_title = title;
+	m_title_pos = {(SCR_WIDTH - m_title->w) / 2, 0};
+	m_help = SDL_CreateRGBSurface(0, SCR_WIDTH, SCR_HEIGHT - m_title->h, 32, 0, 0, 0, 0);
+	int height = HELP_EACH;
+	for (const auto &pair: help_map.at(USER_LANG).get<help_map_t>()) {
+		int content_height = height + (HELP_EACH - HELP_SIZE) / 2;
+		auto title_surf = create_text((string) pair.first, HELP_SIZE, WHITE);
+		auto descr_surf = create_text((string) pair.second, HELP_SIZE, GREY);
+		SDL_Rect title_srcrect = get_srcrect(title_surf),
+				descr_srcrect = get_srcrect(descr_surf),
+				title_dstrect = get_dstrect({LEAVE_BLANK_WIDTH, content_height}, title_surf),
+				descr_dstrect = get_dstrect({LEAVE_BLANK_WIDTH * 2 + title_surf->w, content_height}, descr_surf);
+		SDL_BlitSurface(title_surf, &title_srcrect, m_help, &title_dstrect);
+		SDL_BlitSurface(descr_surf, &descr_srcrect, m_help, &descr_dstrect);
+		height += HELP_EACH;
+		SDL_FreeSurface(title_surf);
+		SDL_FreeSurface(descr_surf);
+	}
+}
+
+Text_Page::~Text_Page() {
+	SDL_FreeSurface(m_help);
+}
+
+void Text_Page::show() {
+	show_surface(display->renderer, m_title, m_title_pos);
+	show_surface(display->renderer, m_help, {0, m_title->h});
+}
+
+void Text_Page::process() {
+	if (key_d(KEY_CONFIRM)) {
+		display->m_page = nullptr;
+		this->~Text_Page();
+	}
 }
 
 Display::Display() {
@@ -219,6 +286,7 @@ void Display::process_room() {
 	m_room->move_independents(key_c);
 	m_room->do_pending_moves();
 	m_room->end_of_step();
+	if (key_d(KEY_HELP)) m_page = new Text_Page(img_help, m_room->m_help_map);
 }
 
 void Display::process_content() {
@@ -233,7 +301,7 @@ void Display::process_content() {
 		show_room();
 	} else {
 		m_page->process();
-		m_page->show();
+		if (m_page != nullptr) m_page->show();
 	}
 }
 
@@ -256,6 +324,7 @@ void Display::present() const {
 }
 
 void Display::change_room(RoomType room) {
+	clear_room();
 	m_room = room;
 	auto total_size = m_room->total_size();
 	DisplayPos m_room_edge = {SCR_WIDTH - total_size.w, RESERVED_HEIGHT - total_size.h};
@@ -299,6 +368,20 @@ DisplayPos Display::show_img(SDL_Surface *img, const TilePos &pos) {
 	return {dstrect.w, dstrect.h};
 }
 
+void Display::show_room_title() const {
+	auto surface = create_text(m_room->m_title, ROOM_TITLE_SIZE);
+	show_surface(renderer, surface, {LEAVE_BLANK_WIDTH, RESERVED_HEIGHT + (RESERVED_FROM_B - surface->h) / 2});
+	SDL_FreeSurface(surface);
+}
+
+void Display::show_room_winning() const {
+	if (m_room->is_winning) {
+		auto surface = create_text(txt_in_game.at(IN_GAME_K_WINNING), WINNING_SIZE, GREEN);
+		show_surface(renderer, surface, {WINNING_WIDTH, RESERVED_HEIGHT + (RESERVED_FROM_B - WINNING_SIZE) / 2});
+		SDL_FreeSurface(surface);
+	}
+}
+
 void Display::show_room() {
 	size_t w, h = 0;
 	for (const auto &lane: *m_room) {
@@ -314,6 +397,8 @@ void Display::show_room() {
 	}
 	switch_color_fill(BLACK, {0, RESERVED_HEIGHT, SCR_WIDTH, RESERVED_FROM_B});
 	show_reservation_line();
+	show_room_title();
+	show_room_winning();
 }
 
 void Display::show_reservation_line() const {
@@ -327,6 +412,11 @@ void Display::clear_img_vec() {
 		}
 		img_vec.clear();
 	}
+}
+
+void Display::clear_room() {
+	close_room(m_room);
+	m_room = nullptr;
 }
 
 img_info &Display::find_info(SDL_Surface *surface) {
@@ -348,7 +438,6 @@ void Display::refresh_key_m() {
 	}
 }
 
+
 DisplayType display;
-
-
 
