@@ -21,7 +21,7 @@ void do_all_free() {
 
 int main() {
 	do_all_init();
-	//display->change_room(room);
+	
 	do {
 		display->switch_color_fill(BLACK);
 		

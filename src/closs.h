@@ -76,10 +76,10 @@ using pending_movements_t = unordered_map<TileType, TilePos>;
 class Room : public vector<vector<SpaceType> *> {
 public:
 	int m_each;
-	size_t steps = 0;
+	size_t m_steps = 0, m_perf;
 	bool is_winning = false;
 	
-	json m_title, m_help_map, m_next_level;
+	json m_title, m_help_map, m_next;
 	
 	TilePos m_size;
 	pending_movements_t m_pending;

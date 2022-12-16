@@ -2,5 +2,9 @@
   "winning": {
     "en": "You are Winning! Press Confirm(C) to Finish",
     "zh_cn": "你赢了！按确认(C)来结束"
+  },
+  "steps": {
+    "en": "Steps : ",
+    "zh_cn": "步数"
   }
 }
