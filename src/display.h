@@ -95,7 +95,7 @@ public:
 using Selection_Page_Type = Selection_Page *;
 using Selection_Page_Const = const Selection_Page *;
 
-extern Selection_Page_Type page_settings, page_lobby;
+extern Selection_Page_Type page_settings, page_lobby, page_levels;
 
 
 class Text_Page : public Page {

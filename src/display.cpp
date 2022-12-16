@@ -9,7 +9,7 @@ key_down_map_t key_clicking_map;
 key_down_map_t key_click_map;
 
 
-Selection_Page_Type page_settings, page_lobby;
+Selection_Page_Type page_settings, page_lobby, page_levels;
 Text_Page_Type page_manual = nullptr;
 
 void init_pages() {
@@ -93,7 +93,7 @@ void init_pages() {
 	                                },
 	                                {
 			                                [] {
-				                                if (key_c(KEY_CONFIRM)) start_game();
+				                                if (key_c(KEY_CONFIRM)) display->m_page = page_levels;
 			                                },
 			                                [] {
 				                                if (key_c(KEY_CONFIRM)) display->m_page = page_settings;
@@ -106,6 +106,30 @@ void init_pages() {
 			                                }
 	                                },
 	                                LOBBY_EACH
+	};
+	page_levels = new Selection_Page{img_levels,
+	                                 {
+			                                 [](bool b) {
+				                                 return create_text(txt_in_game.at(IN_GAME_K_LEVELS), LEVELS_SIZE,
+				                                                    b ? LIGHT_GREEN : WHITE,
+				                                                    to_string(current_user.at(USER_K_LEVELS)));
+			                                 }
+	                                 },
+	                                 {
+			                                 [] {
+				                                 if (key_d(KEY_MOVE_RIGHT)) {
+					                                 shift_framerate(true);
+					                                 SDL_Delay(LEVELS_DELAY);
+				                                 } else if (key_d(KEY_MOVE_LEFT)) {
+					                                 shift_framerate(false);
+					                                 SDL_Delay(LEVELS_DELAY);
+				                                 } else if (key_c(KEY_CONFIRM)) {
+					                                 current_user[USER_K_ROOM] = current_user.at(USER_K_LEVELS);
+					                                 start_game();
+				                                 }
+			                                 }
+	                                 },
+	                                 LEVELS_EACH
 	};
 }
 
@@ -316,7 +340,8 @@ void Display::process_room_winning() const {
 		if (m_room->m_steps <= m_room->m_perf) {
 			if (m_room->m_is_second_play && !current_user[USER_K_PERF].contains(current_user.at(USER_K_ROOM))) {
 				current_user[USER_K_PERF].push_back(current_user.at(USER_K_ROOM));
-				if (m_room->m_is_perf_play && m_room->m_gems.empty() && !current_user[USER_K_GEM].contains(current_user.at(USER_K_ROOM)))
+				if (m_room->m_is_perf_play && m_room->m_gems.empty() &&
+				    !current_user[USER_K_GEM].contains(current_user.at(USER_K_ROOM)))
 					current_user[USER_K_GEM].push_back(current_user.at(USER_K_ROOM));
 			}
 		}

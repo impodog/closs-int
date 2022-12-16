@@ -30,7 +30,7 @@ FontType Font_Family::sized(int size) {
 
 Font_Family arial(ARIAL_PATH), consolas(CONSOLAS_PATH), simhei(SIMHEI_PATH);
 
-SDL_Surface_ptr img_arrow, img_settings, img_Closs_InT, img_help, img_manual;
+SDL_Surface_ptr img_arrow, img_settings, img_Closs_InT, img_help, img_manual, img_levels;
 
 language_fonts_t language_fonts = {
 		{"en",    &arial},
@@ -55,6 +55,7 @@ void init_img() {
 	img_Closs_InT = IMG_Load(IMG_PATH "Closs_InT.png");
 	img_help = IMG_Load(IMG_PATH "help.png");
 	img_manual = IMG_Load(IMG_PATH "manual.png");
+	img_levels = IMG_Load(IMG_PATH "levels.png");
 	// old graphics
 	auto img_old_box = IMG_Load(IMG_PATH "old_box.png");
 	
@@ -67,12 +68,15 @@ void init_img() {
 			                      img_wall,
 			                      img_dest,
 								  img_gem,
+								  
 			                      img_box2,
+								  
 			                      img_arrow,
 			                      img_settings,
 			                      img_Closs_InT,
 			                      img_help,
-			                      img_manual
+			                      img_manual,
+								  img_levels
 	                      });
 	
 	// put into image map

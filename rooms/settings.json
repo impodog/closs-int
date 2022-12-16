@@ -8,8 +8,8 @@
     "zh_cn": "滑动敏感度 [1<<   >>300] : "
   },
   "framerate": {
-    "en": "Framerate Upper Limit [20<<  >>150] (Applying Required) : ",
-    "zh_cn": "帧率上限 [20<<  >>150] (需要应用) : "
+    "en": "Framerate Upper Limit [20<<  >>150] : ",
+    "zh_cn": "帧率上限 [20<<  >>150] : "
   },
   "apply": {
     "en": "Apply Settings",

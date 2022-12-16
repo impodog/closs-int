@@ -18,7 +18,7 @@
 #include "SDL_image.h"
 #include "SDL_ttf.h"
 
-#define VERSION "v0.1.3"
+#define VERSION "v0.1.4"
 
 #define TITLE "Closs : Inside the Tapes " VERSION
 #define SCR_WIDTH 2000
@@ -37,6 +37,9 @@
 #define LOBBY_SIZE 60
 #define TEXT_PAGE_EACH 100
 #define TEXT_PAGE_SIZE 50
+#define LEVELS_EACH 150
+#define LEVELS_SIZE 70
+#define LEVELS_DELAY 100
 
 #define WINNING_SIZE 40
 #define WINNING_WIDTH 800
@@ -52,6 +55,9 @@
 
 #define MAX_FRAMERATE 150
 #define MIN_FRAMERATE 20
+
+#define MAX_LEVEL_NUMBER 2
+#define MIN_LEVEL_NUMBER 1
 
 
 #define PATH_BEGIN "../"
@@ -92,6 +98,7 @@
 #define USER_K_UNLOCKED "unlocked"
 #define USER_K_PERF "perf"
 #define USER_K_GEM "gem"
+#define USER_K_LEVELS "levels"
 
 #define SETTINGS_K_LANGUAGE "language"
 #define SETTINGS_K_SENSITIVITY "sensitivity"
@@ -107,6 +114,7 @@
 
 #define IN_GAME_K_WINNING "winning"
 #define IN_GAME_K_STEPS "steps"
+#define IN_GAME_K_LEVELS "levels"
 
 #define KEY_SHIFT_UP SDLK_w
 #define KEY_SHIFT_LEFT SDLK_a
@@ -138,6 +146,7 @@ const SDL_Color GREEN{0, 200, 0, 255};
 const SDL_Color BLUE{0, 0, 200, 255};
 const SDL_Color CYAN{0, 200, 200, 255};
 const SDL_Color GREY{200, 200, 200};
+const SDL_Color LIGHT_GREEN{100, 200, 150, 255};
 
 template<typename T1>
 struct Pos2D {

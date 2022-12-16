@@ -52,7 +52,7 @@ RoomType open_room(const string &room_path) {
 }
 
 int get_default_each(size_t w, size_t h) {
-	return max((int) min(SCR_WIDTH / w, SCR_HEIGHT / h), MIN_EACH);
+	return max((int) min(SCR_WIDTH / w, RESERVED_HEIGHT / h), MIN_EACH);
 }
 
 RoomType create_room(const json &room_json) {
@@ -163,6 +163,12 @@ void shift_framerate(bool down) {
 	else if (framerate > MIN_FRAMERATE) current_user[USER_K_FRAMERATE] = framerate - 1;
 }
 
+void shift_levels(bool down) {
+	int levels = USER_LEVELS;
+	if (down) { if (levels < current_user.at(USER_K_UNLOCKED)) current_user[USER_K_LEVELS] = levels + 1; }
+	else if (levels > MIN_LEVEL_NUMBER) current_user[USER_K_LEVELS] = levels - 1;
+}
+
 bool is_second_play() {
 	return current_user.at(USER_K_ROOM) < current_user.at(USER_K_UNLOCKED);
 }
@@ -190,5 +196,6 @@ SDL_Surface *create_text(const string &str, int size, const SDL_Color &color) {
 	return TTF_RenderUTF8_Solid(language_fonts.at(USER_LANG)->sized(size),
 	                            str.c_str(), color);
 }
+
 
 

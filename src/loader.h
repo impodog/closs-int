@@ -9,6 +9,7 @@
 #define USER_SENSITIVITY (int)((int)current_user.at(USER_K_SENSITIVITY))
 #define USER_LANG (string)current_user.at(USER_K_LANGUAGE)
 #define USER_FRAMERATE (int)current_user.at(USER_K_FRAMERATE)
+#define USER_LEVELS (int)current_user.at(USER_K_LEVELS)
 
 #include "closs.h"
 
@@ -44,6 +45,8 @@ void shift_language(bool down);
 void shift_sensitivity(bool down);
 
 void shift_framerate(bool down);
+
+void shift_levels(bool down);
 
 bool is_second_play();
 
