@@ -22,7 +22,8 @@ repl_code = {
     "cy": 1,
     "bx": 2,
     "wa": 3,
-    "ds": 4
+    "ds": 4,
+    "gm": 5
 }
 common_define = {
     "1c": "ds<cy",
@@ -101,8 +102,8 @@ def analyze_content(content: "list[str]") -> dict:
                 import_define(eval(operator))
             else:
                 k, v = operator.split("=")
-                k.strip()
-                v.strip()
+                k = k.strip()
+                v = v.strip()
                 define_repl[k] = v
         else:
             result[key] = eval(operator)

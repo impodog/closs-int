@@ -18,7 +18,7 @@
 #include "SDL_image.h"
 #include "SDL_ttf.h"
 
-#define VERSION "v0.1.1"
+#define VERSION "v0.1.2"
 
 #define TITLE "Closs : Inside the Tapes " VERSION
 #define SCR_WIDTH 2000
@@ -30,6 +30,7 @@
 
 #define SELECTION_DEFAULT_EACH 50
 #define DESTINATION_SIZE 20
+#define GEM_SIZE DESTINATION_SIZE
 #define SETTINGS_EACH 60
 #define SETTINGS_SIZE 40
 #define LOBBY_EACH 100
@@ -38,7 +39,7 @@
 #define TEXT_PAGE_SIZE 50
 
 #define WINNING_SIZE 40
-#define WINNING_WIDTH 500
+#define WINNING_WIDTH 800
 
 #define RESERVED_HEIGHT 1000
 #define RESERVED_FROM_B (SCR_HEIGHT - RESERVED_HEIGHT)
@@ -89,6 +90,8 @@
 #define USER_K_SENSITIVITY "sensitivity"
 #define USER_K_ROOM "room"
 #define USER_K_UNLOCKED "unlocked"
+#define USER_K_PERF "perf"
+#define USER_K_GEM "gem"
 
 #define SETTINGS_K_LANGUAGE "language"
 #define SETTINGS_K_SENSITIVITY "sensitivity"
@@ -156,7 +159,8 @@ enum tile_types {
 	tile_cyan,
 	tile_box,
 	tile_wall,
-	tile_destination
+	tile_destination,
+	tile_gem
 };
 
 using c_str = const char *;

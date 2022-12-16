@@ -127,6 +127,7 @@ RoomType json_to_room(const json &room_json) {
 	if (count_w != room->m_size.w || loop_count_h != room->m_size.h)
 		throw closs_room_error("width or height does not match room content's ones");
 	room->refresh_dest();
+	room->refresh_gems();
 	return room;
 }
 

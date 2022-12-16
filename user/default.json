@@ -4,5 +4,6 @@
   "sensitivity": 1,
   "framerate": 30,
   "language": "en",
-  "perf": []
+  "perf": [],
+  "gem": []
 }

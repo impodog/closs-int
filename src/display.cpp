@@ -314,7 +314,14 @@ void Display::collect_loop_info() {
 }
 
 void Display::process_room_winning() const {
-	if (m_room->is_winning && key_c(KEY_CONFIRM)) {
+	if (m_room->m_is_winning && key_c(KEY_CONFIRM)) {
+		if (m_room->m_steps <= m_room->m_perf) {
+			if (m_is_second_play && !current_user[USER_K_PERF].contains(current_user.at(USER_K_ROOM))) {
+				current_user[USER_K_PERF].push_back(current_user.at(USER_K_ROOM));
+				if (m_room->m_gems.empty() && !current_user[USER_K_GEM].contains(current_user.at(USER_K_ROOM)))
+					current_user[USER_K_GEM].push_back(current_user.at(USER_K_ROOM));
+			}
+		}
 		if (m_room->m_next.is_number_integer()) {
 			int next = (int) m_room->m_next;
 			current_user[USER_K_ROOM] = next;
@@ -324,6 +331,7 @@ void Display::process_room_winning() const {
 		} else {
 			current_user[USER_K_ROOM] = (string) m_room->m_next;
 		}
+		save_user();
 		start_game();
 	}
 }
@@ -344,6 +352,7 @@ void Display::process_room() {
 	
 	m_room->move_independents(key_c);
 	m_room->do_pending_moves();
+	m_room->detect_gems();
 	m_room->end_of_step();
 	process_room_winning();
 	if (key_d(KEY_HELP)) m_page = new Text_Page(img_help, m_room->m_help_map, true);
@@ -437,8 +446,9 @@ void Display::show_room_info() const {
 	
 	SDL_Color steps_color = WHITE;
 	string steps_text = " " + to_string(m_room->m_steps);
-	if (m_is_second_play && m_room->m_perf > 0) {
+	if (m_is_second_play && m_room->m_perf != 0) {
 		if (m_room->m_perf < m_room->m_steps) steps_color = RED;
+		else if (m_room->m_perf == m_room->m_steps) steps_color = WHITE;
 		else {
 			long double steps_percent = m_room->m_steps / (long double) m_room->m_perf, rev_percent = 1 - steps_percent;
 			steps_color = {(Uint8) (200 * steps_percent), (Uint8) (200 * rev_percent), (Uint8) (200 * rev_percent)};
@@ -451,7 +461,7 @@ void Display::show_room_info() const {
 }
 
 void Display::show_room_winning() const {
-	if (m_room->is_winning) {
+	if (m_room->m_is_winning) {
 		auto surface = create_text(txt_in_game.at(IN_GAME_K_WINNING), WINNING_SIZE, GREEN);
 		show_surface(renderer, surface, {WINNING_WIDTH, RESERVED_HEIGHT + (RESERVED_FROM_B - WINNING_SIZE) / 2});
 		SDL_FreeSurface(surface);

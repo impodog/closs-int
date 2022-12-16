@@ -30,14 +30,14 @@ bool Tile::operator==(const Tile &tile) const {
 
 bool Tile::is_independent() const { return false; }
 
-direction_t Tile::acq_req(const Tile::Movement_Request &req) const { return 0; }
+tile_types Tile::get_type() const { return tile_undefined; }
+
+direction_t Tile::acq_req(const Movement_Request &req) const { return 0; }
 
 direction_t Tile::respond_keys(key_predicate_t predicate) const { return 0; }
 
 void Tile::show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
                            double stretch_ratio) const {}
-
-tile_types Tile::get_type() const { return tile_undefined; }
 
 Room::Room(int each, TilePos size) {
 	for (size_t h = 0; h != size.h; h++) {
@@ -71,6 +71,15 @@ void Room::refresh_dest() {
 			for (auto tile: *space)
 				if (tile->get_type() == tile_destination)
 					m_dest.push_back(tile);
+}
+
+void Room::refresh_gems() {
+	m_gems.clear();
+	for (auto lane: *this)
+		for (auto space: *lane)
+			for (auto tile: *space)
+				if (tile->get_type() == tile_gem)
+					m_gems.push_back(tile);
 }
 
 SpaceType Room::at(const TilePos &pos) {
@@ -132,23 +141,16 @@ DisplayPos Room::total_size() const {
 	return {(int) (m_each * m_size.w), (int) (m_each * m_size.h)};
 }
 
-void Room::end_of_step() {
-	is_winning = true;
-	for (auto dest: m_dest)
-		if (!((Destination *) dest)->detect_requirement(at(dest->m_pos))) {
-			is_winning = false;
-			break;
-		}
-}
-
 void Room::move_independents(key_predicate_t predicate) {
 	bool next_step_flag = true;
+	m_is_moving = false;
 	for (auto lane: *this)
 		for (auto space: *lane)
 			for (auto tile: *space)
 				if (tile->is_independent()) {
 					auto dir = tile->respond_keys(predicate);
 					if (dir > 0) {
+						m_is_moving = true;
 						send_req_from(tile, dir);
 						if (next_step_flag) {
 							next_step_flag = false;
@@ -156,6 +158,32 @@ void Room::move_independents(key_predicate_t predicate) {
 						}
 					}
 				}
+}
+
+void Room::detect_gems() {
+	if (m_is_moving) {
+		Space pending_collection;
+		for (auto gem_tile: m_gems) {
+			auto space = at(gem_tile->m_pos);
+			for (auto tile: *space)
+				if (tile->get_type() == tile_cyan) pending_collection.push_back(gem_tile);
+		}
+		for (auto gem_tile: pending_collection) {
+			auto gem = (Gem *) gem_tile;
+			m_steps += gem->m_addition;
+			del(gem);
+			delete gem;
+		}
+	}
+}
+
+void Room::end_of_step() {
+	m_is_winning = true;
+	for (auto dest: m_dest)
+		if (!((Destination *) dest)->detect_requirement(at(dest->m_pos))) {
+			m_is_winning = false;
+			break;
+		}
 }
 
 
@@ -209,22 +237,23 @@ void Destination::show_additional(SDL_Renderer *renderer, const DisplayPos &pos,
 	auto texture = SDL_CreateTextureFromSurface(renderer, surface);
 	auto srcrect = get_srcrect(surface), dstrect = get_dstrect(show_pos, surface);
 	SDL_RenderCopy(renderer, texture, &srcrect, &dstrect);
+	SDL_DestroyTexture(texture);
 	SDL_FreeSurface(surface);
 }
 
-TileType construct_undefined(TilePos pos, SDL_Surface *img, int type) {
+TileType construct_undefined(TilePos pos, SDL_Surface *img, int) {
 	return new Tile(pos, img);
 }
 
-TileType construct_cyan(TilePos pos, SDL_Surface *img, int type) {
+TileType construct_cyan(TilePos pos, SDL_Surface *img, int) {
 	return new Cyan(pos, img);
 }
 
-TileType construct_box(TilePos pos, SDL_Surface *img, int type) {
+TileType construct_box(TilePos pos, SDL_Surface *img, int) {
 	return new Box(pos, img);
 }
 
-TileType construct_wall(TilePos pos, SDL_Surface *img, int type) {
+TileType construct_wall(TilePos pos, SDL_Surface *img, int) {
 	return new Wall(pos, img);
 }
 
@@ -232,12 +261,17 @@ TileType construct_dest(TilePos pos, SDL_Surface *img, int type) {
 	return new Destination(pos, img, type);
 }
 
+TileType construct_gem(TilePos pos, SDL_Surface *img, int addition) {
+	return new Gem(pos, img, addition);
+}
+
 tile_types_map_t tile_type_map = {
 		{tile_undefined,   construct_undefined},
 		{tile_cyan,        construct_cyan},
 		{tile_box,         construct_box},
 		{tile_wall,        construct_wall},
-		{tile_destination, construct_dest}
+		{tile_destination, construct_dest},
+		{tile_gem,         construct_gem}
 };
 
 Cyan::Cyan(TilePos pos, SDL_Surface *m_img) : Tile(pos, m_img) {}
@@ -270,3 +304,23 @@ direction_t Wall::acq_req(const Movement_Request &req) const {
 	return -1;
 }
 
+Gem::Gem(TilePos pos, SDL_Surface *m_img, int addition) : Tile(pos, m_img) {
+	m_addition = addition;
+}
+
+tile_types Gem::get_type() const {
+	return tile_gem;
+}
+
+void Gem::show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
+                          double stretch_ratio) const {
+	auto surface = TTF_RenderText_Solid(consolas.sized(FONT_SIZE(DESTINATION_SIZE)),
+	                                    to_string(m_addition).c_str(),
+	                                    m_addition <= 0 ? GREEN : RED);
+	DisplayPos show_pos = {center.w - surface->w / 2, center.h - surface->h / 2};
+	auto texture = SDL_CreateTextureFromSurface(renderer, surface);
+	auto srcrect = get_srcrect(surface), dstrect = get_dstrect(show_pos, surface);
+	SDL_RenderCopy(renderer, texture, &srcrect, &dstrect);
+	SDL_DestroyTexture(texture);
+	SDL_FreeSurface(surface);
+}

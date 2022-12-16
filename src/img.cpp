@@ -47,6 +47,7 @@ void init_img() {
 			img_box = IMG_Load(IMG_PATH "box.png"),
 			img_wall = IMG_Load(IMG_PATH "wall.png"),
 			img_dest = IMG_Load(IMG_PATH "dest.png"),
+			img_gem = IMG_Load(IMG_PATH "gem.png"),
 			img_box2 = IMG_Load(IMG_PATH "box2.png");
 	// load global graphics
 	img_arrow = IMG_Load(IMG_PATH "arrow.png");
@@ -65,6 +66,7 @@ void init_img() {
 			                      img_box,
 			                      img_wall,
 			                      img_dest,
+								  img_gem,
 			                      img_box2,
 			                      img_arrow,
 			                      img_settings,
@@ -80,6 +82,7 @@ void init_img() {
 	types_img_map[tile_box] = img_box;
 	types_img_map[tile_wall] = img_wall;
 	types_img_map[tile_destination] = img_dest;
+	types_img_map[tile_gem] = img_gem;
 }
 
 void free_img() {

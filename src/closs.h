@@ -77,20 +77,22 @@ class Room : public vector<vector<SpaceType> *> {
 public:
 	int m_each;
 	size_t m_steps = 0, m_perf;
-	bool is_winning = false;
+	bool m_is_winning = false, m_is_moving = false;
 	
 	json m_title, m_help_map, m_next;
 	
 	TilePos m_size;
 	pending_movements_t m_pending;
 	
-	Space m_dest;
+	Space m_dest, m_gems;
 	
 	explicit Room(int each, TilePos size);
 	
 	~Room();
 	
 	void refresh_dest();
+	
+	void refresh_gems();
 	
 	SpaceType at(const TilePos &pos);
 	
@@ -112,6 +114,8 @@ public:
 	
 	void move_independents(key_predicate_t predicate);
 	
+	void detect_gems();
+	
 	void end_of_step();
 	
 	DisplayPos total_size() const;
@@ -120,7 +124,7 @@ public:
 
 using RoomType = Room *;
 
-using tile_constructor_t = TileType (*)(TilePos, SDL_Surface *img, int type);
+using tile_constructor_t = TileType (*)(TilePos, SDL_Surface *, int);
 using tile_types_map_t = const map<tile_types, tile_constructor_t>;
 
 extern tile_types_map_t tile_type_map;
@@ -177,5 +181,15 @@ public:
 	direction_t acq_req(const Movement_Request &req) const override;
 };
 
+class Gem : public Tile {
+public:
+	int m_addition;
+	Gem(TilePos pos, SDL_Surface *m_img, int addition);
+	
+	tile_types get_type() const override;
+	
+	void show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
+	                     double stretch_ratio) const override;
+};
 
 #endif //CLOSS_INT_CLOSS_H
