@@ -125,7 +125,7 @@ extern Text_Page_Type page_manual;
 
 class Display {
 public:
-	bool m_loop = true, m_is_second_play;
+	bool m_loop = true;
 	Uint32 m_delay;
 	double stretch_ratio;
 	system_clock::time_point m_last;

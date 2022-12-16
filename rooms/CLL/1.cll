@@ -2,17 +2,17 @@
 .define G1 = gm<-20
 
 title {
-    "en" : "Step One",
-    "zh_cn" : "步骤 1"
+    "en": "Step One",
+    "zh_cn": "步骤 1"
 }
 
 help {
-    "en" : {
+    "en": {
         "To move": "Press direction keys to move the cyan blocks around",
         "To win": "Fill all yellow crosses with the block shown",
         "What to do now": "Just move along the walls to the cross"
     },
-    "zh_cn" : {
+    "zh_cn": {
         "移动": "按方向键来把青色方块四处移动",
         "赢": "把所有黄色叉填上它显示的方块",
         "现在要做的": "只要沿着墙移动, 到达叉"

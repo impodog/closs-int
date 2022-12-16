@@ -77,7 +77,7 @@ class Room : public vector<vector<SpaceType> *> {
 public:
 	int m_each;
 	size_t m_steps = 0, m_perf;
-	bool m_is_winning = false, m_is_moving = false;
+	bool m_is_winning = false, m_is_moving = false, m_is_second_play = false, m_is_perf_play = false;
 	
 	json m_title, m_help_map, m_next;
 	
@@ -184,6 +184,7 @@ public:
 class Gem : public Tile {
 public:
 	int m_addition;
+	
 	Gem(TilePos pos, SDL_Surface *m_img, int addition);
 	
 	tile_types get_type() const override;

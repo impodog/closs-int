@@ -44,10 +44,6 @@ void set_white_as_colorkey(const vector<SDL_Surface *> &surfaces);
 
 void show_surface(SDL_Renderer *renderer, SDL_Surface *surface, const DisplayPos &pos);
 
-SDL_Rect get_srcrect(const SDL_Surface *surface);
-
-SDL_Rect get_dstrect(const DisplayPos &pos, const SDL_Surface *surface);
-
 uint32_t MapRGB(SDL_Surface *surface, const SDL_Color &color);
 
 #endif //CLOSS_INT_IMG_H

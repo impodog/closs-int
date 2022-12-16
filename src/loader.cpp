@@ -78,6 +78,8 @@ RoomType create_room(const json &room_json) {
 	int next = room_json.at(ROOM_K_NEXT);
 	room->m_next = next == -1 ? (int) current_user.at(USER_K_ROOM) + 1 : next;
 	room->m_perf = (size_t) room_json.at(ROOM_K_PERF);
+	room->m_is_second_play = is_second_play();
+	room->m_is_perf_play = is_perf_play();
 	return room;
 }
 
@@ -161,6 +163,14 @@ void shift_framerate(bool down) {
 	else if (framerate > MIN_FRAMERATE) current_user[USER_K_FRAMERATE] = framerate - 1;
 }
 
+bool is_second_play() {
+	return current_user.at(USER_K_ROOM) < current_user.at(USER_K_UNLOCKED);
+}
+
+bool is_perf_play() {
+	return current_user.at(USER_K_PERF).contains(current_user.at(USER_K_ROOM));
+}
+
 string get_room_path() {
 	auto room = current_user.at(USER_K_ROOM);
 	return room.is_number() ? (CLOSS_ROOMS_PATH + to_string(current_user.at(USER_K_ROOM)) + ".json") : (ROOMS_PATH +
@@ -180,4 +190,5 @@ SDL_Surface *create_text(const string &str, int size, const SDL_Color &color) {
 	return TTF_RenderUTF8_Solid(language_fonts.at(USER_LANG)->sized(size),
 	                            str.c_str(), color);
 }
+
 

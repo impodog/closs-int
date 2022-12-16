@@ -1,0 +1,27 @@
+.define common
+.define G1 = gm<0
+
+title {
+    "en": "Easy Pathfinder",
+    "zh_cn": "简单寻路"
+}
+
+help {
+    "en": {
+        "Hi There!": "Nothing much to say. Follow your heart!"
+    },
+    "zh_cn": {
+        "你好!": "没什么可以说的. 跟感觉走吧!"
+    }
+}
+
+perf 17
+
+content {
+    wa wa wa wa wa wa wa
+    wa -- -- -- wa -- 1c
+    wa -- wa cy wa -- wa
+    wa -- -- wa -- -- wa
+    wa -- wa wa -- wa wa
+    -- -- -- -- -- -- G1
+}

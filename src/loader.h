@@ -45,6 +45,10 @@ void shift_sensitivity(bool down);
 
 void shift_framerate(bool down);
 
+bool is_second_play();
+
+bool is_perf_play();
+
 string get_room_path();
 
 SDL_Surface *create_text(const json &txt, int size, const SDL_Color &color = WHITE, const string &addition = "");

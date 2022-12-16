@@ -183,8 +183,6 @@ void start_game() {
 	auto room = open_room(get_room_path());
 	display->change_room(room);
 	display->m_page = nullptr;
-	if (current_user.at(USER_K_ROOM).is_number_integer())
-		display->m_is_second_play = (int) current_user.at(USER_K_ROOM) < (int) current_user.at(USER_K_UNLOCKED);
 }
 
 
@@ -316,9 +314,9 @@ void Display::collect_loop_info() {
 void Display::process_room_winning() const {
 	if (m_room->m_is_winning && key_c(KEY_CONFIRM)) {
 		if (m_room->m_steps <= m_room->m_perf) {
-			if (m_is_second_play && !current_user[USER_K_PERF].contains(current_user.at(USER_K_ROOM))) {
+			if (m_room->m_is_second_play && !current_user[USER_K_PERF].contains(current_user.at(USER_K_ROOM))) {
 				current_user[USER_K_PERF].push_back(current_user.at(USER_K_ROOM));
-				if (m_room->m_gems.empty() && !current_user[USER_K_GEM].contains(current_user.at(USER_K_ROOM)))
+				if (m_room->m_is_perf_play && m_room->m_gems.empty() && !current_user[USER_K_GEM].contains(current_user.at(USER_K_ROOM)))
 					current_user[USER_K_GEM].push_back(current_user.at(USER_K_ROOM));
 			}
 		}
@@ -342,11 +340,6 @@ void Display::process_room() {
 	if (key_d(KEY_SHIFT_DOWN)) m_room_pos.h += USER_SENSITIVITY;
 	if (key_d(KEY_SHIFT_RIGHT)) m_room_pos.w += USER_SENSITIVITY;
 	if (key_c(KEY_RESTART)) start_game();
-	else if (key_c(KEY_ESCAPE)) {
-		close_room(m_room);
-		m_room = nullptr;
-		m_page = page_lobby;
-	}
 	
 	move_room_to_visible();
 	
@@ -395,7 +388,6 @@ void Display::present() const {
 void Display::change_room(RoomType room) {
 	clear_room();
 	m_room = room;
-	m_is_second_play = false; // will be changed later in start_game()
 	auto total_size = m_room->total_size();
 	DisplayPos m_room_edge = {SCR_WIDTH - total_size.w, RESERVED_HEIGHT - total_size.h};
 	m_room_pos = {0, 0};
@@ -443,10 +435,9 @@ void Display::show_room_info() const {
 	show_surface(renderer, surface, {LEAVE_BLANK_WIDTH, RESERVED_HEIGHT + (RESERVED_FROM_B - surface->h) / 2});
 	int title_end_w = LEAVE_BLANK_WIDTH + surface->w;
 	SDL_FreeSurface(surface);
-	
 	SDL_Color steps_color = WHITE;
 	string steps_text = " " + to_string(m_room->m_steps);
-	if (m_is_second_play && m_room->m_perf != 0) {
+	if (m_room->m_is_second_play && m_room->m_perf != 0) {
 		if (m_room->m_perf < m_room->m_steps) steps_color = RED;
 		else if (m_room->m_perf == m_room->m_steps) steps_color = WHITE;
 		else {

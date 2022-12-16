@@ -78,8 +78,13 @@ void Room::refresh_gems() {
 	for (auto lane: *this)
 		for (auto space: *lane)
 			for (auto tile: *space)
-				if (tile->get_type() == tile_gem)
-					m_gems.push_back(tile);
+				if (tile->get_type() == tile_gem) {
+					if (m_is_perf_play) m_gems.push_back(tile);
+					else {
+						del(tile);
+						delete tile;
+					}
+				}
 }
 
 SpaceType Room::at(const TilePos &pos) {
