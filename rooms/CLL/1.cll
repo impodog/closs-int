@@ -1,15 +1,21 @@
+.define common
+
 title {
     "en" : "Step One",
-    "zh_cn" : "步骤1"
+    "zh_cn" : "步骤 1"
 }
+
 help {
     "en" : {
-
+        "To move": "Press direction keys to move the cyan blocks around"
     },
     "zh_cn" : {
-
+        "移动": "按方向键来把青色方块四处移动"
     }
 }
+
 content {
-    cy -- -- -- -- ds<cy
+    wa wa wa wa wa wa wa wa
+    wa cy -- -- -- -- 1c wa
+    wa wa wa wa wa wa wa wa
 }

@@ -18,7 +18,7 @@
 #include "SDL_image.h"
 #include "SDL_ttf.h"
 
-#define VERSION "v0.1.0"
+#define VERSION "v0.1.1"
 
 #define TITLE "Closs : Inside the Tapes " VERSION
 #define SCR_WIDTH 2000
@@ -34,7 +34,7 @@
 #define SETTINGS_SIZE 40
 #define LOBBY_EACH 100
 #define LOBBY_SIZE 60
-#define TEXT_PAGE_EACH 60
+#define TEXT_PAGE_EACH 100
 #define TEXT_PAGE_SIZE 50
 
 #define WINNING_SIZE 40
@@ -82,6 +82,7 @@
 #define ROOM_K_HELP "help"
 #define ROOM_K_CONTENT "content"
 #define ROOM_K_NEXT "next"
+#define ROOM_K_PERF "perf"
 
 #define USER_K_LANGUAGE "language"
 #define USER_K_FRAMERATE "framerate"
@@ -102,6 +103,7 @@
 #define LOBBY_K_QUIT "quit"
 
 #define IN_GAME_K_WINNING "winning"
+#define IN_GAME_K_STEPS "steps"
 
 #define KEY_SHIFT_UP SDLK_w
 #define KEY_SHIFT_LEFT SDLK_a
@@ -118,6 +120,8 @@
 #define KEY_SETTINGS SDLK_q
 #define KEY_CONFIRM SDLK_c
 #define KEY_HELP SDLK_h
+#define KEY_RESTART SDLK_r
+#define KEY_ESCAPE SDLK_ESCAPE
 
 
 using namespace std;
@@ -126,9 +130,10 @@ using namespace nlohmann;
 
 const SDL_Color WHITE{255, 255, 255, 255};
 const SDL_Color BLACK{0, 0, 0, 255};
-const SDL_Color RED{255, 0, 0, 255};
-const SDL_Color GREEN{0, 255, 0, 255};
-const SDL_Color BLUE{0, 0, 255, 255};
+const SDL_Color RED{200, 0, 0, 255};
+const SDL_Color GREEN{0, 200, 0, 255};
+const SDL_Color BLUE{0, 0, 200, 255};
+const SDL_Color CYAN{0, 200, 200, 255};
 const SDL_Color GREY{200, 200, 200};
 
 template<typename T1>

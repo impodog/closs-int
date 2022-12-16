@@ -12,8 +12,8 @@ def convert_CLL_to_Closs(src: str):
     if src.endswith(".cll"):
         name = src[:-4]
     else:
-        src += ".cll"
         name = src
+        src += ".cll"
     src_path = os.path.join(CLL_path, src)
     output_path = os.path.join(Closs_path, name + ".json")
     convertor.convert_file(src_path, output_path)

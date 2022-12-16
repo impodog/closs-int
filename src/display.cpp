@@ -10,7 +10,7 @@ key_down_map_t key_click_map;
 
 
 Selection_Page_Type page_settings, page_lobby;
-Text_Page_Type page_manual;
+Text_Page_Type page_manual = nullptr;
 
 void init_pages() {
 	page_settings = new Selection_Page{img_settings,
@@ -107,8 +107,6 @@ void init_pages() {
 	                                },
 	                                LOBBY_EACH
 	};
-	
-	page_manual = new Text_Page{img_manual, txt_manual, false};
 }
 
 void free_pages() {
@@ -124,15 +122,20 @@ void reload_pages() {
 
 
 void init_key_map() {
-	init_key_map(0, 8, 9, 13, 27);
+	init_key_map({0, 8, 9, 13, 27});
 	init_key_map(32, 64);
 	init_key_map(91, 127);
 	init_key_map(1073741881, 1073742106);
 	key_click_map = key_down_map_t(key_down_map);
 }
 
-void init_key_map(direction_t code, ...) {
+void init_key_map(direction_t code) {
 	key_down_map[code] = key_clicking_map[code] = false;
+}
+
+void init_key_map(const vector<direction_t> &codes) {
+	for (auto code: codes)
+		init_key_map(code);
 }
 
 void init_key_map(direction_t begin, direction_t end) {
@@ -141,7 +144,7 @@ void init_key_map(direction_t begin, direction_t end) {
 	}
 }
 
-void key_down(direction_t code, ...) {
+void key_down(direction_t code) {
 	key_clicking_map[code] = key_down_map[code];
 	key_down_map[code] = true;
 }
@@ -177,8 +180,11 @@ void free_display() {
 }
 
 void start_game() {
-	display->change_room(open_room(get_room_path()));
+	auto room = open_room(get_room_path());
+	display->change_room(room);
 	display->m_page = nullptr;
+	if (current_user.at(USER_K_ROOM).is_number_integer())
+		display->m_is_second_play = (int) current_user.at(USER_K_ROOM) < (int) current_user.at(USER_K_UNLOCKED);
 }
 
 
@@ -206,7 +212,7 @@ void Selection_Page::show() {
 }
 
 void Selection_Page::process() {
-	if (key_c(KEY_MOVE_UP)) m_index = m_index + m_size - 1;
+	if (key_c(KEY_MOVE_UP)) m_index += m_size - 1;
 	else if (key_c(KEY_MOVE_DOWN)) m_index++;
 	m_index %= m_size;
 	m_processors.at(m_index)();
@@ -219,13 +225,15 @@ Text_Page::Text_Page(SDL_Surface *title, json &help_map, bool release) {
 	SDL_Surface *surface = nullptr;
 	int height = SCR_HEIGHT;
 	for (const auto &pair: help_map.at(USER_LANG).get<help_map_t>()) {
-		if (height + TEXT_PAGE_EACH > SCR_HEIGHT) {
+		content_height_refresh:
+		int content_height = height + (TEXT_PAGE_EACH - TEXT_PAGE_SIZE) / 2;
+		if (content_height > SCR_HEIGHT - TEXT_PAGE_EACH - m_title->h) {
 			surface = SDL_CreateRGBSurface(0, SCR_WIDTH, SCR_HEIGHT - m_title->h, 32, 0, 0, 0, 0);
-			height = m_title->h;
+			height = TEXT_PAGE_SIZE;
 			m_sides.push_back(surface);
+			goto content_height_refresh;
 		}
 		
-		int content_height = height + (TEXT_PAGE_EACH - TEXT_PAGE_SIZE) / 2;
 		auto title_surf = create_text((string) pair.first, TEXT_PAGE_SIZE, WHITE);
 		auto descr_surf = create_text((string) pair.second, TEXT_PAGE_SIZE, GREY);
 		SDL_Rect title_srcrect = get_srcrect(title_surf),
@@ -239,6 +247,7 @@ Text_Page::Text_Page(SDL_Surface *title, json &help_map, bool release) {
 		SDL_FreeSurface(title_surf);
 		SDL_FreeSurface(descr_surf);
 	}
+	m_size = m_sides.size();
 }
 
 Text_Page::~Text_Page() {
@@ -256,9 +265,9 @@ void Text_Page::process() {
 		display->return_to_game();
 		if (m_release) this->~Text_Page();
 	}
-	if (key_c(KEY_MOVE_LEFT) || key_c(KEY_MOVE_UP)) m_index += 1;
-	else if (key_c(KEY_MOVE_RIGHT) || key_c(KEY_MOVE_DOWN)) m_index -= 1;
-	m_index %= m_sides.size();
+	if (key_c(KEY_MOVE_LEFT) || key_c(KEY_MOVE_UP)) m_index += m_size - 1;
+	else if (key_c(KEY_MOVE_RIGHT) || key_c(KEY_MOVE_DOWN)) m_index++;
+	m_index %= m_size;
 }
 
 
@@ -306,14 +315,14 @@ void Display::collect_loop_info() {
 
 void Display::process_room_winning() const {
 	if (m_room->is_winning && key_c(KEY_CONFIRM)) {
-		if (m_room->m_next_level.is_number_integer()) {
-			int next = (int) m_room->m_next_level;
+		if (m_room->m_next.is_number_integer()) {
+			int next = (int) m_room->m_next;
 			current_user[USER_K_ROOM] = next;
 			current_user[USER_K_UNLOCKED] = max(next, (int) current_user[USER_K_UNLOCKED]);
-		} else if (m_room->m_next_level.is_number_float()) {
-			current_user[USER_K_ROOM] = (float) m_room->m_next_level;
+		} else if (m_room->m_next.is_number_float()) {
+			current_user[USER_K_ROOM] = (float) m_room->m_next;
 		} else {
-			current_user[USER_K_ROOM] = (string) m_room->m_next_level;
+			current_user[USER_K_ROOM] = (string) m_room->m_next;
 		}
 		start_game();
 	}
@@ -324,6 +333,12 @@ void Display::process_room() {
 	if (key_d(KEY_SHIFT_LEFT)) m_room_pos.w -= USER_SENSITIVITY;
 	if (key_d(KEY_SHIFT_DOWN)) m_room_pos.h += USER_SENSITIVITY;
 	if (key_d(KEY_SHIFT_RIGHT)) m_room_pos.w += USER_SENSITIVITY;
+	if (key_c(KEY_RESTART)) start_game();
+	else if (key_c(KEY_ESCAPE)) {
+		close_room(m_room);
+		m_room = nullptr;
+		m_page = page_lobby;
+	}
 	
 	move_room_to_visible();
 	
@@ -371,6 +386,7 @@ void Display::present() const {
 void Display::change_room(RoomType room) {
 	clear_room();
 	m_room = room;
+	m_is_second_play = false; // will be changed later in start_game()
 	auto total_size = m_room->total_size();
 	DisplayPos m_room_edge = {SCR_WIDTH - total_size.w, RESERVED_HEIGHT - total_size.h};
 	m_room_pos = {0, 0};
@@ -413,10 +429,25 @@ DisplayPos Display::show_img(SDL_Surface *img, const TilePos &pos) {
 	return {dstrect.w, dstrect.h};
 }
 
-void Display::show_room_title() const {
+void Display::show_room_info() const {
 	auto surface = create_text(m_room->m_title, ROOM_TITLE_SIZE);
 	show_surface(renderer, surface, {LEAVE_BLANK_WIDTH, RESERVED_HEIGHT + (RESERVED_FROM_B - surface->h) / 2});
+	int title_end_w = LEAVE_BLANK_WIDTH + surface->w;
 	SDL_FreeSurface(surface);
+	
+	SDL_Color steps_color = WHITE;
+	string steps_text = " " + to_string(m_room->m_steps);
+	if (m_is_second_play && m_room->m_perf > 0) {
+		if (m_room->m_perf < m_room->m_steps) steps_color = RED;
+		else {
+			long double steps_percent = m_room->m_steps / (long double) m_room->m_perf, rev_percent = 1 - steps_percent;
+			steps_color = {(Uint8) (200 * steps_percent), (Uint8) (200 * rev_percent), (Uint8) (200 * rev_percent)};
+		}
+		steps_text += "/" + to_string(m_room->m_perf);
+	}
+	surface = create_text(txt_in_game.at(IN_GAME_K_STEPS), ROOM_TITLE_SIZE, steps_color, steps_text);
+	show_surface(renderer, surface,
+	             {title_end_w + LEAVE_BLANK_WIDTH, RESERVED_HEIGHT + (RESERVED_FROM_B - surface->h) / 2});
 }
 
 void Display::show_room_winning() const {
@@ -442,7 +473,7 @@ void Display::show_room() {
 	}
 	switch_color_fill(BLACK, {0, RESERVED_HEIGHT, SCR_WIDTH, RESERVED_FROM_B});
 	show_reservation_line();
-	show_room_title();
+	show_room_info();
 	show_room_winning();
 }
 

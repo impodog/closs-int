@@ -3,5 +3,6 @@
   "unlocked": 1,
   "sensitivity": 1,
   "framerate": 30,
-  "language": "en"
+  "language": "en",
+  "perf": []
 }

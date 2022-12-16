@@ -6,7 +6,7 @@ import re
 
 DEFAULT = "DEFAULT"
 tools_dir = os.path.join(__file__, os.path.pardir)
-template_json: dict = json.load(open(os.path.join(tools_dir, "template.json")))
+template_json: dict = json.load(open(os.path.join(tools_dir, "convertor_template.json")))
 """
 tile_background = -2,
 tile_undefined,
@@ -24,6 +24,10 @@ repl_code = {
     "wa": 3,
     "ds": 4
 }
+common_define = {
+    "1c": "ds<cy",
+    "1x": "ds<bx"
+}
 
 
 def get_repl(tile: str) -> int:
@@ -35,6 +39,7 @@ def get_repl(tile: str) -> int:
 
 def parse_content(content: str) -> "list[list[list]]":
     content = content.strip("{}\n")
+    content = re.sub(" +", " ", content)
     result = list()
     max_width = 0
     for line in content.split('\n'):
@@ -58,7 +63,13 @@ def parse_content(content: str) -> "list[list[list]]":
 
 
 def analyze_content(content: "list[str]") -> dict:
+    def import_define(src: dict[str, str]):
+        nonlocal define_repl
+        for import_k, import_v in src.items():
+            define_repl[import_k] = import_v
+
     result = copy.deepcopy(template_json)
+    define_repl: dict[str, str] = dict()
     i = 0
     while i < len(content):
         line = content[i]
@@ -77,10 +88,22 @@ def analyze_content(content: "list[str]") -> dict:
                 raise RuntimeError("braces not closed")
             operator += "\n" + "\n".join(content[i + 1:j + 1])
             i = j
+        for k, v in define_repl.items():
+            operator = re.sub(r"(\b)%s(\b)" % k, r"\1%s\2" % v, operator)
         if key == "content":
             result["content"] = parse_content(operator)
             result["width"] = len(result["content"][0])
             result["height"] = len(result["content"])
+        elif key == ".define":
+            if operator == "common":
+                import_define(common_define)
+            elif operator.startswith("{"):
+                import_define(eval(operator))
+            else:
+                k, v = operator.split("=")
+                k.strip()
+                v.strip()
+                define_repl[k] = v
         else:
             result[key] = eval(operator)
         i += 1

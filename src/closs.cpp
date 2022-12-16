@@ -61,7 +61,7 @@ Room::~Room() {
 		}
 		delete lane;
 	}
-	vector<vector<SpaceType> *>::~vector();
+	clear();
 }
 
 void Room::refresh_dest() {
@@ -152,7 +152,7 @@ void Room::move_independents(key_predicate_t predicate) {
 						send_req_from(tile, dir);
 						if (next_step_flag) {
 							next_step_flag = false;
-							steps++;
+							m_steps++;
 						}
 					}
 				}

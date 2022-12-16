@@ -10,8 +10,8 @@
 #undef main
 
 #define ROOM_EACH m_room->m_each
-#define KEY_UP(codes) init_key_map(codes)
-#define KEY_DOWN(codes) key_down(codes)
+#define KEY_UP(code) init_key_map(code)
+#define KEY_DOWN(code) key_down(code)
 #define IS_GAMING (m_page == nullptr)
 
 struct img_info {
@@ -34,15 +34,17 @@ void free_display();
 
 void init_key_map();
 
-void init_key_map(SDL_Keycode code, ...);
+void init_key_map(direction_t code);
 
-void init_key_map(SDL_Keycode begin, SDL_Keycode end);
+void init_key_map(const vector<direction_t>& code);
 
-void key_down(SDL_Keycode code, ...);
+void init_key_map(direction_t begin, direction_t end);
 
-bool key_d(SDL_Keycode code);
+void key_down(direction_t code);
 
-bool key_clicking(SDL_Keycode code);
+bool key_d(direction_t code);
+
+bool key_clicking(direction_t code);
 
 bool key_c(direction_t code);
 
@@ -104,7 +106,7 @@ public:
 	DisplayPos m_title_pos;
 	
 	text_sides_t m_sides;
-	size_t m_index = 0;
+	size_t m_index = 0, m_size;
 	
 	string m_language = current_user.at(USER_K_LANGUAGE);
 	
@@ -123,7 +125,7 @@ extern Text_Page_Type page_manual;
 
 class Display {
 public:
-	bool m_loop = true;
+	bool m_loop = true, m_is_second_play;
 	Uint32 m_delay;
 	double stretch_ratio;
 	system_clock::time_point m_last;
@@ -173,7 +175,7 @@ public:
 	
 	DisplayPos show_img(SDL_Surface *img, const TilePos &pos);
 	
-	void show_room_title() const;
+	void show_room_info() const;
 	
 	void show_room_winning() const;
 	
