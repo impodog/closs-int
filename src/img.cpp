@@ -30,7 +30,7 @@ FontType Font_Family::sized(int size) {
 
 Font_Family arial(ARIAL_PATH), consolas(CONSOLAS_PATH), simhei(SIMHEI_PATH);
 
-SDL_Surface_ptr img_arrow, img_settings, img_Closs_InT, img_help;
+SDL_Surface_ptr img_arrow, img_settings, img_Closs_InT, img_help, img_manual;
 
 language_fonts_t language_fonts = {
 		{"en",    &arial},
@@ -53,8 +53,10 @@ void init_img() {
 	img_settings = IMG_Load(IMG_PATH "settings.png");
 	img_Closs_InT = IMG_Load(IMG_PATH "Closs_InT.png");
 	img_help = IMG_Load(IMG_PATH "help.png");
+	img_manual = IMG_Load(IMG_PATH "manual.png");
 	// old graphics
 	auto img_old_box = IMG_Load(IMG_PATH "old_box.png");
+	
 	
 	// set color keys
 	set_white_as_colorkey({
@@ -67,7 +69,8 @@ void init_img() {
 			                      img_arrow,
 			                      img_settings,
 			                      img_Closs_InT,
-			                      img_help
+			                      img_help,
+			                      img_manual
 	                      });
 	
 	// put into image map
@@ -87,6 +90,7 @@ void free_img() {
 	SDL_FreeSurface(img_arrow);
 	SDL_FreeSurface(img_Closs_InT);
 	SDL_FreeSurface(img_help);
+	SDL_FreeSurface(img_manual);
 }
 
 void set_white_as_colorkey(const vector<SDL_Surface *> &surfaces) {

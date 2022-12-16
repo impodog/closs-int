@@ -39,7 +39,7 @@ public:
 	TilePos m_pos;
 	SDL_Surface *m_img;
 	
-	Tile(TilePos pos, SDL_Surface *m_img, tile_types type);
+	Tile(TilePos pos, SDL_Surface *m_img);
 	
 	SDL_Rect srcrect() const;
 	
@@ -79,7 +79,7 @@ public:
 	size_t steps = 0;
 	bool is_winning = false;
 	
-	json m_title, m_help_map;
+	json m_title, m_help_map, m_next_level;
 	
 	TilePos m_size;
 	pending_movements_t m_pending;
@@ -120,7 +120,7 @@ public:
 
 using RoomType = Room *;
 
-using tile_constructor_t = TileType (*)(TilePos, SDL_Surface *img, tile_types type);
+using tile_constructor_t = TileType (*)(TilePos, SDL_Surface *img, int type);
 using tile_types_map_t = const map<tile_types, tile_constructor_t>;
 
 extern tile_types_map_t tile_type_map;
@@ -136,7 +136,7 @@ class Destination : public Tile {
 public:
 	tile_types m_req;
 	
-	explicit Destination(TilePos pos, SDL_Surface *img, tile_types type);
+	explicit Destination(TilePos pos, SDL_Surface *img, int type);
 	
 	tile_types get_type() const override;
 	
@@ -148,7 +148,7 @@ public:
 
 class Cyan : public Tile {
 public:
-	Cyan(TilePos pos, SDL_Surface *m_img, tile_types type);
+	Cyan(TilePos pos, SDL_Surface *m_img);
 	
 	bool is_independent() const override;
 	
@@ -161,7 +161,7 @@ public:
 
 class Box : public Tile {
 public:
-	Box(TilePos pos, SDL_Surface *m_img, tile_types type);
+	Box(TilePos pos, SDL_Surface *m_img);
 	
 	tile_types get_type() const override;
 	
@@ -170,7 +170,7 @@ public:
 
 class Wall : public Tile {
 public:
-	Wall(TilePos pos, SDL_Surface *m_img, tile_types type);
+	Wall(TilePos pos, SDL_Surface *m_img);
 	
 	tile_types get_type() const override;
 	

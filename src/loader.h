@@ -13,7 +13,7 @@
 #include "closs.h"
 
 extern json default_user, current_user;
-extern json txt_settings, txt_lobby, txt_in_game;
+extern json txt_settings, txt_lobby, txt_in_game, txt_manual;
 
 void init_default_user();
 

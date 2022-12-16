@@ -68,6 +68,7 @@ using selection_generators_const_t = const vector<selection_surface_generator_t>
 using selection_click_processor_t = void (*)();
 using selection_processors_t = vector<selection_click_processor_t>;
 using selection_processors_const_t = const vector<selection_click_processor_t> &;
+using text_sides_t = vector<SDL_Surface *>;
 
 class Selection_Page : public Page {
 public:
@@ -94,12 +95,20 @@ using Selection_Page_Const = const Selection_Page *;
 
 extern Selection_Page_Type page_settings, page_lobby;
 
+
 class Text_Page : public Page {
 public:
-	SDL_Surface *m_title, *m_help;
+	bool m_release;
+	
+	SDL_Surface *m_title;
 	DisplayPos m_title_pos;
 	
-	Text_Page(SDL_Surface *title, json &help_map);
+	text_sides_t m_sides;
+	size_t m_index = 0;
+	
+	string m_language = current_user.at(USER_K_LANGUAGE);
+	
+	Text_Page(SDL_Surface *title, json &help_map, bool release);
 	
 	~Text_Page();
 	
@@ -107,6 +116,10 @@ public:
 	
 	void process() override;
 };
+
+using Text_Page_Type = Text_Page *;
+using Text_Page_Const = const Text_Page *;
+extern Text_Page_Type page_manual;
 
 class Display {
 public:
@@ -131,6 +144,8 @@ public:
 	void apply_settings();
 	
 	void collect_loop_info();
+	
+	void process_room_winning() const;
 	
 	void process_room();
 	
@@ -169,6 +184,8 @@ public:
 	void clear_img_vec();
 	
 	void clear_room();
+	
+	void return_to_game();
 	
 	void move_room_to_visible();
 	

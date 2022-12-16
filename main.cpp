@@ -21,7 +21,6 @@ void do_all_free() {
 
 int main() {
 	do_all_init();
-	auto room = OPEN_CLOSS_ROOM("test.json");
 	//display->change_room(room);
 	do {
 		display->switch_color_fill(BLACK);
@@ -31,8 +30,8 @@ int main() {
 		display->process_content();
 		
 		display->present();
+		
 	} while (display->m_loop);
-	close_room(room);
 	do_all_free();
 	return 0;
 }

@@ -10,6 +10,7 @@ key_down_map_t key_click_map;
 
 
 Selection_Page_Type page_settings, page_lobby;
+Text_Page_Type page_manual;
 
 void init_pages() {
 	page_settings = new Selection_Page{img_settings,
@@ -67,9 +68,9 @@ void init_pages() {
 				                                   }
 			                                   },
 			                                   [] { // 6 to_game
-				                                   if (key_c(KEY_CONFIRM) && display->m_room != nullptr) {
+				                                   if (key_c(KEY_CONFIRM)) {
 					                                   display->apply_settings();
-					                                   display->m_page = nullptr;
+					                                   display->return_to_game();
 				                                   }
 			                                   }
 	                                   },
@@ -84,6 +85,9 @@ void init_pages() {
 				                                return create_lobby_text(LOBBY_K_SETTINGS, b);
 			                                },
 			                                [](bool b) {
+				                                return create_lobby_text(LOBBY_K_MANUAL, b);
+			                                },
+			                                [](bool b) {
 				                                return create_lobby_text(LOBBY_K_QUIT, b);
 			                                }
 	                                },
@@ -95,16 +99,27 @@ void init_pages() {
 				                                if (key_c(KEY_CONFIRM)) display->m_page = page_settings;
 			                                },
 			                                [] {
+				                                if (key_c(KEY_CONFIRM)) display->m_page = page_manual;
+			                                },
+			                                [] {
 				                                if (key_c(KEY_CONFIRM)) display->m_loop = false;
 			                                }
 	                                },
 	                                LOBBY_EACH
 	};
+	
+	page_manual = new Text_Page{img_manual, txt_manual, false};
 }
 
 void free_pages() {
 	delete page_settings;
 	delete page_lobby;
+	delete page_manual;
+}
+
+void reload_pages() {
+	delete page_manual;
+	page_manual = new Text_Page{img_manual, txt_manual, false};
 }
 
 
@@ -197,42 +212,55 @@ void Selection_Page::process() {
 	m_processors.at(m_index)();
 }
 
-Text_Page::Text_Page(SDL_Surface *title, json &help_map) {
+Text_Page::Text_Page(SDL_Surface *title, json &help_map, bool release) {
+	m_release = release;
 	m_title = title;
 	m_title_pos = {(SCR_WIDTH - m_title->w) / 2, 0};
-	m_help = SDL_CreateRGBSurface(0, SCR_WIDTH, SCR_HEIGHT - m_title->h, 32, 0, 0, 0, 0);
-	int height = HELP_EACH;
+	SDL_Surface *surface = nullptr;
+	int height = SCR_HEIGHT;
 	for (const auto &pair: help_map.at(USER_LANG).get<help_map_t>()) {
-		int content_height = height + (HELP_EACH - HELP_SIZE) / 2;
-		auto title_surf = create_text((string) pair.first, HELP_SIZE, WHITE);
-		auto descr_surf = create_text((string) pair.second, HELP_SIZE, GREY);
+		if (height + TEXT_PAGE_EACH > SCR_HEIGHT) {
+			surface = SDL_CreateRGBSurface(0, SCR_WIDTH, SCR_HEIGHT - m_title->h, 32, 0, 0, 0, 0);
+			height = m_title->h;
+			m_sides.push_back(surface);
+		}
+		
+		int content_height = height + (TEXT_PAGE_EACH - TEXT_PAGE_SIZE) / 2;
+		auto title_surf = create_text((string) pair.first, TEXT_PAGE_SIZE, WHITE);
+		auto descr_surf = create_text((string) pair.second, TEXT_PAGE_SIZE, GREY);
 		SDL_Rect title_srcrect = get_srcrect(title_surf),
 				descr_srcrect = get_srcrect(descr_surf),
 				title_dstrect = get_dstrect({LEAVE_BLANK_WIDTH, content_height}, title_surf),
 				descr_dstrect = get_dstrect({LEAVE_BLANK_WIDTH * 2 + title_surf->w, content_height}, descr_surf);
-		SDL_BlitSurface(title_surf, &title_srcrect, m_help, &title_dstrect);
-		SDL_BlitSurface(descr_surf, &descr_srcrect, m_help, &descr_dstrect);
-		height += HELP_EACH;
+		SDL_BlitSurface(title_surf, &title_srcrect, surface, &title_dstrect);
+		SDL_BlitSurface(descr_surf, &descr_srcrect, surface, &descr_dstrect);
+		
+		height += TEXT_PAGE_EACH;
 		SDL_FreeSurface(title_surf);
 		SDL_FreeSurface(descr_surf);
 	}
 }
 
 Text_Page::~Text_Page() {
-	SDL_FreeSurface(m_help);
+	for (auto surface: m_sides) SDL_FreeSurface(surface);
+	Page::~Page();
 }
 
 void Text_Page::show() {
 	show_surface(display->renderer, m_title, m_title_pos);
-	show_surface(display->renderer, m_help, {0, m_title->h});
+	show_surface(display->renderer, m_sides.at(m_index), {0, m_title->h});
 }
 
 void Text_Page::process() {
-	if (key_d(KEY_CONFIRM)) {
-		display->m_page = nullptr;
-		this->~Text_Page();
+	if (key_c(KEY_CONFIRM)) {
+		display->return_to_game();
+		if (m_release) this->~Text_Page();
 	}
+	if (key_c(KEY_MOVE_LEFT) || key_c(KEY_MOVE_UP)) m_index += 1;
+	else if (key_c(KEY_MOVE_RIGHT) || key_c(KEY_MOVE_DOWN)) m_index -= 1;
+	m_index %= m_sides.size();
 }
+
 
 Display::Display() {
 	window = SDL_CreateWindow(TITLE,
@@ -252,6 +280,7 @@ Display::~Display() {
 
 void Display::apply_settings() {
 	m_delay = 1000 / (int) current_user["framerate"];
+	reload_pages();
 }
 
 void Display::collect_loop_info() {
@@ -275,6 +304,21 @@ void Display::collect_loop_info() {
 	refresh_key_m();
 }
 
+void Display::process_room_winning() const {
+	if (m_room->is_winning && key_c(KEY_CONFIRM)) {
+		if (m_room->m_next_level.is_number_integer()) {
+			int next = (int) m_room->m_next_level;
+			current_user[USER_K_ROOM] = next;
+			current_user[USER_K_UNLOCKED] = max(next, (int) current_user[USER_K_UNLOCKED]);
+		} else if (m_room->m_next_level.is_number_float()) {
+			current_user[USER_K_ROOM] = (float) m_room->m_next_level;
+		} else {
+			current_user[USER_K_ROOM] = (string) m_room->m_next_level;
+		}
+		start_game();
+	}
+}
+
 void Display::process_room() {
 	if (key_d(KEY_SHIFT_UP)) m_room_pos.h -= USER_SENSITIVITY;
 	if (key_d(KEY_SHIFT_LEFT)) m_room_pos.w -= USER_SENSITIVITY;
@@ -286,7 +330,8 @@ void Display::process_room() {
 	m_room->move_independents(key_c);
 	m_room->do_pending_moves();
 	m_room->end_of_step();
-	if (key_d(KEY_HELP)) m_page = new Text_Page(img_help, m_room->m_help_map);
+	process_room_winning();
+	if (key_d(KEY_HELP)) m_page = new Text_Page(img_help, m_room->m_help_map, true);
 }
 
 void Display::process_content() {
@@ -417,6 +462,11 @@ void Display::clear_img_vec() {
 void Display::clear_room() {
 	close_room(m_room);
 	m_room = nullptr;
+}
+
+void Display::return_to_game() {
+	if (m_room == nullptr) m_page = page_lobby;
+	else m_page = nullptr;
 }
 
 img_info &Display::find_info(SDL_Surface *surface) {

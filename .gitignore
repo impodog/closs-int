@@ -3,3 +3,9 @@
 cmake-build-debug
 
 user
+
+*.pyc
+
+tools/.idea
+
+tools/venv

@@ -5,7 +5,7 @@
 #include "loader.h"
 
 json default_user, current_user;
-json txt_settings, txt_lobby, txt_in_game;
+json txt_settings, txt_lobby, txt_in_game, txt_manual;
 
 void init_default_user() {
 	ifstream default_file(DEFAULT_JSON_PATH, ios::in);
@@ -19,6 +19,8 @@ void init_txt() {
 	lobby_file >> txt_lobby;
 	auto in_game_file = ifstream(IN_GAME_PATH, ios::in);
 	in_game_file >> txt_in_game;
+	auto manual_file = ifstream(MANUAL_PATH, ios::in);
+	manual_file >> txt_manual;
 }
 
 void load_user() {
@@ -73,6 +75,8 @@ RoomType create_room(const json &room_json) {
 	auto room = new Room(each, {w, h});
 	room->m_title = room_json.at(ROOM_K_TITLE);
 	room->m_help_map = room_json.at(ROOM_K_HELP);
+	int next = room_json.at(ROOM_K_NEXT);
+	room->m_next_level = next == -1 ? (int) current_user.at(USER_K_ROOM) : next;
 	return room;
 }
 
@@ -156,7 +160,9 @@ void shift_framerate(bool down) {
 }
 
 string get_room_path() {
-	return CLOSS_ROOMS_PATH + to_string(current_user.at(USER_K_ROOM)) + ".json";
+	auto room = current_user.at(USER_K_ROOM);
+	return room.is_number() ? (CLOSS_ROOMS_PATH + to_string(current_user.at(USER_K_ROOM)) + ".json") : (ROOMS_PATH +
+	                                                                                                    (string) room);
 }
 
 SDL_Surface *create_text(const json &txt, int size, const SDL_Color &color, const string &addition) {

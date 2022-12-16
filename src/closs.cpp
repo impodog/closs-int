@@ -14,7 +14,7 @@ closs_page_error::closs_page_error(const string &arg) : runtime_error(arg) {}
 
 closs_page_error::closs_page_error(const char *arg) : runtime_error(arg) {}
 
-Tile::Tile(TilePos pos, SDL_Surface *img, tile_types type) {
+Tile::Tile(TilePos pos, SDL_Surface *img) {
 	m_pubCode = get_public_code();
 	m_pos = pos;
 	m_img = img;
@@ -61,7 +61,7 @@ Room::~Room() {
 		}
 		delete lane;
 	}
-	clear();
+	vector<vector<SpaceType> *>::~vector();
 }
 
 void Room::refresh_dest() {
@@ -183,8 +183,8 @@ direction_vec_t find_keys(bool (*predicate)(direction_t), const direction_vec_t 
 	return result;
 }
 
-Destination::Destination(TilePos pos, SDL_Surface *img, tile_types type) : Tile(pos, img, tile_destination) {
-	m_req = type;
+Destination::Destination(TilePos pos, SDL_Surface *img, int type) : Tile(pos, img) {
+	m_req = (tile_types) type;
 }
 
 tile_types Destination::get_type() const { return tile_destination; }
@@ -212,23 +212,23 @@ void Destination::show_additional(SDL_Renderer *renderer, const DisplayPos &pos,
 	SDL_FreeSurface(surface);
 }
 
-TileType construct_undefined(TilePos pos, SDL_Surface *img, tile_types type) {
-	return new Tile(pos, img, type);
+TileType construct_undefined(TilePos pos, SDL_Surface *img, int type) {
+	return new Tile(pos, img);
 }
 
-TileType construct_cyan(TilePos pos, SDL_Surface *img, tile_types type) {
-	return new Cyan(pos, img, type);
+TileType construct_cyan(TilePos pos, SDL_Surface *img, int type) {
+	return new Cyan(pos, img);
 }
 
-TileType construct_box(TilePos pos, SDL_Surface *img, tile_types type) {
-	return new Box(pos, img, type);
+TileType construct_box(TilePos pos, SDL_Surface *img, int type) {
+	return new Box(pos, img);
 }
 
-TileType construct_wall(TilePos pos, SDL_Surface *img, tile_types type) {
-	return new Wall(pos, img, type);
+TileType construct_wall(TilePos pos, SDL_Surface *img, int type) {
+	return new Wall(pos, img);
 }
 
-TileType construct_dest(TilePos pos, SDL_Surface *img, tile_types type) {
+TileType construct_dest(TilePos pos, SDL_Surface *img, int type) {
 	return new Destination(pos, img, type);
 }
 
@@ -240,7 +240,7 @@ tile_types_map_t tile_type_map = {
 		{tile_destination, construct_dest}
 };
 
-Cyan::Cyan(TilePos pos, SDL_Surface *m_img, tile_types type) : Tile(pos, m_img, type) {}
+Cyan::Cyan(TilePos pos, SDL_Surface *m_img) : Tile(pos, m_img) {}
 
 bool Cyan::is_independent() const { return true; }
 
@@ -254,7 +254,7 @@ direction_t Cyan::respond_keys(key_predicate_t predicate) const {
 	return pending[0];
 }
 
-Box::Box(TilePos pos, SDL_Surface *m_img, tile_types type) : Tile(pos, m_img, type) {}
+Box::Box(TilePos pos, SDL_Surface *m_img) : Tile(pos, m_img) {}
 
 tile_types Box::get_type() const { return tile_box; }
 
@@ -262,7 +262,7 @@ direction_t Box::acq_req(const Movement_Request &req) const {
 	return req.direction;
 }
 
-Wall::Wall(TilePos pos, SDL_Surface *m_img, tile_types type) : Tile(pos, m_img, type) {}
+Wall::Wall(TilePos pos, SDL_Surface *m_img) : Tile(pos, m_img) {}
 
 tile_types Wall::get_type() const { return tile_wall; }
 

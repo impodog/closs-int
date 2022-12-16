@@ -1,3 +1,24 @@
 {
-
+  "en": {
+    "Confirm(C)[1]": "Confirm selection",
+    "Confirm(C)[2]":"Exit from text pages",
+    "Confirm(C)[3]":"Continue from winning levels",
+    "Settings(Q)": "Open settings page in game",
+    "Help(H)": "Open the current room's help page",
+    "Arrow:Up/Down/Left/Right[1]":"Perform a move in the game",
+    "Arrow:Up/Down/Left/Right[2]":"Move on to the previous/next text page",
+    "Arrow:Up/Down":"Move selection cursor",
+    "Arrow:Left/Right":"Adjust settings"
+  },
+  "zh_cn": {
+    "确认(C)[1]": "确认选项",
+    "确认(C)[2]":"离开文本页(如本页)",
+    "确认(C)[3]":"从赢得的关卡中继续",
+    "设置(Q)": "在游戏中打开设置页",
+    "帮助(H)": "打开当前房间的帮助页",
+    "箭头:上/下/左/右[1]":"在游戏中行进一步",
+    "箭头:上/下/左/右[2]":"前进到上/下一文本页",
+    "箭头:上/下":"移动选择光标",
+    "箭头:左/右":"调整设置"
+  }
 }

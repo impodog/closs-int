@@ -18,7 +18,7 @@
 #include "SDL_image.h"
 #include "SDL_ttf.h"
 
-#define VERSION "v0.0.2"
+#define VERSION "v0.1.0"
 
 #define TITLE "Closs : Inside the Tapes " VERSION
 #define SCR_WIDTH 2000
@@ -34,8 +34,8 @@
 #define SETTINGS_SIZE 40
 #define LOBBY_EACH 100
 #define LOBBY_SIZE 60
-#define HELP_EACH 100
-#define HELP_SIZE 60
+#define TEXT_PAGE_EACH 60
+#define TEXT_PAGE_SIZE 50
 
 #define WINNING_SIZE 40
 #define WINNING_WIDTH 500
@@ -60,6 +60,7 @@
 #define SETTINGS_PATH ROOMS_PATH "settings.json"
 #define LOBBY_PATH ROOMS_PATH "lobby.json"
 #define IN_GAME_PATH ROOMS_PATH "in_game.json"
+#define MANUAL_PATH ROOMS_PATH "manual.json"
 
 #define IMG_PATH PATH_BEGIN "img/"
 #define USER_PATH PATH_BEGIN "user/"
@@ -80,6 +81,7 @@
 #define ROOM_K_TITLE "title"
 #define ROOM_K_HELP "help"
 #define ROOM_K_CONTENT "content"
+#define ROOM_K_NEXT "next"
 
 #define USER_K_LANGUAGE "language"
 #define USER_K_FRAMERATE "framerate"
@@ -96,6 +98,7 @@
 
 #define LOBBY_K_PLAY "play"
 #define LOBBY_K_SETTINGS "settings"
+#define LOBBY_K_MANUAL "manual"
 #define LOBBY_K_QUIT "quit"
 
 #define IN_GAME_K_WINNING "winning"
