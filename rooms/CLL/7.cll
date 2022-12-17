@@ -1,5 +1,5 @@
 .define common
-.define G1 = gm<-4
+.define G1 = gm<-2
 
 title {
     "en": "Crossing",
@@ -19,10 +19,10 @@ perf 28
 
 content {
     wa -- -- -- wa 1x wa
-    -- bx wa -- wa -- wa
+    G1 bx wa -- wa -- wa
     -- -- wa -- wa -- wa
     -- -- -- -- -- -- wa
     -- -- wa -- wa -- wa
-    -- G1 wa -- -- -- wa
+    -- -- wa -- -- -- wa
     cy wa wa wa wa wa wa
 }

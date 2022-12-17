@@ -1,6 +1,6 @@
 .define common
 .define G1 = gm<-255
-.define G2 = gm<+253
+.define G2 = gm<+255
 
 title {
     "en": "Box Slot",

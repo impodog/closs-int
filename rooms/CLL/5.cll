@@ -1,5 +1,5 @@
 .define common
-.define G1 = gm<-4
+.define G1 = gm<-2
 .define G2 = gm<-14
 
 title {
