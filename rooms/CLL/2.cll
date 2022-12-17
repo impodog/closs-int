@@ -1,5 +1,5 @@
 .define common
-.define G1 = gm<0
+.define G1 = gm<-4
 
 title {
     "en": "Easy Pathfinder",
@@ -15,7 +15,7 @@ help {
     }
 }
 
-perf 17
+perf 16
 
 content {
     wa wa wa wa wa wa wa
@@ -23,5 +23,5 @@ content {
     wa -- wa cy wa -- wa
     wa -- -- wa -- -- wa
     wa -- wa wa -- wa wa
-    -- -- -- -- -- -- G1
+    wa -- -- -- -- -- G1
 }

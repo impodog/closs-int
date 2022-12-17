@@ -18,7 +18,7 @@
 #include "SDL_image.h"
 #include "SDL_ttf.h"
 
-#define VERSION "v0.1.4"
+#define VERSION "v0.2.0"
 
 #define TITLE "Closs : Inside the Tapes " VERSION
 #define SCR_WIDTH 2000
@@ -39,10 +39,9 @@
 #define TEXT_PAGE_SIZE 50
 #define LEVELS_EACH 150
 #define LEVELS_SIZE 70
-#define LEVELS_DELAY 100
 
-#define WINNING_SIZE 40
-#define WINNING_WIDTH 800
+#define WINNING_SIZE 35
+#define WINNING_WIDTH 1000
 
 #define RESERVED_HEIGHT 1000
 #define RESERVED_FROM_B (SCR_HEIGHT - RESERVED_HEIGHT)
@@ -133,6 +132,7 @@
 #define KEY_HELP SDLK_h
 #define KEY_RESTART SDLK_r
 #define KEY_ESCAPE SDLK_ESCAPE
+#define KEY_SAVE_AND_REPLAY SDLK_x
 
 
 using namespace std;
@@ -147,6 +147,9 @@ const SDL_Color BLUE{0, 0, 200, 255};
 const SDL_Color CYAN{0, 200, 200, 255};
 const SDL_Color GREY{200, 200, 200};
 const SDL_Color LIGHT_GREEN{100, 200, 150, 255};
+const SDL_Color HALF_LIGHT_GREEN{50, 200, 75, 255};
+const SDL_Color LIGHT_CYAN{100, 200, 200, 255};
+const SDL_Color GOLD{255, 215, 0, 255};
 
 template<typename T1>
 struct Pos2D {

@@ -17,18 +17,17 @@ void do_all_free() {
 	free_img();
 	free_pages();
 	free_display();
+	IMG_Quit();
+	TTF_Quit();
+	SDL_Quit();
 }
 
 int main() {
 	do_all_init();
-	
 	do {
 		display->switch_color_fill(BLACK);
-		
 		display->collect_loop_info();
-		
 		display->process_content();
-		
 		display->present();
 		
 	} while (display->m_loop);

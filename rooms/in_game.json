@@ -1,11 +1,11 @@
 {
   "winning": {
-    "en": "You are Winning! Press Confirm(C) to Finish",
-    "zh_cn": "你赢了！按确认(C)来结束"
+    "en": "You are Winning! Press Confirm(C) to Finish, or Save&Replay(X)",
+    "zh_cn": "你赢了！按确认(C)来结束, 或者保存并重玩(X)"
   },
   "steps": {
-    "en": "Steps : ",
-    "zh_cn": "步数"
+    "en": "Steps ",
+    "zh_cn": "步数 "
   },
   "levels": {
     "en": "Levels (Press Confirm(C) to Start) : ",

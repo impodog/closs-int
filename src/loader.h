@@ -46,11 +46,13 @@ void shift_sensitivity(bool down);
 
 void shift_framerate(bool down);
 
-void shift_levels(bool down);
+void shift_levels(bool down, int amount = 1);
 
 bool is_second_play();
 
 bool is_perf_play();
+
+bool is_gem_play();
 
 string get_room_path();
 
@@ -59,5 +61,7 @@ SDL_Surface *create_text(const json &txt, int size, const SDL_Color &color = WHI
 SDL_Surface *create_text(const json &txt, int size, bool b, const string &addition = "");
 
 SDL_Surface *create_text(const string &str, int size, const SDL_Color &color);
+
+bool contains_literal(const json &array, const json &value);
 
 #endif //CLOSS_INT_LOADER_H

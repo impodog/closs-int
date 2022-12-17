@@ -1,0 +1,25 @@
+.define common
+.define G1 = gm<0
+
+title {
+    "en": "Swinging",
+    "zh_cn": "回旋"
+}
+
+help {
+    "en": {
+        "Swinging": "Sometimes, to get a better position, you need to swing around the box"
+    },
+    "zh_cn": {
+        "回旋": "有时, 为了更好的位置, 你需要在箱子周围回旋"
+    }
+}
+
+perf 22
+
+content {
+    wa wa wa wa wa wa wa
+    -- -- -- wa -- -- wa
+    G1 -- bx -- -- -- wa
+    wa wa wa 1x -- -- cy
+}

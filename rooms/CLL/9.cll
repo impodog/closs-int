@@ -1,0 +1,27 @@
+.define common
+.define G1 = gm<-2
+
+title {
+    "en": "Box Loops to Push",
+    "zh_cn": "推箱子环"
+}
+
+help {
+    "en": {
+        "Go Up from the Bottom": "Push the lower box and find a way"
+    },
+    "zh_cn": {
+        "从下到上": "推下面的箱子再找路"
+    }
+}
+
+perf 15
+
+content {
+    wa G1 -- wa wa wa wa
+    1x cy bx -- -- -- wa
+    wa -- -- wa -- -- wa
+    wa -- -- wa -- wa wa
+    wa -- bx -- -- wa wa
+    wa wa wa -- -- wa wa
+}

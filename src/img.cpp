@@ -67,16 +67,16 @@ void init_img() {
 			                      img_box,
 			                      img_wall,
 			                      img_dest,
-								  img_gem,
-								  
+			                      img_gem,
+			
 			                      img_box2,
-								  
+			
 			                      img_arrow,
 			                      img_settings,
 			                      img_Closs_InT,
 			                      img_help,
 			                      img_manual,
-								  img_levels
+			                      img_levels
 	                      });
 	
 	// put into image map

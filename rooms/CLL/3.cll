@@ -1,0 +1,30 @@
+.define common
+.define G1 = gm<-10
+.define G2 = gm<-10
+
+title {
+    "en": "Spilted Paths",
+    "zh_cn": "分离的路"
+}
+
+help {
+    "en": {
+        "Still Remember How to Move?": "Press direction keys"
+    },
+    "zh_cn": {
+        "还记得怎么移动吗?": "按方向键"
+    }
+}
+
+perf 15
+
+content {
+    1c wa wa cy wa wa wa G1 wa
+    -- wa -- -- -- wa wa -- wa
+    -- wa -- wa -- -- wa -- wa
+    -- wa -- -- wa -- -- -- wa
+    -- -- wa -- -- wa wa -- wa
+    wa -- -- -- -- -- -- -- wa
+    wa wa -- wa wa wa -- wa wa
+    wa wa -- wa -- -- -- -- G2
+}

@@ -175,7 +175,9 @@ void Room::detect_gems() {
 		}
 		for (auto gem_tile: pending_collection) {
 			auto gem = (Gem *) gem_tile;
-			m_steps += gem->m_addition;
+			if (gem->m_addition >= 0 || m_steps > -gem->m_addition) m_steps += gem->m_addition;
+			else m_steps = 0;
+			m_gems.erase(std::find(m_gems.begin(), m_gems.end(), gem));
 			del(gem);
 			delete gem;
 		}
@@ -189,6 +191,18 @@ void Room::end_of_step() {
 			m_is_winning = false;
 			break;
 		}
+}
+
+bool Room::is_perf_play() const {
+	return m_steps == m_perf;
+}
+
+bool Room::can_get_perf_play() const {
+	return is_perf_play() && m_is_second_play && !m_is_perf_play;
+}
+
+bool Room::can_get_gem_play() const {
+	return is_perf_play() && m_is_perf_play && m_gems.empty() && !m_is_gem_play;
 }
 
 

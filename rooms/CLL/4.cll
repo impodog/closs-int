@@ -1,0 +1,30 @@
+.define common
+.define G1 = gm<-11
+.define G2 = gm<-1
+
+title {
+    "en": "Box in the Way",
+    "zh_cn": "路中箱"
+}
+
+help {
+    "en": {
+        "Boxes!": "Boxes can be pushed--you can go towards them to force them to move",
+        "Stopping": "If boxes are pushed towards walls, they with you will stop",
+        "To restart": "If you don't think you can win like this, press R to restart the room"
+    },
+    "zh_cn": {
+        "箱子!": "箱子可以推动——你可以对着它使它移动",
+        "停止": "如果箱子被对着墙推动, 它和你都会停下",
+        "重试": "如果你认为你以现在的情况赢不了, 按R来重新开始这个房间"
+    }
+}
+
+perf 11
+
+content {
+    wa wa wa -- wa -- -- G2 wa
+    cy -- bx -- -- -- wa 1c wa
+    -- wa -- -- wa wa wa wa wa
+    -- G1 wa wa wa wa wa wa wa
+}

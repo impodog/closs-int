@@ -110,19 +110,32 @@ void init_pages() {
 	page_levels = new Selection_Page{img_levels,
 	                                 {
 			                                 [](bool b) {
+				                                 SDL_Color color = WHITE;
+				                                 if (b) {
+					                                 if (contains_literal(current_user.at(USER_K_PERF),
+					                                                      current_user.at(USER_K_LEVELS))) {
+						                                 if (contains_literal(current_user.at(USER_K_GEM),
+						                                                      current_user.at(USER_K_LEVELS)))
+							                                 color = GOLD;
+						                                 else color = HALF_LIGHT_GREEN;
+					                                 } else color = LIGHT_CYAN;
+				                                 }
 				                                 return create_text(txt_in_game.at(IN_GAME_K_LEVELS), LEVELS_SIZE,
-				                                                    b ? LIGHT_GREEN : WHITE,
-				                                                    to_string(current_user.at(USER_K_LEVELS)));
+				                                                    color,
+				                                                    to_string(current_user.at(USER_K_LEVELS)) + "/" +
+				                                                    to_string(current_user.at(USER_K_UNLOCKED)));
 			                                 }
 	                                 },
 	                                 {
 			                                 [] {
-				                                 if (key_d(KEY_MOVE_RIGHT)) {
-					                                 shift_framerate(true);
-					                                 SDL_Delay(LEVELS_DELAY);
-				                                 } else if (key_d(KEY_MOVE_LEFT)) {
-					                                 shift_framerate(false);
-					                                 SDL_Delay(LEVELS_DELAY);
+				                                 if (key_c(KEY_MOVE_RIGHT)) {
+					                                 shift_levels(true, 1);
+				                                 } else if (key_c(KEY_MOVE_LEFT)) {
+					                                 shift_levels(false, 1);
+				                                 } else if (key_c(KEY_MOVE_DOWN)) {
+					                                 shift_levels(true, 10);
+				                                 } else if (key_c(KEY_MOVE_UP)) {
+					                                 shift_levels(false, 10);
 				                                 } else if (key_c(KEY_CONFIRM)) {
 					                                 current_user[USER_K_ROOM] = current_user.at(USER_K_LEVELS);
 					                                 start_game();
@@ -336,22 +349,19 @@ void Display::collect_loop_info() {
 }
 
 void Display::process_room_winning() const {
-	if (m_room->m_is_winning && key_c(KEY_CONFIRM)) {
-		if (m_room->m_steps <= m_room->m_perf) {
-			if (m_room->m_is_second_play && !current_user[USER_K_PERF].contains(current_user.at(USER_K_ROOM))) {
-				current_user[USER_K_PERF].push_back(current_user.at(USER_K_ROOM));
-				if (m_room->m_is_perf_play && m_room->m_gems.empty() &&
-				    !current_user[USER_K_GEM].contains(current_user.at(USER_K_ROOM)))
-					current_user[USER_K_GEM].push_back(current_user.at(USER_K_ROOM));
-			}
-		}
+	bool confirm = key_c(KEY_CONFIRM);
+	if (m_room->m_is_winning && (confirm || key_c(KEY_SAVE_AND_REPLAY))) {
+		if (m_room->can_get_perf_play())
+			current_user[USER_K_PERF].push_back(current_user.at(USER_K_ROOM));
+		if (m_room->can_get_gem_play())
+			current_user[USER_K_GEM].push_back(current_user.at(USER_K_ROOM));
 		if (m_room->m_next.is_number_integer()) {
 			int next = (int) m_room->m_next;
-			current_user[USER_K_ROOM] = next;
+			if (confirm) current_user[USER_K_ROOM] = next;
 			current_user[USER_K_UNLOCKED] = max(next, (int) current_user[USER_K_UNLOCKED]);
 		} else if (m_room->m_next.is_number_float()) {
-			current_user[USER_K_ROOM] = (float) m_room->m_next;
-		} else {
+			if (confirm) current_user[USER_K_ROOM] = (float) m_room->m_next;
+		} else if (confirm) {
 			current_user[USER_K_ROOM] = (string) m_room->m_next;
 		}
 		save_user();
@@ -464,8 +474,12 @@ void Display::show_room_info() const {
 	string steps_text = " " + to_string(m_room->m_steps);
 	if (m_room->m_is_second_play && m_room->m_perf != 0) {
 		if (m_room->m_perf < m_room->m_steps) steps_color = RED;
-		else if (m_room->m_perf == m_room->m_steps) steps_color = WHITE;
-		else {
+		else if (m_room->m_perf == m_room->m_steps) {
+			if (m_room->m_is_perf_play) {
+				if (m_room->m_gems.empty()) steps_color = GOLD;
+				else steps_color = WHITE;
+			} else steps_color = GREEN;
+		} else {
 			long double steps_percent = m_room->m_steps / (long double) m_room->m_perf, rev_percent = 1 - steps_percent;
 			steps_color = {(Uint8) (200 * steps_percent), (Uint8) (200 * rev_percent), (Uint8) (200 * rev_percent)};
 		}

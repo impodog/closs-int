@@ -1,0 +1,28 @@
+.define common
+.define G1 = gm<-255
+.define G2 = gm<+253
+
+title {
+    "en": "Box Slot",
+    "zh_cn": "箱子槽"
+}
+
+help {
+    "en": {
+        "Just go!": "Make sure you don't put the box in corners and you'll be fine"
+    },
+    "zh_cn": {
+        "直接走!": "确保你不把箱子推到角上就好"
+    }
+}
+
+perf 52
+
+content {
+    wa wa wa wa wa wa wa wa
+    wa wa -- -- -- wa 1x wa
+    wa G1 -- -- -- -- -- wa
+    -- -- -- wa wa wa -- wa
+    -- wa cy bx -- wa -- wa
+    -- -- G2 wa -- -- -- wa
+}

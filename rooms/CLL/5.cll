@@ -1,0 +1,27 @@
+.define common
+.define G1 = gm<-4
+.define G2 = gm<-14
+
+title {
+    "en": "2 by 2",
+    "zh_cn": "二乘二"
+}
+
+help {
+    "en": {
+        "To restart": "Press R to restart the room if necessary"
+    },
+    "zh_cn": {
+        "重试": "当有必要时, 按R重试房间"
+    }
+}
+
+perf 10
+
+content {
+    cy -- wa -- wa wa wa
+    -- -- bx bx -- wa wa
+    -- -- bx bx -- -- wa
+    G2 -- wa wa -- 1c wa
+    wa wa wa wa -- -- G1
+}

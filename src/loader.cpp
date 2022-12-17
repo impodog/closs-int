@@ -80,6 +80,7 @@ RoomType create_room(const json &room_json) {
 	room->m_perf = (size_t) room_json.at(ROOM_K_PERF);
 	room->m_is_second_play = is_second_play();
 	room->m_is_perf_play = is_perf_play();
+	room->m_is_gem_play = is_gem_play();
 	return room;
 }
 
@@ -163,10 +164,12 @@ void shift_framerate(bool down) {
 	else if (framerate > MIN_FRAMERATE) current_user[USER_K_FRAMERATE] = framerate - 1;
 }
 
-void shift_levels(bool down) {
+void shift_levels(bool down, int amount) {
 	int levels = USER_LEVELS;
-	if (down) { if (levels < current_user.at(USER_K_UNLOCKED)) current_user[USER_K_LEVELS] = levels + 1; }
-	else if (levels > MIN_LEVEL_NUMBER) current_user[USER_K_LEVELS] = levels - 1;
+	if (down) {
+		if (levels + amount - 1 < current_user.at(USER_K_UNLOCKED))
+			current_user[USER_K_LEVELS] = levels + amount;
+	} else if (levels > MIN_LEVEL_NUMBER + amount - 1) current_user[USER_K_LEVELS] = levels - amount;
 }
 
 bool is_second_play() {
@@ -174,7 +177,11 @@ bool is_second_play() {
 }
 
 bool is_perf_play() {
-	return current_user.at(USER_K_PERF).contains(current_user.at(USER_K_ROOM));
+	return contains_literal(current_user.at(USER_K_PERF), current_user.at(USER_K_ROOM));
+}
+
+bool is_gem_play() {
+	return contains_literal(current_user.at(USER_K_GEM), current_user.at(USER_K_ROOM));
 }
 
 string get_room_path() {
@@ -197,5 +204,10 @@ SDL_Surface *create_text(const string &str, int size, const SDL_Color &color) {
 	                            str.c_str(), color);
 }
 
+bool contains_literal(const json &array, const json &value) {
+	for (const auto &cmp: array)
+		if (cmp == value) return true;
+	return false;
+}
 
 

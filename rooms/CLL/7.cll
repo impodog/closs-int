@@ -1,0 +1,28 @@
+.define common
+.define G1 = gm<-4
+
+title {
+    "en": "Crossing",
+    "zh_cn": "十字路口"
+}
+
+help {
+    "en": {
+        "Tips": "Try to find a straight path to the destination"
+    },
+    "zh_cn": {
+        "提示": "试着找到到终点的一条直路"
+    }
+}
+
+perf 28
+
+content {
+    wa -- -- -- wa 1x wa
+    -- bx wa -- wa -- wa
+    -- -- wa -- wa -- wa
+    -- -- -- -- -- -- wa
+    -- -- wa -- wa -- wa
+    -- G1 wa -- -- -- wa
+    cy wa wa wa wa wa wa
+}
