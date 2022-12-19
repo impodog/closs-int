@@ -1,6 +1,6 @@
-.define common
-.define G1 = gm<-10
-.define G2 = gm<-10
+.add common
+.add G1 = gm<-10
+.add G2 = gm<-10
 
 title {
     "en": "Spilted Paths",

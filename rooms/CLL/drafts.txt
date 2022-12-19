@@ -1,0 +1,9 @@
+# ORIGIN - 11.cll
+wa wa wa wa wa wa wa
+cy -- -- wa wa wa wa
+wa -- -- bx bx -- wa
+wa -- -- wa 1x -- --
+wa -- -- -- -- wa --
+wa 1x wa -- -- -- --
+# DRAFT REASON: a lot of steps, may be too difficult for a tuto level
+# PLANS: can be put to 18~20.cll

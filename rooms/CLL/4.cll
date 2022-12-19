@@ -1,6 +1,6 @@
-.define common
-.define G1 = gm<-11
-.define G2 = gm<-1
+.add common
+.add G1 = gm<-11
+.add G2 = gm<-1
 
 title {
     "en": "Box in the Way",

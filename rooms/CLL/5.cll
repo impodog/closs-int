@@ -1,6 +1,6 @@
-.define common
-.define G1 = gm<-2
-.define G2 = gm<-14
+.add common
+.add G1 = gm<-2
+.add G2 = gm<-14
 
 title {
     "en": "2 by 2",

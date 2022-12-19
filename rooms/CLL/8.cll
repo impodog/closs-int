@@ -1,5 +1,5 @@
-.define common
-.define G1 = gm<0
+.add common
+.add G1 = gm<0
 
 title {
     "en": "Swinging",

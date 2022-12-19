@@ -29,6 +29,10 @@ common_define = {
     "1c": "ds<cy",
     "1x": "ds<bx"
 }
+common_code = {
+    "1c": [4, 1],
+    "1x": [4, 2]
+}
 
 
 def get_repl(tile: str) -> int:
@@ -63,14 +67,20 @@ def parse_content(content: str) -> "list[list[list]]":
     return result
 
 
+def import_code(src: "dict[str,int|list[int]]"):
+    global repl_code
+    for import_k, import_v in src.items():
+        repl_code[import_k] = import_v
+
+
 def analyze_content(content: "list[str]") -> dict:
-    def import_define(src: dict[str, str]):
+    def import_define(src: "dict[str, str]"):
         nonlocal define_repl
         for import_k, import_v in src.items():
             define_repl[import_k] = import_v
 
     result = copy.deepcopy(template_json)
-    define_repl: dict[str, str] = dict()
+    define_repl: "dict[str, str]" = dict()
     i = 0
     while i < len(content):
         line = content[i]
@@ -99,12 +109,23 @@ def analyze_content(content: "list[str]") -> dict:
             if operator == "common":
                 import_define(common_define)
             elif operator.startswith("{"):
-                import_define(eval(operator))
+                import_define(eval(operator.replace("=", ":")))
             else:
                 k, v = operator.split("=")
                 k = k.strip()
                 v = v.strip()
                 define_repl[k] = v
+        elif key == ".add":
+            if operator == "common":
+                import_code(common_code)
+            elif operator.startswith("{"):
+                import_code(eval(operator.replace("=", ":")))
+            else:
+                k, v = operator.split("=")
+                k = k.strip()
+                v = v.strip()
+                repl_code[k] = get_repl(v) if v.find('<') == -1 else list(map(get_repl, v.split('<')))
+
         else:
             result[key] = eval(operator)
         i += 1
