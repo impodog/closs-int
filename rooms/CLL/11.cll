@@ -1,28 +1,28 @@
-.add common
-.add G1 = gm<-3
-.add G2 = gm<-4
+!add C_InT.cll
+!def G1 [gm -3]
+!def G2 [gm -4]
 
 title {
-    "en": "Two Spots",
-    "zh_cn": "双位"
+  en="Two Spots" 
+  zh_cn="双位"
 }
 
 help {
-    "en": {
-        "Two Dest": "You'll need to put the right blocks on both of dests to win"
-    },
-    "zh_cn": {
-        "双终点": "你将会需要把正确的方块都分别放在终点上来赢"
-    }
+  en={
+    "Two Dest"="You'll need to put the right blocks on both of dests to win"
+  } 
+  zh_cn={
+    "双终点"="你将会需要把正确的方块都分别放在终点上来赢"
+  }
 }
 
 perf 19
 
-content {
-    wa wa wa wa wa wa wa
-    wa G2 cy -- -- -- G1
-    -- -- -- 1x wa wa wa
-    -- -- -- bx wa wa wa
-    wa bx 1x -- -- wa wa
-    wa -- -- -- -- wa wa
-}
+content 4d[
+  wa wa wa wa wa wa wa
+  wa G2 cy -- -- -- G1
+  -- -- -- 1x wa wa wa
+  -- -- -- bx wa wa wa
+  wa bx 1x -- -- wa wa
+  wa -- -- -- -- wa wa
+]

@@ -1,28 +1,28 @@
-.add common
-.add G1 = gm<-255
-.add G2 = gm<+255
+!add C_InT.cll
+!def G1 [gm -255]
+!def G2 [gm +255]
 
 title {
-    "en": "Box Slot",
-    "zh_cn": "箱子槽"
+  en="Box Slot" 
+  zh_cn="箱子槽"
 }
 
 help {
-    "en": {
-        "Just go!": "Make sure you don't put the box in corners and you'll be fine"
-    },
-    "zh_cn": {
-        "直接走!": "确保你不把箱子推到角上就好"
-    }
+  en={
+    "Just go!"="Make sure you don't put the box in corners and you'll be fine"
+  } 
+  zh_cn={
+    "直接走!"="确保你不把箱子推到角上就好"
+  }
 }
 
 perf 52
 
-content {
-    wa wa wa wa wa wa wa wa
-    wa wa -- -- -- wa 1x wa
-    wa G1 -- -- -- -- -- wa
-    -- -- -- wa wa wa -- wa
-    -- wa cy bx -- wa -- wa
-    -- -- G2 wa -- -- -- wa
-}
+content 4d[
+  wa wa wa wa wa wa wa wa
+  wa wa -- -- -- wa 1x wa
+  wa G1 -- -- -- -- -- wa
+  -- -- -- wa wa wa -- wa
+  -- wa cy bx -- wa -- wa
+  -- -- G2 wa -- -- -- wa
+]

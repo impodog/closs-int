@@ -1,27 +1,27 @@
-.add common
-.add G1 = gm<-4
+!add C_InT.cll
+!def G1 [gm -4]
 
 title {
-    "en": "Easy Pathfinder",
-    "zh_cn": "简单寻路"
+  en="Easy Pathfinder" 
+  zh_cn="简单寻路"
 }
 
 help {
-    "en": {
-        "Hi There!": "Nothing much to say. Follow your heart!"
-    },
-    "zh_cn": {
-        "你好!": "没什么可以说的. 跟感觉走吧!"
-    }
+  en={
+    "Hi There!"="Nothing much to say. Follow your heart!"
+  } 
+  zh_cn={
+    "你好!"="没什么可以说的. 跟感觉走吧!"
+  }
 }
 
 perf 16
 
-content {
-    wa wa wa wa wa wa wa
-    wa -- -- -- wa -- 1c
-    wa -- wa cy wa -- wa
-    wa -- -- wa -- -- wa
-    wa -- wa wa -- wa wa
-    wa -- -- -- -- -- G1
-}
+content 4d[
+  wa wa wa wa wa wa wa
+  wa -- -- -- wa -- 1c
+  wa -- wa cy wa -- wa
+  wa -- -- wa -- -- wa
+  wa -- wa wa -- wa wa
+  wa -- -- -- -- -- G1
+]

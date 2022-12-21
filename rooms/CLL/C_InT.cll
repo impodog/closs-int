@@ -1,0 +1,56 @@
+// Forced template for Closs : Inside the Tapes
+// This also include common shortcuts
+
+!add-only
+!forced-template
+
+!cl-ml ver 1
+!cl-ml auto4d True  sep4d '<'  fill4d [0]
+
+!def background -2
+!def ud -1
+!def -- 0
+!def cy 1
+!def bx 2
+!def wa 3
+!def ds 4
+!def gm 5
+
+!%undef background
+!%undef ud
+!%undef --
+!%undef cy
+!%undef bx
+!%undef wa
+!%undef ds
+!%undef gm
+
+!add C_InT_common.cll
+
+!template !to ..\Closs\(%filename).json
+
+!%template !set width len((%content))
+!%template !set height len((%content)[0])
+
+!not-custom width height
+
+!template title dict {
+  en="Untitled"
+  zh_cn="未命名"
+}
+!template help dict {
+  en={
+    "Help Unavailable"="Help Unavailable"
+  }
+  zh_cn={
+    "帮助不可用"="帮助不可用"
+  }
+}
+!template next int -1
+!template perf int 0
+!template each int -1
+!template width int 1
+!template height int 1
+!template content list 4d[
+  --
+]
