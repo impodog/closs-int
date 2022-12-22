@@ -1,3 +1,4 @@
+!process-only
 !add C_InT.cll
 !def G1 [gm -3]
 !def G2 [gm -4]

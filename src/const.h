@@ -18,7 +18,7 @@
 #include "SDL_image.h"
 #include "SDL_ttf.h"
 
-#define VERSION "v0.2.3"
+#define VERSION "v0.2.4"
 
 #define TITLE "Closs : Inside the Tapes " VERSION
 #define SCR_WIDTH 2000

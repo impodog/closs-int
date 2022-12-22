@@ -29,8 +29,8 @@
 
 !template !to ..\Closs\(%filename).json
 
-!%template !set width len((%content))
-!%template !set height len((%content)[0])
+!%template !set width len((%content)[0])
+!%template !set height len((%content))
 
 !not-custom width height
 
