@@ -15,6 +15,8 @@
 !def wa 3
 !def ds 4
 !def gm 5
+!def pic 6
+!def goto 7
 
 !%undef background
 !%undef ud
@@ -24,10 +26,17 @@
 !%undef wa
 !%undef ds
 !%undef gm
+!%undef pic
+!%undef goto
 
 !add C_InT_common.cll
 
 !template !to ..\Closs\(%filename).json
+
+!template !pic-def !def (%arg1) [pic (%arg2)]
+!template !goto-def !def GT [goto (%arg1)]
+!template !unlock-b !set unlock_bonus (%arg1)
+!template !unlock-bonus !unlock-b (%arg1)
 
 !%template !set width len((%content)[0])
 !%template !set height len((%content))
@@ -54,3 +63,4 @@
 !template content list 4d[
   --
 ]
+!template unlock_bonus int 0

@@ -1,6 +1,8 @@
 !process-only
 !add C_InT.cll
 !def G1 [gm -2]
+!goto-def -1
+!pic-def PW wa
 
 title {
   en="Box Loops to Push" 
@@ -22,7 +24,7 @@ content 4d[
   wa G1 -- wa wa wa wa
   1x cy bx -- -- -- wa
   wa -- -- wa -- -- wa
-  wa -- -- wa -- wa wa
-  wa -- bx -- -- wa wa
-  wa wa wa -- -- wa wa
+  wa -- -- wa -- PW PW
+  wa -- bx -- -- wa PW
+  wa wa wa -- -- wa GT
 ]

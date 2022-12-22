@@ -75,7 +75,7 @@ using pending_movements_t = unordered_map<TileType, TilePos>;
 
 class Room : public vector<vector<SpaceType> *> {
 public:
-	int m_each;
+	int m_each, m_pending_go_to = 0, m_unlock_bonus = 0;
 	size_t m_steps = 0, m_perf;
 	bool m_is_winning = false, m_is_moving = false, m_is_second_play = false, m_is_perf_play = false, m_is_gem_play = false;
 	
@@ -142,6 +142,12 @@ Space::iterator find_tile(SpaceConst space, TileConst tile);
 
 direction_vec_t find_keys(key_predicate_t predicate, const direction_vec_t &wanted_keys);
 
+// defined in display.cpp
+RoomType get_room();
+
+// defined in loader.cpp
+json &get_user();
+
 class Destination : public Tile {
 public:
 	tile_types m_req;
@@ -197,6 +203,24 @@ public:
 	
 	void show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
 	                     double stretch_ratio) const override;
+};
+
+class Picture : public Tile {
+public:
+	Picture(TilePos pos, SDL_Surface *m_img);
+	
+	tile_types get_type() const override;
+};
+
+class Go_To : public Tile {
+public:
+	int m_level;
+	
+	Go_To(TilePos pos, SDL_Surface *m_img, int level);
+	
+	tile_types get_type() const override;
+	
+	direction_t acq_req(const Movement_Request &req) const override;
 };
 
 #endif //CLOSS_INT_CLOSS_H

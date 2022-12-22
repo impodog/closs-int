@@ -284,13 +284,23 @@ TileType construct_gem(TilePos pos, SDL_Surface *img, int addition) {
 	return new Gem(pos, img, addition);
 }
 
+TileType construct_picture(TilePos pos, SDL_Surface *, int type) {
+	return new Picture(pos, types_img_map[(tile_types) type]);
+}
+
+TileType construct_go_to(TilePos pos, SDL_Surface *img, int level) {
+	return new Go_To(pos, img, level);
+}
+
 tile_types_map_t tile_type_map = {
 		{tile_undefined,   construct_undefined},
 		{tile_cyan,        construct_cyan},
 		{tile_box,         construct_box},
 		{tile_wall,        construct_wall},
 		{tile_destination, construct_dest},
-		{tile_gem,         construct_gem}
+		{tile_gem,         construct_gem},
+		{tile_picture,     construct_picture},
+		{tile_go_to,       construct_go_to}
 };
 
 Cyan::Cyan(TilePos pos, SDL_Surface *m_img) : Tile(pos, m_img) {}
@@ -343,3 +353,25 @@ void Gem::show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const D
 	SDL_DestroyTexture(texture);
 	SDL_FreeSurface(surface);
 }
+
+Picture::Picture(TilePos pos, SDL_Surface *m_img) : Tile(pos, m_img) {}
+
+tile_types Picture::get_type() const {
+	return tile_picture;
+}
+
+Go_To::Go_To(TilePos pos, SDL_Surface *m_img, int level) : Tile(pos, m_img) {
+	m_level = level;
+}
+
+tile_types Go_To::get_type() const {
+	return tile_go_to;
+}
+
+direction_t Go_To::acq_req(const Movement_Request &req) const {
+	if (req.sender->get_type() == tile_cyan) {
+		get_room()->m_pending_go_to = m_level;
+	}
+	return Tile::acq_req(req);
+}
+

@@ -31,6 +31,7 @@ FontType Font_Family::sized(int size) {
 Font_Family arial(ARIAL_PATH), consolas(CONSOLAS_PATH), simhei(SIMHEI_PATH);
 
 SDL_Surface_ptr img_arrow, img_settings, img_Closs_InT, img_help, img_manual, img_levels;
+SDL_Surface_ptr img_none;
 
 language_fonts_t language_fonts = {
 		{"en",    &arial},
@@ -48,7 +49,8 @@ void init_img() {
 			img_wall = IMG_Load(IMG_PATH "wall.png"),
 			img_dest = IMG_Load(IMG_PATH "dest.png"),
 			img_gem = IMG_Load(IMG_PATH "gem.png"),
-			img_box2 = IMG_Load(IMG_PATH "box2.png");
+			img_box2 = IMG_Load(IMG_PATH "box2.png"),
+			img_go_to = IMG_Load(IMG_PATH "go_to.png");
 	// load global graphics
 	img_arrow = IMG_Load(IMG_PATH "arrow.png");
 	img_settings = IMG_Load(IMG_PATH "settings.png");
@@ -58,6 +60,7 @@ void init_img() {
 	img_levels = IMG_Load(IMG_PATH "levels.png");
 	// old graphics
 	auto img_old_box = IMG_Load(IMG_PATH "old_box.png");
+	img_none = SDL_CreateRGBSurface(0, 1, 1, 32, 0, 0, 0, 0);
 	
 	
 	// set color keys
@@ -68,6 +71,7 @@ void init_img() {
 			                      img_wall,
 			                      img_dest,
 			                      img_gem,
+								  img_go_to,
 			
 			                      img_box2,
 			
@@ -87,6 +91,8 @@ void init_img() {
 	types_img_map[tile_wall] = img_wall;
 	types_img_map[tile_destination] = img_dest;
 	types_img_map[tile_gem] = img_gem;
+	types_img_map[tile_picture] = img_none;
+	types_img_map[tile_go_to] = img_go_to;
 }
 
 void free_img() {

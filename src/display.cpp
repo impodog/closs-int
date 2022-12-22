@@ -222,6 +222,10 @@ void start_game() {
 	display->m_page = nullptr;
 }
 
+// declared in closs.h
+RoomType get_room() {
+	return display->m_room;
+}
 
 Selection_Page::Selection_Page(SDL_Surface *title, selection_generators_const_t generators,
                                selection_processors_const_t processors, int each) {
@@ -351,8 +355,10 @@ void Display::collect_loop_info() {
 void Display::process_room_winning() const {
 	bool confirm = key_c(KEY_CONFIRM);
 	if (m_room->m_is_winning && (confirm || key_c(KEY_SAVE_AND_REPLAY))) {
-		if (m_room->can_get_perf_play())
+		if (m_room->can_get_perf_play()) {
 			current_user[USER_K_PERF].push_back(current_user.at(USER_K_ROOM));
+			if (m_room->m_unlock_bonus != 0) current_user[USER_K_BONUS].push_back(m_room->m_unlock_bonus);
+		}
 		if (m_room->can_get_gem_play())
 			current_user[USER_K_GEM].push_back(current_user.at(USER_K_ROOM));
 		if (m_room->m_next.is_number_integer()) {
@@ -383,7 +389,12 @@ void Display::process_room() {
 	m_room->detect_gems();
 	m_room->end_of_step();
 	process_room_winning();
+	
 	if (key_d(KEY_HELP)) m_page = new Text_Page(img_help, m_room->m_help_map, true);
+	if (key_c(KEY_CONFIRM) && m_room->m_pending_go_to != 0) {
+		current_user[USER_K_ROOM] = m_room->m_pending_go_to;
+		start_game();
+	}
 }
 
 void Display::process_content() {

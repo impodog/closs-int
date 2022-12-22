@@ -1,0 +1,13 @@
+!process-only
+!add C_InT.cll
+!unlock-b 1
+
+next 9
+
+content 4d[
+    wa -- cy wa wa
+    wa bx bx -- wa
+    wa -- bx bx --
+    wa bx -- bx --
+    wa wa wa -- 1c
+]

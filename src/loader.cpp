@@ -78,6 +78,7 @@ RoomType create_room(const json &room_json) {
 	int next = room_json.at(ROOM_K_NEXT);
 	room->m_next = next == -1 ? (int) current_user.at(USER_K_ROOM) + 1 : next;
 	room->m_perf = (size_t) room_json.at(ROOM_K_PERF);
+	room->m_unlock_bonus = room_json.at(ROOM_K_UNLOCK_BONUS);
 	room->m_is_second_play = is_second_play();
 	room->m_is_perf_play = is_perf_play();
 	room->m_is_gem_play = is_gem_play();
@@ -210,4 +211,8 @@ bool contains_literal(const json &array, const json &value) {
 	return false;
 }
 
+// declared in closs.h
+json &get_user(){
+	return current_user;
+}
 

@@ -89,6 +89,7 @@
 #define ROOM_K_CONTENT "content"
 #define ROOM_K_NEXT "next"
 #define ROOM_K_PERF "perf"
+#define ROOM_K_UNLOCK_BONUS "unlock_bonus"
 
 #define USER_K_LANGUAGE "language"
 #define USER_K_FRAMERATE "framerate"
@@ -98,6 +99,7 @@
 #define USER_K_PERF "perf"
 #define USER_K_GEM "gem"
 #define USER_K_LEVELS "levels"
+#define USER_K_BONUS "bonus"
 
 #define SETTINGS_K_LANGUAGE "language"
 #define SETTINGS_K_SENSITIVITY "sensitivity"
@@ -172,7 +174,9 @@ enum tile_types {
 	tile_box,
 	tile_wall,
 	tile_destination,
-	tile_gem
+	tile_gem = 5,
+	tile_picture,
+	tile_go_to
 };
 
 using c_str = const char *;
