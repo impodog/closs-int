@@ -35,6 +35,7 @@
 
 !template !pic-def !def (%arg1) [pic (%arg2)]
 !template !goto-def !def GT [goto (%arg1)]
+!template !gem-def !def (%arg1) [gm (%arg2)]
 !template !unlock-b !set unlock_bonus (%arg1)
 !template !unlock-bonus !unlock-b (%arg1)
 

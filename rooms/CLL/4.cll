@@ -1,7 +1,7 @@
 !process-only
 !add C_InT.cll
-!def G1 [gm -11]
-!def G2 [gm -1]
+!gem-def G1 -11
+!gem-def G2 -1
 
 title {
   en="Box in the Way" 

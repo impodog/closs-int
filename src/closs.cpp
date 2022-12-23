@@ -157,12 +157,12 @@ void Room::move_independents(key_predicate_t predicate) {
 					if (dir > 0) {
 						m_is_moving = true;
 						send_req_from(tile, dir);
-						if (next_step_flag) {
+						if (next_step_flag)
 							next_step_flag = false;
-							m_steps++;
-						}
 					}
 				}
+	if (!next_step_flag && !m_pending.empty())
+		m_steps++;
 }
 
 void Room::detect_gems() {

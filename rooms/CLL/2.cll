@@ -1,6 +1,6 @@
 !process-only
 !add C_InT.cll
-!def G1 [gm -4]
+!gem-def G1 -4
 
 title {
   en="Easy Pathfinder" 

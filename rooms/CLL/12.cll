@@ -1,0 +1,29 @@
+!process-only
+!add C_InT.cll
+!gem-def G1 -2
+
+title {
+    en="Splited Boxes"
+    zh_cn="分离的箱子"
+}
+
+help {
+    en={
+        "Don't Get Stuck"="Don't push any of the boxes to a corner"
+    }
+    zh_cn={
+        "别卡住了"="不要把任何箱子推到角上"
+    }
+}
+
+perf 34
+
+content 4d[
+    wa wa wa wa wa wa wa
+    1x -- -- -- G1 wa wa
+    -- wa -- -- wa wa wa
+    -- -- -- -- -- 1x wa
+    wa bx -- wa -- wa wa
+    -- -- bx -- -- wa wa
+    cy -- wa -- -- wa wa
+]

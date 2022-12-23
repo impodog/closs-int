@@ -357,6 +357,7 @@ void Display::process_room_winning() const {
 	if (m_room->m_is_winning && (confirm || key_c(KEY_SAVE_AND_REPLAY))) {
 		if (m_room->can_get_perf_play()) {
 			current_user[USER_K_PERF].push_back(current_user.at(USER_K_ROOM));
+			
 			if (m_room->m_unlock_bonus != 0) current_user[USER_K_BONUS].push_back(m_room->m_unlock_bonus);
 		}
 		if (m_room->can_get_gem_play())

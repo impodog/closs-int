@@ -1,7 +1,7 @@
 !process-only
 !add C_InT.cll
-!def G1 [gm -10]
-!def G2 [gm -10]
+!gem-def G1 -10
+!gem-def G2 -10
 
 title {
   en="Spilted Paths" 

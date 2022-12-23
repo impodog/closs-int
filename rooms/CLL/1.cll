@@ -1,6 +1,6 @@
 !process-only
 !add C_InT.cll
-!def G1 [gm 0]
+!gem-def G1 0
 
 title {
   en="Step One"

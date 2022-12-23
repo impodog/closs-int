@@ -1,7 +1,7 @@
 !process-only
 !add C_InT.cll
-!def G1 [gm -3]
-!def G2 [gm -4]
+!gem-def G1 -3
+!gem-def G2 -4
 
 title {
   en="Two Spots" 

@@ -1,6 +1,6 @@
 !process-only
 !add C_InT.cll
-!def G1 [gm -2]
+!gem-def G1 -2
 
 title {
   en="Crossing" 
