@@ -18,11 +18,39 @@
 #include "SDL_image.h"
 #include "SDL_ttf.h"
 
-#define VERSION "v0.3.0"
+struct Screen_Info {
+    int w = -1, h = -1;
+};
+
+void get_scr_info(Screen_Info &info);
+
+#if defined _WIN32
+
+#include "Windows.h"
+
+#elif defined __linux__
+
+#include<sys/types.h>
+#include<sys/stat.h>
+#include<sys/mman.h>
+#include<sys/ioctl.h>
+#include<unistd.h>
+#include<fcntl.h>
+#include<linux/fb.h>
+
+#else
+
+#error "No support for this system"
+
+#endif
+
+
+#define VERSION "v0.3.1"
 
 #define TITLE "Closs : Inside the Tapes " VERSION
 #define SCR_WIDTH 2000
 #define SCR_HEIGHT 1125
+#define SCR_RATIO (3.0/4)
 #define TILE_BACK_SEP 5
 #define TILE_BACK_SEP2 (2*TILE_BACK_SEP)
 #define STANDARD_EACH 50
@@ -156,28 +184,28 @@ const SDL_Color GOLD{255, 215, 0, 255};
 
 template<typename T1>
 struct Pos2D {
-	T1 w, h;
-	
-	template<typename T2>
-	Pos2D operator+(const Pos2D<T2> pos) {
-		return {w + pos.w, h + pos.h};
-	};
+    T1 w, h;
+
+    template<typename T2>
+    Pos2D operator+(const Pos2D<T2> pos) {
+        return {w + pos.w, h + pos.h};
+    };
 };
 
 using TilePos = Pos2D<size_t>;
 using DisplayPos = Pos2D<int>;
 
 enum tile_types {
-	tile_background = -2,
-	tile_undefined,
-	tile_empty = 0,
-	tile_cyan,
-	tile_box,
-	tile_wall,
-	tile_destination,
-	tile_gem = 5,
-	tile_picture,
-	tile_go_to
+    tile_background = -2,
+    tile_undefined,
+    tile_empty = 0,
+    tile_cyan,
+    tile_box,
+    tile_wall,
+    tile_destination,
+    tile_gem = 5,
+    tile_picture,
+    tile_go_to
 };
 
 using c_str = const char *;

@@ -327,11 +327,14 @@ level_pic_map_t level_pic_map;
 
 
 Display::Display() {
+    Screen_Info info;
+    get_scr_info(info);
     window = SDL_CreateWindow(TITLE,
                               SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                              SCR_WIDTH, SCR_HEIGHT,
+                              (int) (info.w * SCR_RATIO), (int) (info.h * SCR_RATIO),
                               0);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    SDL_RenderSetLogicalSize(renderer, SCR_WIDTH, SCR_HEIGHT);
     m_page = page_lobby;
     apply_settings();
     collect_loop_info();
@@ -370,7 +373,11 @@ void Display::collect_loop_info() {
 
 void Display::process_room_winning() {
     bool confirm = key_c(KEY_CONFIRM);
+    PageType chapter_end = nullptr;
     if (m_room->m_is_winning && (confirm || key_c(KEY_SAVE_AND_REPLAY))) {
+        try {
+            chapter_end = level_pic_map.at(current_user[USER_K_ROOM]);
+        } catch (const out_of_range &) {}
         if (m_room->can_get_perf_play()) {
             current_user[USER_K_PERF].push_back(current_user.at(USER_K_ROOM));
 
@@ -388,11 +395,9 @@ void Display::process_room_winning() {
             current_user[USER_K_ROOM] = (string) m_room->m_next;
         }
         save_user();
-        try {
-            m_page = level_pic_map.at(current_user[USER_K_ROOM]);
-        } catch (const out_of_range &) {
-            start_game();
-        }
+        start_game();
+        if (chapter_end != nullptr)
+            m_page = chapter_end;
     }
 }
 

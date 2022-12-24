@@ -1,0 +1,27 @@
+!process-only
+!add C_InT.cll
+!gem-def G1 -1
+
+title {
+  en="Warped Space"
+  zh_cn="扭曲空间"
+}
+
+help {
+  en={
+    "Edge-Crossing"="Go to the edge to reach the other side!"
+  }
+  zh_cn={
+    "跨过边缘"="经过边缘来到达另一侧!"
+  }
+}
+
+perf 13
+
+content 4d[
+    1c wa -- wa wa wa
+    wa wa -- -- -- --
+    -- wa wa wa wa --
+    -- wa wa wa cy wa
+    -- wa -- -- -- wa
+]

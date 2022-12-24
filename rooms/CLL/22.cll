@@ -1,0 +1,27 @@
+!process-only
+!add C_InT.cll
+!gem-def G1 -1
+
+title {
+  en="Every Side"
+  zh_cn="每一边"
+}
+
+help {
+  en={
+    "Edge-Crossing 2"="Boxes can also cross the edge"
+  }
+  zh_cn={
+    "跨过边缘 2"="箱子也可以跨过边缘"
+  }
+}
+
+perf 18
+
+content 4d[
+    wa wa wa wa 1c
+    -- -- -- G1 --
+    wa bx bx bx wa
+    -- 1x wa -- --
+    wa wa wa cy wa
+]
