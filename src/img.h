@@ -33,6 +33,7 @@ extern Font_Family arial, consolas, simhei;
 using SDL_Surface_ptr = SDL_Surface *;
 extern SDL_Surface_ptr img_arrow, img_settings, img_Closs_InT, img_help, img_manual, img_levels;
 extern SDL_Surface_ptr img_none;
+extern SDL_Surface_ptr img_chapter1;
 
 using language_fonts_t = unordered_map<string, Font_Family *>;
 extern language_fonts_t language_fonts;

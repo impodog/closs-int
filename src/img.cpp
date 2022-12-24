@@ -15,6 +15,7 @@ Font_Family::Font_Family(const string &file) {
 Font_Family::~Font_Family() {
 	for (auto pair: *this)
 		TTF_CloseFont(pair.second);
+    clear();
 	Font_Map::~unordered_map();
 }
 
@@ -32,6 +33,7 @@ Font_Family arial(ARIAL_PATH), consolas(CONSOLAS_PATH), simhei(SIMHEI_PATH);
 
 SDL_Surface_ptr img_arrow, img_settings, img_Closs_InT, img_help, img_manual, img_levels;
 SDL_Surface_ptr img_none;
+SDL_Surface_ptr img_chapter1;
 
 language_fonts_t language_fonts = {
 		{"en",    &arial},
@@ -58,15 +60,14 @@ void init_img() {
 	img_help = IMG_Load(IMG_PATH "help.png");
 	img_manual = IMG_Load(IMG_PATH "manual.png");
 	img_levels = IMG_Load(IMG_PATH "levels.png");
-	// old graphics
-	auto img_old_box = IMG_Load(IMG_PATH "old_box.png");
+    img_chapter1 = IMG_Load(IMG_PATH "chapter1.png");
+
 	img_none = SDL_CreateRGBSurface(0, 1, 1, 32, 0, 0, 0, 0);
 	
 	
 	// set color keys
 	set_white_as_colorkey({
 			                      img_undefined,
-			                      img_old_box,
 			                      img_box,
 			                      img_wall,
 			                      img_dest,
@@ -80,7 +81,9 @@ void init_img() {
 			                      img_Closs_InT,
 			                      img_help,
 			                      img_manual,
-			                      img_levels
+			                      img_levels,
+
+                                  img_chapter1
 	                      });
 	
 	// put into image map
@@ -104,6 +107,9 @@ void free_img() {
 	SDL_FreeSurface(img_Closs_InT);
 	SDL_FreeSurface(img_help);
 	SDL_FreeSurface(img_manual);
+    SDL_FreeSurface(img_levels);
+    SDL_FreeSurface(img_none);
+    SDL_FreeSurface(img_chapter1);
 }
 
 void set_white_as_colorkey(const vector<SDL_Surface *> &surfaces) {

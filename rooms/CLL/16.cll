@@ -1,0 +1,29 @@
+!process-only
+!add C_InT.cll
+!gem-def G1 -12
+
+title {
+    en="Closing Rounds"
+    zh_cn="关闭的轮回"
+}
+
+help {
+  en={
+    "Observe"="See which one needs to go through a round"
+  } 
+  zh_cn={
+    "观察"="看哪一个需要经过轮回"
+  }
+}
+
+perf 26
+
+content 4d[
+    wa wa wa wa -- -- wa
+    -- -- -- -- -- -- wa
+    -- -- wa bx -- -- wa
+    wa -- bx cy wa -- wa
+    wa -- -- -- wa 1x wa
+    wa wa -- -- 1x -- G1
+    wa wa wa wa wa wa wa
+]

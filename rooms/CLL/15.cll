@@ -1,6 +1,6 @@
 !process-only
 !add C_InT.cll
-!gem-def G1 -10
+!gem-def G1 -8
 
 title {
     en="Long Journey"

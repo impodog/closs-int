@@ -18,7 +18,7 @@
 #include "SDL_image.h"
 #include "SDL_ttf.h"
 
-#define VERSION "v0.2.5"
+#define VERSION "v0.3.0"
 
 #define TITLE "Closs : Inside the Tapes " VERSION
 #define SCR_WIDTH 2000
@@ -116,6 +116,7 @@
 #define IN_GAME_K_WINNING "winning"
 #define IN_GAME_K_STEPS "steps"
 #define IN_GAME_K_LEVELS "levels"
+#define IN_GAME_K_CHAPTER1 "chapter1"
 
 #define KEY_SHIFT_UP SDLK_w
 #define KEY_SHIFT_LEFT SDLK_a
@@ -191,6 +192,8 @@ extern usable_languages_t usable_languages;
 
 using type_names_t = const unordered_map<tile_types, string>;
 extern type_names_t type_names;
+
+extern json empty_json;
 
 
 SDL_Rect get_srcrect(const SDL_Surface *surface);

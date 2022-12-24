@@ -10,5 +10,13 @@
   "levels": {
     "en": "Levels (Press Confirm(C) to Start) : ",
     "zh_cn": "关卡 (按确认(C)来开始) : "
+  },
+  "chapter1": {
+    "en": {
+      "Chapter 1 Clear!": "You cleared level 1~20!"
+    },
+    "zh_cn": {
+      "章节 1 完成!": "你完成了关卡1~20!"
+    }
   }
 }

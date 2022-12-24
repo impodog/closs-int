@@ -29,26 +29,30 @@
 !%undef pic
 !%undef goto
 
-!add C_InT_common.cll
+!def 1c [ds cy]
+!def 1x [ds bx]
 
-!template !to ..\Closs\(%filename).json
+!%undef 1c
+!%undef 1x
 
-!template !pic-def !def (%arg1) [pic (%arg2)]
-!template !goto-def !def GT [goto (%arg1)]
-!template !gem-def !def (%arg1) [gm (%arg2)]
-!template !unlock-b !set unlock_bonus (%arg1)
-!template !unlock-bonus !unlock-b (%arg1)
+!templ-repl !to ..\Closs\(%filename).json
 
-!%template !set width len((%content)[0])
-!%template !set height len((%content))
+!templ-cmd !pic-def !def (%arg1) [pic (%arg2)]
+!templ-cmd !goto-def !def GT [goto (%arg1)]
+!templ-cmd !gem-def !def (%arg1) [gm (%arg2)]
+!templ-cmd !unlock-b !set unlock_bonus (%arg1)
+!templ-cmd !unlock-bonus !unlock-b (%arg1)
+
+!%templ-repl !set width len((%content)[0])
+!%templ-repl !set height len((%content))
 
 !not-custom width height
 
-!template title dict {
+!templ-val title dict {
   en="Untitled"
   zh_cn="未命名"
 }
-!template help dict {
+!templ-val help dict {
   en={
     "Help Unavailable"="Help Unavailable"
   }
@@ -56,12 +60,12 @@
     "帮助不可用"="帮助不可用"
   }
 }
-!template next int -1
-!template perf int 0
-!template each int -1
-!template width int 1
-!template height int 1
-!template content list 4d[
+!templ-val next int -1
+!templ-val perf int 0
+!templ-val each int -1
+!templ-val width int 1
+!templ-val height int 1
+!templ-val content list 4d[
   --
 ]
-!template unlock_bonus int 0
+!templ-val unlock_bonus int 0

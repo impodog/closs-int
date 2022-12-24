@@ -37,3 +37,4 @@ SDL_Rect get_dstrect(const DisplayPos &pos, const SDL_Surface *surface) {
 	return {pos.w, pos.h, surface->w, surface->h};
 }
 
+json empty_json;
