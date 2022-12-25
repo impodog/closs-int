@@ -1,0 +1,27 @@
+!process-only
+!add C_InT.cll
+!gem-def G1 -1
+
+title {
+  en="We're Just Moving"
+  zh_cn="我们只是在移动"
+}
+
+help {
+  en={
+    "Sequence"="Which dest does not mess up the other?"
+  }
+  zh_cn={
+    "次序"="哪个终点不会扰乱另一个?"
+  }
+}
+
+perf 44
+
+content 4d[
+    wa wa wa -- wa -- wa
+    wa 1x -- -- -- 1x wa
+    wa -- wa G1 wa wa wa
+    wa -- bx -- bx -- wa
+    -- -- wa cy wa -- --
+]
