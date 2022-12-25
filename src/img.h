@@ -17,13 +17,13 @@ using Font_Map = unordered_map<int, FontType>;
 
 class Font_Family : public Font_Map {
 private:
-	string m_file;
+    string m_file;
 public:
-	explicit Font_Family(const string &file);
-	
-	~Font_Family();
-	
-	FontType sized(int size);
+    explicit Font_Family(const string &file);
+
+    ~Font_Family();
+
+    FontType sized(int size);
 };
 
 extern types_img_map_t types_img_map;
@@ -37,6 +37,11 @@ extern SDL_Surface_ptr img_chapter1;
 
 using language_fonts_t = unordered_map<string, Font_Family *>;
 extern language_fonts_t language_fonts;
+
+using text_renderer_t = SDL_Surface *(*)(TTF_Font *, const char *, SDL_Color);
+extern text_renderer_t text_renderer;
+using text_renderer_map_t = map<text_renderer_types, text_renderer_t>;
+extern text_renderer_map_t text_renderer_map;
 
 void init_img();
 

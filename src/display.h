@@ -36,7 +36,7 @@ void init_key_map();
 
 void init_key_map(direction_t code);
 
-void init_key_map(const vector<direction_t> &code);
+void init_key_map(const initializer_list<direction_t> &code);
 
 void init_key_map(direction_t begin, direction_t end);
 
@@ -44,9 +44,13 @@ void key_down(direction_t code);
 
 bool key_d(direction_t code);
 
+bool key_d(initializer_list<direction_t> codes);
+
 bool key_clicking(direction_t code);
 
 bool key_c(direction_t code);
+
+bool key_c(initializer_list<direction_t> codes);
 
 SDL_Surface *create_settings_text(const string &setting, const string &from_user, bool b);
 

@@ -165,6 +165,12 @@ void shift_framerate(bool down) {
 	else if (framerate > MIN_FRAMERATE) current_user[USER_K_FRAMERATE] = framerate - 1;
 }
 
+void shift_text_renderer(bool down) {
+    int renderer = current_user.at(USER_K_TEXT_RENDERER);
+	if (down) { if (renderer < MAX_TEXT_RENDERER) current_user[USER_K_TEXT_RENDERER] = renderer + 1; }
+	else if (renderer > MIN_TEXT_RENDERER) current_user[USER_K_TEXT_RENDERER] = renderer - 1;
+}
+
 void shift_levels(bool down, int amount) {
 	int levels = USER_LEVELS;
 	if (down) {
@@ -192,8 +198,8 @@ string get_room_path() {
 }
 
 SDL_Surface *create_text(const json &txt, int size, const SDL_Color &color, const string &addition) {
-	return TTF_RenderUTF8_Solid(language_fonts.at(USER_LANG)->sized(size),
-	                            ((string) txt.at(USER_LANG) + addition).c_str(), color);
+	return RENDER_TEXT(language_fonts.at(USER_LANG)->sized(size),
+                       ((string) txt.at(USER_LANG) + addition).c_str(), color);
 }
 
 SDL_Surface *create_text(const json &txt, int size, bool b, const string &addition) {
@@ -201,8 +207,8 @@ SDL_Surface *create_text(const json &txt, int size, bool b, const string &additi
 }
 
 SDL_Surface *create_text(const string &str, int size, const SDL_Color &color) {
-	return TTF_RenderUTF8_Solid(language_fonts.at(USER_LANG)->sized(size),
-	                            str.c_str(), color);
+	return RENDER_TEXT(language_fonts.at(USER_LANG)->sized(size),
+                       str.c_str(), color);
 }
 
 bool contains_literal(const json &array, const json &value) {

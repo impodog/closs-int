@@ -9,12 +9,10 @@ title {
 
 help {
     en={
-        "Try More"="Try to push another lane and see the results",
-        "A Little Tip"="Unlike most games, this game allows you to push multiple boxes!"
+        "Try More"="Try to push another lane and see the results"
     }
     zh_cn={
-        "多试试"="试着推另一行并看看结果",
-        "小提示"="与很多游戏不同, 本游戏允许你推动多个箱子"
+        "多试试"="试着推另一行并看看结果"
     }
 }
 

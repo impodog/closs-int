@@ -45,7 +45,7 @@ void get_scr_info(Screen_Info &info);
 #endif
 
 
-#define VERSION "v0.3.2"
+#define VERSION "v0.3.3"
 
 #define TITLE "Closs : Inside the Tapes " VERSION
 #define SCR_WIDTH 2000
@@ -82,6 +82,9 @@ void get_scr_info(Screen_Info &info);
 
 #define MAX_FRAMERATE 150
 #define MIN_FRAMERATE 20
+
+#define MAX_TEXT_RENDERER 1
+#define MIN_TEXT_RENDERER 0
 
 #define MAX_LEVEL_NUMBER 2
 #define MIN_LEVEL_NUMBER 1
@@ -128,10 +131,12 @@ void get_scr_info(Screen_Info &info);
 #define USER_K_GEM "gem"
 #define USER_K_LEVELS "levels"
 #define USER_K_BONUS "bonus"
+#define USER_K_TEXT_RENDERER "text_renderer"
 
 #define SETTINGS_K_LANGUAGE "language"
 #define SETTINGS_K_SENSITIVITY "sensitivity"
 #define SETTINGS_K_FRAMERATE "framerate"
+#define SETTINGS_K_TEXT_RENDERER "text_renderer"
 #define SETTINGS_K_APPLY "apply"
 #define SETTINGS_K_TO_LOBBY "to_lobby"
 #define SETTINGS_K_TO_GAME "to_game"
@@ -158,12 +163,14 @@ void get_scr_info(Screen_Info &info);
 
 #define MOVEMENT_KEYS {KEY_MOVE_UP,KEY_MOVE_LEFT,KEY_MOVE_DOWN,KEY_MOVE_RIGHT}
 
-#define KEY_SETTINGS SDLK_q
-#define KEY_CONFIRM SDLK_c
+#define KEY_SETTINGS {SDLK_q, SDLK_ESCAPE}
+#define KEY_CONFIRM {SDLK_c, SDLK_RETURN}
 #define KEY_HELP SDLK_h
 #define KEY_RESTART SDLK_r
 #define KEY_ESCAPE SDLK_ESCAPE
 #define KEY_SAVE_AND_REPLAY SDLK_x
+
+#define RENDER_TEXT text_renderer
 
 
 using namespace std;
@@ -206,6 +213,11 @@ enum tile_types {
     tile_gem = 5,
     tile_picture,
     tile_go_to
+};
+
+enum text_renderer_types {
+    text_renderer_solid = 0,
+    text_renderer_blended
 };
 
 using c_str = const char *;

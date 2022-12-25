@@ -27,13 +27,17 @@ void init_pages() {
                                                    return create_settings_text(SETTINGS_K_FRAMERATE, USER_K_FRAMERATE,
                                                                                b);
                                                },
-                                               [](bool b) { // 4 apply
+                                               [](bool b) { // 4 text renderer
+                                                   return create_settings_text(SETTINGS_K_TEXT_RENDERER,
+                                                                               USER_K_TEXT_RENDERER, b);
+                                               },
+                                               [](bool b) { // 5 apply
                                                    return create_settings_text(SETTINGS_K_APPLY, "", b);
                                                },
-                                               [](bool b) { // 5 to_lobby
+                                               [](bool b) { // 6 to_lobby
                                                    return create_settings_text(SETTINGS_K_TO_LOBBY, "", b);
                                                },
-                                               [](bool b) { // 6 to_game
+                                               [](bool b) { // 7 to_game
                                                    return create_settings_text(SETTINGS_K_TO_GAME, "", b);
                                                }
                                        },
@@ -56,10 +60,16 @@ void init_pages() {
                                                    else if (key_d(KEY_MOVE_LEFT))
                                                        shift_framerate(false);
                                                },
-                                               [] { // 4 apply
+                                               [] { // 4 text renderer
+                                                   if (key_d(KEY_MOVE_RIGHT))
+                                                       shift_text_renderer(true);
+                                                   else if (key_d(KEY_MOVE_LEFT))
+                                                       shift_text_renderer(false);
+                                               },
+                                               [] { // 5 apply
                                                    if (key_c(KEY_CONFIRM)) display->apply_settings();
                                                },
-                                               [] { // 5 to_lobby
+                                               [] { // 6 to_lobby
                                                    if (key_c(KEY_CONFIRM)) {
                                                        display->apply_settings();
                                                        display->m_page = page_lobby;
@@ -67,7 +77,7 @@ void init_pages() {
                                                        display->clear_room();
                                                    }
                                                },
-                                               [] { // 6 to_game
+                                               [] { // 7 to_game
                                                    if (key_c(KEY_CONFIRM)) {
                                                        display->apply_settings();
                                                        display->return_to_game();
@@ -180,7 +190,7 @@ void init_key_map(direction_t code) {
     key_down_map[code] = key_clicking_map[code] = false;
 }
 
-void init_key_map(const vector<direction_t> &codes) {
+void init_key_map(const initializer_list<direction_t> &codes) {
     for (auto code: codes)
         init_key_map(code);
 }
@@ -200,6 +210,10 @@ bool key_d(direction_t code) {
     return key_down_map[code];
 }
 
+bool key_d(initializer_list<direction_t> codes) {
+    return any_of(codes.begin(), codes.end(), [](direction_t code) { return key_d(code); });
+}
+
 bool key_clicking(direction_t code) {
     auto click = key_clicking_map[code];
     return (key_clicking_map[code] = key_down_map[code]) != click;
@@ -207,6 +221,10 @@ bool key_clicking(direction_t code) {
 
 bool key_c(direction_t code) {
     return key_click_map.at(code);
+}
+
+bool key_c(initializer_list<direction_t> codes) {
+    return any_of(codes.begin(), codes.end(), [](direction_t code) { return key_c(code); });
 }
 
 SDL_Surface *create_settings_text(const string &setting, const string &from_user, bool b) {
@@ -231,6 +249,7 @@ void start_game() {
     display->change_room(room);
     display->m_page = nullptr;
 }
+
 
 // declared in closs.h
 RoomType get_room() {
@@ -332,7 +351,7 @@ Display::Display() {
     window = SDL_CreateWindow(TITLE,
                               SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                               (int) (info.w * SCR_RATIO), (int) (info.h * SCR_RATIO),
-                              0);
+                              SDL_WINDOW_RESIZABLE);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     SDL_RenderSetLogicalSize(renderer, SCR_WIDTH, SCR_HEIGHT);
     m_page = page_lobby;
@@ -346,7 +365,8 @@ Display::~Display() {
 }
 
 void Display::apply_settings() {
-    m_delay = 1000 / (int) current_user["framerate"];
+    m_delay = 1000 / (int) current_user.at(USER_K_FRAMERATE);
+    text_renderer = text_renderer_map.at(current_user.at(USER_K_TEXT_RENDERER));
     reload_pages();
 }
 

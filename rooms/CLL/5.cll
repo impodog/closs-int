@@ -11,9 +11,11 @@ title {
 help {
   en={
     "To restart"="Press R to restart the room if necessary"
+    "A Little Tip"="Unlike most games, this game allows you to push multiple boxes!"
   } 
   zh_cn={
     "重试"="当有必要时  按R重试房间"
+    "小提示"="与很多游戏不同, 本游戏允许你推动多个箱子"
   }
 }
 

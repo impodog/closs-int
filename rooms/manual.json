@@ -1,10 +1,10 @@
 {
   "en": {
-    "Confirm(C)[1]": "Confirm selection",
-    "Confirm(C)[2]": "Exit from text pages",
-    "Confirm(C)[3]": "Continue from winning levels",
-    "Settings(Q)[1]": "In game, open settings page",
-    "Settings(Q)[2]": "In any page, quit to the previous game/lobby",
+    "Confirm(C/Return)[1]": "Confirm selection",
+    "Confirm(C/Return)[2]": "Exit from text pages",
+    "Confirm(C/Return)[3]": "Continue from winning levels",
+    "Settings(Q/Esc)[1]": "In game, open settings page",
+    "Settings(Q/Esc)[2]": "In any page, quit to the previous game/lobby",
     "Help(E)": "Open the current room's help page",
     "Direction:Up/Down/Left/Right[1]": "Perform a move in the game",
     "Direction:Up/Down/Left/Right[2]": "Move on to the previous/next text page",
@@ -14,11 +14,11 @@
     "Save&Replay(X)": "When winning, save your level progress and replay the current one"
   },
   "zh_cn": {
-    "确认(C)[1]": "确认选项",
-    "确认(C)[2]": "离开文本页(如本页)",
-    "确认(C)[3]": "从赢得的关卡中继续",
-    "设置(Q)[1]": "在游戏中, 打开设置页",
-    "设置(Q)[2]": "在任意页, 退出到最近打开的游戏/大厅",
+    "确认(C/Return)[1]": "确认选项",
+    "确认(C/Return)[2]": "离开文本页(如本页)",
+    "确认(C/Return)[3]": "从赢得的关卡中继续",
+    "设置(Q/Esc)[1]": "在游戏中, 打开设置页",
+    "设置(Q/Esc)[2]": "在任意页, 退出到最近打开的游戏/大厅",
     "帮助(H)": "打开当前房间的帮助页",
     "方向:上/下/左/右[1]": "在游戏中行进一步",
     "方向:上/下/左/右[2]": "前进到上/下一文本页",

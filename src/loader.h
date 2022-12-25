@@ -46,6 +46,8 @@ void shift_sensitivity(bool down);
 
 void shift_framerate(bool down);
 
+void shift_text_renderer(bool down);
+
 void shift_levels(bool down, int amount = 1);
 
 bool is_second_play();

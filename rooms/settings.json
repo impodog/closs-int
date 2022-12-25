@@ -11,6 +11,10 @@
     "en": "Framerate Upper Limit [20<<  >>150] : ",
     "zh_cn": "帧率上限 [20<<  >>150] : "
   },
+  "text_renderer": {
+    "en": "Text Render Mode [<   >] : ",
+    "zh_cn": "文字渲染模式 [<   >] : "
+  },
   "apply": {
     "en": "Apply Settings",
     "zh_cn": "应用此设置"

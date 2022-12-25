@@ -7,5 +7,6 @@
   "perf": [],
   "gem": [],
   "levels": 1,
-  "bonus": []
+  "bonus": [],
+  "text_renderer": 0
 }

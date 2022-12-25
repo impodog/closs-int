@@ -249,9 +249,9 @@ bool Destination::detect_requirement(SpaceConst space) const {
 
 void Destination::show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
                                   double stretch_ratio) const {
-	auto surface = TTF_RenderText_Solid(consolas.sized(FONT_SIZE(DESTINATION_SIZE)),
-	                                    type_names.at(m_req).c_str(),
-	                                    WHITE);
+	auto surface = RENDER_TEXT(consolas.sized(FONT_SIZE(DESTINATION_SIZE)),
+                               type_names.at(m_req).c_str(),
+                               WHITE);
 	DisplayPos show_pos = {center.w - surface->w / 2, center.h - surface->h / 2};
 	auto texture = SDL_CreateTextureFromSurface(renderer, surface);
 	auto srcrect = get_srcrect(surface), dstrect = get_dstrect(show_pos, surface);
@@ -343,8 +343,8 @@ tile_types Gem::get_type() const {
 
 void Gem::show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
                           double stretch_ratio) const {
-	auto surface = TTF_RenderText_Solid(consolas.sized(FONT_SIZE(DESTINATION_SIZE)),
-	                                    to_string(m_addition).c_str(),
+	auto surface = RENDER_TEXT(consolas.sized(FONT_SIZE(DESTINATION_SIZE)),
+                               to_string(m_addition).c_str(),
 	                                    m_addition <= 0 ? GREEN : RED);
 	DisplayPos show_pos = {center.w - surface->w / 2, center.h - surface->h / 2};
 	auto texture = SDL_CreateTextureFromSurface(renderer, surface);

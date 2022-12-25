@@ -40,6 +40,13 @@ language_fonts_t language_fonts = {
 		{"zh_cn", &simhei}
 };
 
+text_renderer_t text_renderer;
+
+text_renderer_map_t text_renderer_map = {
+        {text_renderer_solid, TTF_RenderUTF8_Solid},
+        {text_renderer_blended, TTF_RenderUTF8_Blended}
+};
+
 void init_img() {
 	IMG_Init(IMG_INIT_PNG);
 	
