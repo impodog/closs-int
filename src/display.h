@@ -134,8 +134,9 @@ extern level_pic_map_t level_pic_map;
 class Display {
 public:
     bool m_loop = true;
+    int m_sensitivity;
     Uint32 m_delay;
-    double stretch_ratio;
+    long double stretch_ratio, animation_speed;
     system_clock::time_point m_last;
 
     SDL_Window *window;
@@ -173,15 +174,13 @@ public:
 
     void change_page(PageType page);
 
-    SDL_Rect tile_rect(const Tile &tile) const;
-
     SDL_Rect get_rect(const SDL_Surface *img, const TilePos &pos) const;
 
     DisplayPos get_center(const TilePos &pos) const;
 
     void show_tile(const Tile &tile);
 
-    DisplayPos show_img(SDL_Surface *img, const TilePos &pos);
+    DisplayPos show_img(SDL_Surface *img, const TilePos &pos, const DisplayPos &addition = {0, 0});
 
     void show_room_info() const;
 

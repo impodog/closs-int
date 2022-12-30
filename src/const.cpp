@@ -57,4 +57,17 @@ SDL_Rect get_dstrect(const DisplayPos &pos, const SDL_Surface *surface) {
     return {pos.w, pos.h, surface->w, surface->h};
 }
 
+bool is0(long double ld) {
+    return fabs(ld) < std::numeric_limits<long double>::epsilon();
+}
+
+int sym(long double ld) {
+    if (is0(ld)) return 0;
+    return ld > 0 ? 1 : -1;
+}
+
+void output(DoublePos pos) {
+    cout << pos.w << "," << pos.h << endl;
+}
+
 json empty_json;

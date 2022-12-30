@@ -27,17 +27,21 @@ void init_pages() {
                                                    return create_settings_text(SETTINGS_K_FRAMERATE, USER_K_FRAMERATE,
                                                                                b);
                                                },
-                                               [](bool b) { // 4 text renderer
+                                               [](bool b) { // 4 animation
+                                                   return create_settings_text(SETTINGS_K_ANIMATION,
+                                                                               USER_K_ANIMATION_SPEED, b);
+                                               },
+                                               [](bool b) { // 5 text renderer
                                                    return create_settings_text(SETTINGS_K_TEXT_RENDERER,
                                                                                USER_K_TEXT_RENDERER, b);
                                                },
-                                               [](bool b) { // 5 apply
+                                               [](bool b) { // 6 apply
                                                    return create_settings_text(SETTINGS_K_APPLY, "", b);
                                                },
-                                               [](bool b) { // 6 to_lobby
+                                               [](bool b) { // 7 to_lobby
                                                    return create_settings_text(SETTINGS_K_TO_LOBBY, "", b);
                                                },
-                                               [](bool b) { // 7 to_game
+                                               [](bool b) { // 8 to_game
                                                    return create_settings_text(SETTINGS_K_TO_GAME, "", b);
                                                }
                                        },
@@ -60,29 +64,35 @@ void init_pages() {
                                                    else if (key_d(KEY_MOVE_LEFT))
                                                        shift_framerate(false);
                                                },
-                                               [] { // 4 text renderer
+                                               [] {
                                                    if (key_d(KEY_MOVE_RIGHT))
-                                                       shift_text_renderer(true);
+                                                       shift_animation(true);
                                                    else if (key_d(KEY_MOVE_LEFT))
-                                                       shift_text_renderer(false);
+                                                       shift_animation(false);
                                                },
-                                               [] { // 5 apply
-                                                   if (key_c(KEY_CONFIRM)) display->apply_settings();
-                                               },
-                                               [] { // 6 to_lobby
-                                                   if (key_c(KEY_CONFIRM)) {
-                                                       display->apply_settings();
-                                                       display->m_page = page_lobby;
-                                                       // Also, returning to lobby will clear room
-                                                       display->clear_room();
-                                                   }
-                                               },
-                                               [] { // 7 to_game
-                                                   if (key_c(KEY_CONFIRM)) {
-                                                       display->apply_settings();
-                                                       display->return_to_game();
-                                                   }
-                                               }
+                                               [] { // 5 text renderer
+                                           if (key_d(KEY_MOVE_RIGHT))
+                                               shift_text_renderer(true);
+                                           else if (key_d(KEY_MOVE_LEFT))
+                                               shift_text_renderer(false);
+                                       },
+                                       [] { // 6 apply
+                                           if (key_c(KEY_CONFIRM)) display->apply_settings();
+                                       },
+                                       [] { // 7 to_lobby
+                                           if (key_c(KEY_CONFIRM)) {
+                                               display->apply_settings();
+                                               display->m_page = page_lobby;
+                                               // Also, returning to lobby will clear room
+                                               display->clear_room();
+                                           }
+                                       },
+                                       [] { // 8 to_game
+                                           if (key_c(KEY_CONFIRM)) {
+                                               display->apply_settings();
+                                               display->return_to_game();
+                                           }
+                                       }
                                        },
                                        SETTINGS_EACH
     };
@@ -250,12 +260,6 @@ void start_game() {
     display->m_page = nullptr;
 }
 
-
-// declared in closs.h
-RoomType get_room() {
-    return display->m_room;
-}
-
 Selection_Page::Selection_Page(SDL_Surface *title, selection_generators_const_t generators,
                                selection_processors_const_t processors, int each) {
     m_title = title;
@@ -365,7 +369,9 @@ Display::~Display() {
 }
 
 void Display::apply_settings() {
-    m_delay = 1000 / (int) current_user.at(USER_K_FRAMERATE);
+    m_sensitivity = USER_SENSITIVITY;
+    m_delay = 1000 / USER_FRAMERATE;
+    animation_speed = USER_ANIMATION_SPEED / MAX_ANIMATION;
     text_renderer = text_renderer_map.at(current_user.at(USER_K_TEXT_RENDERER));
     reload_pages();
 }
@@ -422,18 +428,24 @@ void Display::process_room_winning() {
 }
 
 void Display::process_room() {
-    if (key_d(KEY_SHIFT_UP)) m_room_pos.h -= USER_SENSITIVITY;
-    if (key_d(KEY_SHIFT_LEFT)) m_room_pos.w -= USER_SENSITIVITY;
-    if (key_d(KEY_SHIFT_DOWN)) m_room_pos.h += USER_SENSITIVITY;
-    if (key_d(KEY_SHIFT_RIGHT)) m_room_pos.w += USER_SENSITIVITY;
+    if (key_d(KEY_SHIFT_UP)) m_room_pos.h -= m_sensitivity;
+    if (key_d(KEY_SHIFT_LEFT)) m_room_pos.w -= m_sensitivity;
+    if (key_d(KEY_SHIFT_DOWN)) m_room_pos.h += m_sensitivity;
+    if (key_d(KEY_SHIFT_RIGHT)) m_room_pos.w += m_sensitivity;
     if (key_c(KEY_RESTART)) start_game();
 
     move_room_to_visible();
 
     m_room->move_independents(key_c);
-    m_room->do_pending_moves();
-    m_room->detect_gems();
-    m_room->end_of_step();
+
+    m_room->animate_tiles(animation_speed);
+
+    if (m_room->m_animating.empty())
+        m_room->do_pending_moves();
+    if (m_room->m_is_end_of_animation) {
+        m_room->detect_gems();
+        m_room->end_of_step();
+    }
     process_room_winning();
 
     if (key_d(KEY_HELP)) m_page = new Text_Page(img_help, m_room->m_help_map, true);
@@ -445,6 +457,7 @@ void Display::process_room() {
 
 void Display::process_content() {
     if (key_c(KEY_SETTINGS)) {
+        apply_settings();
         if (m_page == nullptr) m_page = page_settings;
         else if (m_room == nullptr) m_page = page_lobby;
         else m_page = nullptr;
@@ -479,22 +492,18 @@ void Display::present() const {
 
 void Display::change_room(RoomType room) {
     clear_room();
-    m_room = room;
+    public_room = m_room = room;
     auto total_size = m_room->total_size();
     DisplayPos m_room_edge = {SCR_WIDTH - total_size.w, RESERVED_HEIGHT - total_size.h};
     m_room_pos = {0, 0};
     m_room_min = {min(m_room_edge.w, 0), min(m_room_edge.h, 0)};
     m_room_max = {max(m_room_edge.w, 0), max(m_room_edge.h, 0)};
-    stretch_ratio = (double) (m_room->m_each) / STANDARD_EACH / 1.5;
+    stretch_ratio = (long double) (m_room->m_each) / STANDARD_EACH / 1.5;
     clear_img_vec();
 }
 
 void Display::change_page(PageType page) {
     m_page = page;
-}
-
-SDL_Rect Display::tile_rect(const Tile &tile) const {
-    return get_rect(tile.m_img, tile.m_pos);
 }
 
 SDL_Rect Display::get_rect(const SDL_Surface *img, const TilePos &pos) const {
@@ -511,13 +520,15 @@ DisplayPos Display::get_center(const TilePos &pos) const {
 }
 
 void Display::show_tile(const Tile &tile) {
-    auto pos = show_img(tile.m_img, tile.m_pos);
+    auto pos = show_img(tile.m_img, tile.m_pos, DisplayPos(tile.m_shift * ROOM_EACH));
     tile.show_additional(renderer, pos, get_center(tile.m_pos), stretch_ratio);
 }
 
-DisplayPos Display::show_img(SDL_Surface *img, const TilePos &pos) {
+DisplayPos Display::show_img(SDL_Surface *img, const TilePos &pos, const DisplayPos &addition) {
     auto info = find_info(img);
     SDL_Rect dstrect = get_rect(img, pos);
+    dstrect.x += addition.w;
+    dstrect.y += addition.h;
     SDL_RenderCopy(renderer, info.texture, &info.srcrect, &dstrect);
     return {dstrect.w, dstrect.h};
 }
@@ -561,13 +572,15 @@ void Display::show_room() {
         w = 0;
         for (const auto &space: *lane) {
             show_img(types_img_map[tile_background], {w, h});
-            for (const auto &tile: *space) {
-                show_tile(*tile);
-            }
             w++;
         }
         h++;
     }
+    for (const auto &lane: *m_room)
+        for (const auto &space: *lane)
+            for (const auto &tile: *space) {
+                show_tile(*tile);
+            }
     switch_color_fill(BLACK, {0, RESERVED_HEIGHT, SCR_WIDTH, RESERVED_FROM_B});
     show_reservation_line();
     show_room_info();

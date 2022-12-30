@@ -11,6 +11,10 @@
     "en": "Framerate Upper Limit [20<<  >>150] : ",
     "zh_cn": "帧率上限 [20<<  >>150] : "
   },
+  "animation": {
+    "en": "Animation Speed [1<<  >>100]% : ",
+    "zh_cn": "动画速度 [1<<  >>100]% : "
+  },
   "text_renderer": {
     "en": "Text Render Mode [<   >] : ",
     "zh_cn": "文字渲染模式 [<   >] : "

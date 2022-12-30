@@ -12,6 +12,7 @@
 #include "unordered_map"
 #include "cmath"
 #include "chrono"
+#include "ctime"
 #include "json.hpp"
 #include "fstream"
 #include "SDL.h"
@@ -45,7 +46,7 @@ void get_scr_info(Screen_Info &info);
 #endif
 
 
-#define VERSION "v0.3.3"
+#define VERSION "v0.4.0"
 
 #define TITLE "Closs : Inside the Tapes " VERSION
 #define SCR_WIDTH 2000
@@ -55,6 +56,7 @@ void get_scr_info(Screen_Info &info);
 #define TILE_BACK_SEP2 (2*TILE_BACK_SEP)
 #define STANDARD_EACH 50
 #define MIN_EACH 128
+#define STRETCHED_EACH (STANDARD_EACH * stretch_ratio)
 
 #define SELECTION_DEFAULT_EACH 50
 #define DESTINATION_SIZE 20
@@ -82,6 +84,9 @@ void get_scr_info(Screen_Info &info);
 
 #define MAX_FRAMERATE 150
 #define MIN_FRAMERATE 20
+
+#define MAX_ANIMATION 100
+#define MIN_ANIMATION 1
 
 #define MAX_TEXT_RENDERER 1
 #define MIN_TEXT_RENDERER 0
@@ -125,6 +130,7 @@ void get_scr_info(Screen_Info &info);
 #define USER_K_LANGUAGE "language"
 #define USER_K_FRAMERATE "framerate"
 #define USER_K_SENSITIVITY "sensitivity"
+#define USER_K_ANIMATION_SPEED "animation_speed"
 #define USER_K_ROOM "room"
 #define USER_K_UNLOCKED "unlocked"
 #define USER_K_PERF "perf"
@@ -136,6 +142,7 @@ void get_scr_info(Screen_Info &info);
 #define SETTINGS_K_LANGUAGE "language"
 #define SETTINGS_K_SENSITIVITY "sensitivity"
 #define SETTINGS_K_FRAMERATE "framerate"
+#define SETTINGS_K_ANIMATION "animation"
 #define SETTINGS_K_TEXT_RENDERER "text_renderer"
 #define SETTINGS_K_APPLY "apply"
 #define SETTINGS_K_TO_LOBBY "to_lobby"
@@ -172,6 +179,10 @@ void get_scr_info(Screen_Info &info);
 
 #define RENDER_TEXT text_renderer
 
+#define F_ABS_SUB(x, y) x = sym(x) * max(fabs(x)-y, 0.0l)
+#define WH_IS0(wh) (is0(wh.w) && is0(wh.h))
+
+#define TIME_LOG(s) cout << s << " : " << system_clock::to_time_t(system_clock::now()) << endl
 
 using namespace std;
 using namespace chrono;
@@ -194,13 +205,30 @@ struct Pos2D {
     T1 w, h;
 
     template<typename T2>
-    Pos2D operator+(const Pos2D<T2> pos) {
+    Pos2D operator+(const Pos2D<T2> pos) const {
         return {w + pos.w, h + pos.h};
     };
+
+    template<typename T2>
+    Pos2D operator*(T2 x) const {
+        return {w * x, h * x};
+    }
+
+    template<typename T2>
+    void operator+=(const Pos2D<T2> pos) {
+        w += pos.w;
+        h += pos.h;
+    }
+
+    template<typename T2>
+    explicit operator Pos2D<T2>() {
+        return {(T2) w, (T2) h};
+    }
 };
 
 using TilePos = Pos2D<size_t>;
 using DisplayPos = Pos2D<int>;
+using DoublePos = Pos2D<long double>;
 
 enum tile_types {
     tile_background = -2,
@@ -239,6 +267,12 @@ extern json empty_json;
 SDL_Rect get_srcrect(const SDL_Surface *surface);
 
 SDL_Rect get_dstrect(const DisplayPos &pos, const SDL_Surface *surface);
+
+bool is0(long double ld);
+
+int sym(long double ld);
+
+void output(DoublePos pos);
 
 
 #endif //CLOSS_INT_CONST_H

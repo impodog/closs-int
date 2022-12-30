@@ -179,6 +179,12 @@ void shift_levels(bool down, int amount) {
 	} else if (levels > MIN_LEVEL_NUMBER + amount - 1) current_user[USER_K_LEVELS] = levels - amount;
 }
 
+void shift_animation(bool down) {
+    int animation_speed = USER_ANIMATION_SPEED;
+	if (down) { if (animation_speed < MAX_ANIMATION) current_user[USER_K_ANIMATION_SPEED] = animation_speed + 1; }
+	else if (animation_speed > MIN_ANIMATION) current_user[USER_K_ANIMATION_SPEED] = animation_speed - 1;
+}
+
 bool is_second_play() {
 	return current_user.at(USER_K_ROOM) < current_user.at(USER_K_UNLOCKED);
 }
