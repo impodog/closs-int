@@ -18,7 +18,7 @@ struct img_info {
     SDL_Texture *texture;
     SDL_Rect srcrect;
 };
-using img_vec_t = unordered_map<SDL_Surface *, img_info>;
+using img_map_t = unordered_map<SDL_Surface *, img_info>;
 
 extern key_down_map_t key_down_map;
 extern key_down_map_t key_clicking_map;
@@ -136,14 +136,14 @@ public:
     bool m_loop = true;
     int m_sensitivity;
     Uint32 m_delay;
-    long double stretch_ratio, animation_speed;
+    long double stretch_ratio, animation_speed, framerate_ratio;
     system_clock::time_point m_last;
 
     SDL_Window *window;
     SDL_Renderer *renderer;
     SDL_Event event;
 
-    img_vec_t img_vec;
+    img_map_t img_map;
     DisplayPos m_room_pos, m_room_min, m_room_max;
     RoomType m_room = nullptr;
     PageType m_page = nullptr;

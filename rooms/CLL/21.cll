@@ -1,10 +1,10 @@
 !process-only
 !add C_InT.cll
-!gem-def G1 -1
+!gem-def G1 -6
 
 title {
-  en="Warped Space"
-  zh_cn="扭曲空间"
+  en="Up Down Shifting"
+  zh_cn="上下切换"
 }
 
 help {
@@ -16,12 +16,13 @@ help {
   }
 }
 
-perf 13
+perf 14
 
 content 4d[
-    1c wa -- wa wa wa
-    wa wa -- -- -- --
-    -- wa wa wa wa --
-    -- wa wa wa cy wa
-    -- wa -- -- -- wa
+    wa wa wa -- wa --
+    wa G1 wa -- wa --
+    wa -- -- bx -- --
+    wa cy wa -- wa wa
+    wa -- -- wa 1c --
+    wa wa -- -- wa --
 ]

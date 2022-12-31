@@ -39,7 +39,7 @@ direction_t Tile::acq_req(const Movement_Request &req) const { return 0; }
 direction_t Tile::respond_keys(key_predicate_t predicate) const { return 0; }
 
 void Tile::show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
-                           double stretch_ratio) const {}
+                           long double stretch_ratio) const {}
 
 void Tile::process() {
 
@@ -85,7 +85,7 @@ void Room::refresh_gems() {
         for (auto space: *lane)
             for (auto tile: *space)
                 if (tile->get_type() == tile_gem) {
-                    if (m_is_perf_play) m_gems.push_back(tile);
+                    if (m_is_perf_play && !m_is_gem_play) m_gems.push_back(tile);
                     else {
                         del(tile);
                         delete tile;
@@ -273,7 +273,7 @@ bool Destination::detect_requirement(SpaceConst space) const {
 }
 
 void Destination::show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
-                                  double stretch_ratio) const {
+                                  long double stretch_ratio) const {
     auto surface = RENDER_TEXT(consolas.sized(FONT_SIZE(DESTINATION_SIZE)),
                                type_names.at(m_req).c_str(),
                                WHITE);
@@ -367,7 +367,7 @@ tile_types Gem::get_type() const {
 }
 
 void Gem::show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
-                          double stretch_ratio) const {
+                          long double stretch_ratio) const {
     auto surface = RENDER_TEXT(consolas.sized(FONT_SIZE(DESTINATION_SIZE)),
                                to_string(m_addition).c_str(),
                                m_addition <= 0 ? GREEN : RED);

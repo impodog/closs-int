@@ -1,11 +1,11 @@
 // Forced template for Closs : Inside the Tapes
 // This also include common shortcuts
 
-!add-only
-!forced-template
-
 !cl-ml ver 1
 !cl-ml auto4d True  sep4d '<'  fill4d [0]
+
+!add-only
+!forced-template
 
 !def background -2
 !def ud -1

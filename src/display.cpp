@@ -71,28 +71,28 @@ void init_pages() {
                                                        shift_animation(false);
                                                },
                                                [] { // 5 text renderer
-                                           if (key_d(KEY_MOVE_RIGHT))
-                                               shift_text_renderer(true);
-                                           else if (key_d(KEY_MOVE_LEFT))
-                                               shift_text_renderer(false);
-                                       },
-                                       [] { // 6 apply
-                                           if (key_c(KEY_CONFIRM)) display->apply_settings();
-                                       },
-                                       [] { // 7 to_lobby
-                                           if (key_c(KEY_CONFIRM)) {
-                                               display->apply_settings();
-                                               display->m_page = page_lobby;
-                                               // Also, returning to lobby will clear room
-                                               display->clear_room();
-                                           }
-                                       },
-                                       [] { // 8 to_game
-                                           if (key_c(KEY_CONFIRM)) {
-                                               display->apply_settings();
-                                               display->return_to_game();
-                                           }
-                                       }
+                                                   if (key_d(KEY_MOVE_RIGHT))
+                                                       shift_text_renderer(true);
+                                                   else if (key_d(KEY_MOVE_LEFT))
+                                                       shift_text_renderer(false);
+                                               },
+                                               [] { // 6 apply
+                                                   if (key_c(KEY_CONFIRM)) display->apply_settings();
+                                               },
+                                               [] { // 7 to_lobby
+                                                   if (key_c(KEY_CONFIRM)) {
+                                                       display->apply_settings();
+                                                       display->m_page = page_lobby;
+                                                       // Also, returning to lobby will clear room
+                                                       display->clear_room();
+                                                   }
+                                               },
+                                               [] { // 8 to_game
+                                                   if (key_c(KEY_CONFIRM)) {
+                                                       display->apply_settings();
+                                                       display->return_to_game();
+                                                   }
+                                               }
                                        },
                                        SETTINGS_EACH
     };
@@ -372,6 +372,7 @@ void Display::apply_settings() {
     m_sensitivity = USER_SENSITIVITY;
     m_delay = 1000 / USER_FRAMERATE;
     animation_speed = USER_ANIMATION_SPEED / MAX_ANIMATION;
+    framerate_ratio = (long double) STANDARD_FRAMERATE / USER_FRAMERATE;
     text_renderer = text_renderer_map.at(current_user.at(USER_K_TEXT_RENDERER));
     reload_pages();
 }
@@ -438,7 +439,7 @@ void Display::process_room() {
 
     m_room->move_independents(key_c);
 
-    m_room->animate_tiles(animation_speed);
+    m_room->animate_tiles(animation_speed * framerate_ratio);
 
     if (m_room->m_animating.empty())
         m_room->do_pending_moves();
@@ -556,6 +557,7 @@ void Display::show_room_info() const {
     surface = create_text(txt_in_game.at(IN_GAME_K_STEPS), ROOM_TITLE_SIZE, steps_color, steps_text);
     show_surface(renderer, surface,
                  {title_end_w + LEAVE_BLANK_WIDTH, RESERVED_HEIGHT + (RESERVED_FROM_B - surface->h) / 2});
+    SDL_FreeSurface(surface);
 }
 
 void Display::show_room_winning() const {
@@ -592,11 +594,11 @@ void Display::show_reservation_line() const {
 }
 
 void Display::clear_img_vec() {
-    if (!img_vec.empty()) {
-        for (auto pair: img_vec) {
+    if (!img_map.empty()) {
+        for (auto pair: img_map) {
             SDL_DestroyTexture(pair.second.texture);
         }
-        img_vec.clear();
+        img_map.clear();
     }
 }
 
@@ -612,9 +614,9 @@ void Display::return_to_game() {
 
 img_info &Display::find_info(SDL_Surface *surface) {
     try {
-        return img_vec.at(surface);
+        return img_map.at(surface);
     } catch (const out_of_range &) {
-        return (img_vec[surface] = {SDL_CreateTextureFromSurface(renderer, surface), get_srcrect(surface)});
+        return (img_map[surface] = {SDL_CreateTextureFromSurface(renderer, surface), get_srcrect(surface)});
     }
 }
 

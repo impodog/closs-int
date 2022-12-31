@@ -3,26 +3,25 @@
 !gem-def G1 -1
 
 title {
-  en="Edge Channel"
-  zh_cn="边缘海峡"
+  en="Every Side"
+  zh_cn="每一边"
 }
 
 help {
   en={
-    "Edges"="Those two dest needs to cross the edge to reach"
+    "The Box Dest"="How to finish it?"
   }
   zh_cn={
-    "边缘"="那两个终点需要跨过边缘来到达"
+    "箱子终点"="怎么完成它?"
   }
 }
 
-perf 44
+perf 18
 
 content 4d[
-    wa -- -- -- wa wa
-    -- -- -- -- wa 1x
-    wa wa -- wa wa --
-    bx -- -- wa wa --
-    wa wa -- -- bx --
-    wa 1x cy wa wa G1
+    wa wa wa wa 1c
+    -- -- -- G1 --
+    wa bx bx bx wa
+    -- 1x wa -- --
+    wa wa wa cy wa
 ]

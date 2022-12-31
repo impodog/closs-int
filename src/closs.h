@@ -58,7 +58,7 @@ public:
     virtual direction_t respond_keys(key_predicate_t predicate) const;
 
     virtual void show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
-                                 double stretch_ratio) const;
+                                 long double stretch_ratio) const;
 };
 
 using TileType = Tile *;
@@ -164,7 +164,7 @@ public:
     bool detect_requirement(SpaceConst space) const;
 
     void show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
-                         double stretch_ratio) const override;
+                         long double stretch_ratio) const override;
 };
 
 class Cyan : public Tile {
@@ -207,7 +207,7 @@ public:
     tile_types get_type() const override;
 
     void show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
-                         double stretch_ratio) const override;
+                         long double stretch_ratio) const override;
 };
 
 class Picture : public Tile {

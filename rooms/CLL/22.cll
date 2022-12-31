@@ -3,25 +3,25 @@
 !gem-def G1 -1
 
 title {
-  en="Every Side"
-  zh_cn="每一边"
+  en="Warped Space"
+  zh_cn="扭曲空间"
 }
 
 help {
   en={
-    "Edge-Crossing 2"="Boxes can also cross the edge"
+    "Edge-Crossing"="Go to the edge to reach the other side!"
   }
   zh_cn={
-    "跨过边缘 2"="箱子也可以跨过边缘"
+    "跨过边缘"="经过边缘来到达另一侧!"
   }
 }
 
-perf 18
+perf 13
 
 content 4d[
-    wa wa wa wa 1c
-    -- -- -- G1 --
-    wa bx bx bx wa
-    -- 1x wa -- --
-    wa wa wa cy wa
+    1c wa -- wa wa wa
+    wa wa -- -- -- --
+    -- wa wa wa wa --
+    -- wa wa wa cy wa
+    -- wa -- -- -- wa
 ]

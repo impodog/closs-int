@@ -1,29 +1,27 @@
 !process-only
 !add C_InT.cll
-!gem-def G1 -255-2
-!gem-def G2 +255
+!gem-def G1 -1
 
 title {
-  en="Long Journey 2"
-  zh_cn="长途旅行 2"
+  en="We're Just Moving"
+  zh_cn="我们只是在移动"
 }
 
 help {
   en={
-    "Edges"="You may want to go to the left to reach the right"
+    "Sequence"="Which dest does not mess up the other?"
   }
   zh_cn={
-    "边缘"="你可能想要先去左边来到达右边"
+    "次序"="哪个终点不会扰乱另一个?"
   }
 }
 
-perf 58
+perf 44
 
 content 4d[
-    wa -- wa wa wa -- wa wa
-    wa -- -- -- wa -- -- --
-    -- -- -- -- wa -- wa --
-    wa wa wa cy bx -- wa --
-    -- -- wa -- wa wa wa 1x
-    wa -- -- G1 G2 -- -- --
+    wa wa wa -- wa -- wa
+    wa 1x -- -- -- 1x wa
+    wa -- wa G1 wa wa wa
+    wa -- bx -- bx -- wa
+    -- -- wa cy wa -- --
 ]
