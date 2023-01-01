@@ -15,9 +15,10 @@ using FontType = TTF_Font *;
 
 using Font_Map = unordered_map<int, FontType>;
 
-class Font_Family : public Font_Map {
+class Font_Family {
 private:
     string m_file;
+    Font_Map m_font_map;
 public:
     explicit Font_Family(const string &file);
 
@@ -28,7 +29,8 @@ public:
 
 extern types_img_map_t types_img_map;
 
-extern Font_Family arial, consolas, simhei;
+using Font_Family_Type = Font_Family *;
+extern Font_Family_Type arial, consolas, simhei;
 
 using SDL_Surface_ptr = SDL_Surface *;
 extern SDL_Surface_ptr img_arrow, img_settings, img_Closs_InT, img_help, img_manual, img_levels;
@@ -46,6 +48,10 @@ extern text_renderer_map_t text_renderer_map;
 void init_img();
 
 void free_img();
+
+void init_font();
+
+void free_font();
 
 void set_white_as_colorkey(const vector<SDL_Surface *> &surfaces);
 

@@ -274,7 +274,7 @@ bool Destination::detect_requirement(SpaceConst space) const {
 
 void Destination::show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
                                   long double stretch_ratio) const {
-    auto surface = RENDER_TEXT(consolas.sized(FONT_SIZE(DESTINATION_SIZE)),
+    auto surface = RENDER_TEXT(consolas->sized(FONT_SIZE(DESTINATION_SIZE)),
                                type_names.at(m_req).c_str(),
                                WHITE);
     DisplayPos show_pos = {center.w - surface->w / 2, center.h - surface->h / 2};
@@ -373,7 +373,7 @@ tile_types Gem::get_type() const {
 
 void Gem::show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
                           long double stretch_ratio) const {
-    auto surface = RENDER_TEXT(consolas.sized(FONT_SIZE(DESTINATION_SIZE)),
+    auto surface = RENDER_TEXT(consolas->sized(FONT_SIZE(DESTINATION_SIZE)),
                                to_string(m_addition).c_str(),
                                m_addition <= 0 ? GREEN : RED);
     DisplayPos show_pos = {center.w - surface->w / 2, center.h - surface->h / 2};

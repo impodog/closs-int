@@ -13,32 +13,28 @@ Font_Family::Font_Family(const string &file) {
 }
 
 Font_Family::~Font_Family() {
-    for (auto pair: *this)
+    for (auto pair: m_font_map) {
         TTF_CloseFont(pair.second);
-    clear();
-    Font_Map::~unordered_map();
+    }
 }
 
 FontType Font_Family::sized(int size) {
     try {
-        return Font_Map::at(size);
+        return m_font_map.at(size);
     } catch (const out_of_range &) {
         auto font = TTF_OpenFont(m_file.c_str(), size);
-        Font_Map::insert({size, font});
+        m_font_map[size] = font;
         return font;
     }
 }
 
-Font_Family arial(ARIAL_PATH), consolas(CONSOLAS_PATH), simhei(SIMHEI_PATH);
+Font_Family_Type arial, consolas, simhei;
 
 SDL_Surface_ptr img_arrow, img_settings, img_Closs_InT, img_help, img_manual, img_levels;
 SDL_Surface_ptr img_none, img_icon;
 SDL_Surface_ptr img_chapter1;
 
-language_fonts_t language_fonts = {
-        {"en",    &arial},
-        {"zh_cn", &simhei}
-};
+language_fonts_t language_fonts;
 
 text_renderer_t text_renderer;
 
@@ -52,44 +48,44 @@ void init_img() {
 
     // load tile graphics
     auto img_tile_background = IMG_Load(IMG_PATH
-    "tile_background.png"),
-    img_undefined = IMG_Load(IMG_PATH
-    "undefined.png"),
-    img_cyan = IMG_Load(IMG_PATH
-    "cyan.png"),
-    img_box = IMG_Load(IMG_PATH
-    "box.png"),
-    img_wall = IMG_Load(IMG_PATH
-    "wall.png"),
-    img_dest = IMG_Load(IMG_PATH
-    "dest.png"),
-    img_gem = IMG_Load(IMG_PATH
-    "gem.png"),
-    img_box2 = IMG_Load(IMG_PATH
-    "box2.png"),
-    img_go_to = IMG_Load(IMG_PATH
-    "go_to.png"),
-    img_blue = IMG_Load(IMG_PATH
-    "blue.png"),
-    img_box3 = IMG_Load(IMG_PATH
-    "box3.png");
+                                        "tile_background.png"),
+            img_undefined = IMG_Load(IMG_PATH
+                                     "undefined.png"),
+            img_cyan = IMG_Load(IMG_PATH
+                                "cyan.png"),
+            img_box = IMG_Load(IMG_PATH
+                               "box.png"),
+            img_wall = IMG_Load(IMG_PATH
+                                "wall.png"),
+            img_dest = IMG_Load(IMG_PATH
+                                "dest.png"),
+            img_gem = IMG_Load(IMG_PATH
+                               "gem.png"),
+            img_box2 = IMG_Load(IMG_PATH
+                                "box2.png"),
+            img_go_to = IMG_Load(IMG_PATH
+                                 "go_to.png"),
+            img_blue = IMG_Load(IMG_PATH
+                                "blue.png"),
+            img_box3 = IMG_Load(IMG_PATH
+                                "box3.png");
     // load global graphics
     img_arrow = IMG_Load(IMG_PATH
-    "arrow.png");
+                         "arrow.png");
     img_settings = IMG_Load(IMG_PATH
-    "settings.png");
+                            "settings.png");
     img_Closs_InT = IMG_Load(IMG_PATH
-    "Closs_InT.png");
+                             "Closs_InT.png");
     img_help = IMG_Load(IMG_PATH
-    "help.png");
+                        "help.png");
     img_manual = IMG_Load(IMG_PATH
-    "manual.png");
+                          "manual.png");
     img_levels = IMG_Load(IMG_PATH
-    "levels.png");
+                          "levels.png");
     img_icon = IMG_Load(IMG_PATH
-    "C_InT_Icon.png");
+                        "C_InT_Icon.png");
     img_chapter1 = IMG_Load(IMG_PATH
-    "chapter1.png");
+                            "chapter1.png");
 
     img_none = SDL_CreateRGBSurface(0, 1, 1, 32, 0, 0, 0, 0);
 
@@ -136,7 +132,7 @@ void init_img() {
 }
 
 void free_img() {
-    vector < SDL_Surface * > freed_surface;
+    vector<SDL_Surface *> freed_surface;
     for (auto pair: types_img_map)
         if (find(freed_surface.begin(), freed_surface.end(), pair.second) == freed_surface.end()) {
             SDL_FreeSurface(pair.second);
@@ -149,9 +145,24 @@ void free_img() {
     SDL_FreeSurface(img_help);
     SDL_FreeSurface(img_manual);
     SDL_FreeSurface(img_levels);
-    SDL_FreeSurface(img_none);
     SDL_FreeSurface(img_icon);
     SDL_FreeSurface(img_chapter1);
+}
+
+void init_font() {
+    arial = new Font_Family(ARIAL_PATH);
+    consolas = new Font_Family(CONSOLAS_PATH);
+    simhei = new Font_Family(SIMHEI_PATH);
+    language_fonts = {
+        { "en", arial },
+        { "zh_cn", simhei }
+    };
+}
+
+void free_font() {
+    delete arial;
+    delete consolas;
+    delete simhei;
 }
 
 void set_white_as_colorkey(const vector<SDL_Surface *> &surfaces) {
@@ -169,3 +180,4 @@ void show_surface(SDL_Renderer *renderer, SDL_Surface *surface, const DisplayPos
 uint32_t MapRGB(SDL_Surface *surface, const SDL_Color &color) {
     return SDL_MapRGB(surface->format, color.r, color.g, color.b);
 }
+

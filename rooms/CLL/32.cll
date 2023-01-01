@@ -1,0 +1,27 @@
+!process-only
+!add C_InT.cll
+!gem-def G1 -3
+
+title {
+  en="Color Swap"
+  zh_cn="交换颜色"
+}
+
+help {
+  en={
+    "Edges"="Don't block the important edge paths"
+  }
+  zh_cn={
+    "边缘"="不要挡住重要的边缘路"
+  }
+}
+
+perf 32
+
+content 4d[
+    wa wa wa -- wa
+    wa cy bx -- --
+    wa 1b -- -- --
+    wa -- wa -- wa
+    -- 1x bl -- G1
+]

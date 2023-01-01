@@ -9,10 +9,10 @@ title {
 
 help {
     en={
-        "Boxes": "The top two boxes can be tricky, but move them one by one"
+        "Boxes"="The top two boxes can be tricky, but move them one by one"
     }
     zh_cn={
-        "箱子": "顶部的两个箱子可能很巧妙, 但是一个一个地移动它们"
+        "箱子"="顶部的两个箱子可能很巧妙, 但是一个一个地移动它们"
     }
 }
 
