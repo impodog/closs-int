@@ -85,7 +85,7 @@ void Room::refresh_gems() {
         for (auto space: *lane)
             for (auto tile: *space)
                 if (tile->get_type() == tile_gem) {
-                    if (m_is_perf_play && !m_is_gem_play) m_gems.push_back(tile);
+                    if (ROOM_CONTAINS_GEMS) m_gems.push_back(tile);
                     else {
                         del(tile);
                         delete tile;
@@ -138,7 +138,7 @@ void Room::do_pending_moves() {
             move_tile(pair.first, pair.second);
             next_step_flag = true;
         }
-        if (next_step_flag) m_steps++;
+        if (next_step_flag && !IS_WINNING_GEM) m_steps++;
         m_pending.clear();
     }
 }
@@ -177,19 +177,21 @@ void Room::move_independents(key_predicate_t predicate) {
 }
 
 void Room::detect_gems() {
-    Space pending_collection;
-    for (auto gem_tile: m_gems) {
-        auto space = at(gem_tile->m_pos);
-        for (auto tile: *space)
-            if (tile->get_type() == tile_cyan) pending_collection.push_back(gem_tile);
-    }
-    for (auto gem_tile: pending_collection) {
-        auto gem = (Gem *) gem_tile;
-        if (gem->m_addition >= 0 || m_steps > -gem->m_addition) m_steps += gem->m_addition;
-        else m_steps = 0;
-        m_gems.erase(std::find(m_gems.begin(), m_gems.end(), gem));
-        del(gem);
-        delete gem;
+    if (!IS_WINNING_GEM) {
+        Space pending_collection;
+        for (auto gem_tile: m_gems) {
+            auto space = at(gem_tile->m_pos);
+            for (auto tile: *space)
+                if (tile->get_type() == tile_cyan) pending_collection.push_back(gem_tile);
+        }
+        for (auto gem_tile: pending_collection) {
+            auto gem = (Gem *) gem_tile;
+            if (gem->m_addition >= 0 || m_steps > -gem->m_addition) m_steps += gem->m_addition;
+            else m_steps = 0;
+            m_gems.erase(std::find(m_gems.begin(), m_gems.end(), gem));
+            del(gem);
+            delete gem;
+        }
     }
 }
 

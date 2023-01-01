@@ -1,6 +1,6 @@
 !process-only
 !add C_InT.cll
-!gem-def G1 -3
+!gem-def G1 -2
 
 title {
     en="Down Is Up"

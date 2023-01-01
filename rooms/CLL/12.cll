@@ -1,6 +1,6 @@
 !process-only
 !add C_InT.cll
-!gem-def G1 -2
+!gem-def G1 -1
 
 title {
     en="Splited Boxes"
@@ -20,9 +20,9 @@ perf 34
 
 content 4d[
     wa wa wa wa wa wa wa
-    1x -- -- -- G1 wa wa
+    1x -- -- -- wa wa wa
     -- wa -- -- wa wa wa
-    -- -- -- -- -- 1x wa
+    -- -- -- -- G1 1x wa
     wa bx -- wa -- wa wa
     -- -- bx -- -- wa wa
     cy -- wa -- -- wa wa

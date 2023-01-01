@@ -5,6 +5,9 @@
 #ifndef CLOSS_INT_CLOSS_H
 #define CLOSS_INT_CLOSS_H
 
+#define ROOM_CONTAINS_GEMS (m_is_perf_play && !m_is_gem_play)
+#define IS_WINNING_GEM (m_is_winning && ROOM_CONTAINS_GEMS)
+
 #include "img.h"
 
 using public_code_t = unsigned long long;

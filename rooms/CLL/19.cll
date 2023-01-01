@@ -1,6 +1,6 @@
 !process-only
 !add C_InT.cll
-!gem-def G1 0
+!gem-def G1 -10
 
 title {
     en="Stacking Up"
@@ -16,7 +16,7 @@ help {
     }
 }
 
-perf 69
+perf 63
 
 content 4d[
     wa wa wa wa -- -- wa 1x

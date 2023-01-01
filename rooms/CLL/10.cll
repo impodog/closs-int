@@ -1,6 +1,6 @@
 !process-only
 !add C_InT.cll
-!gem-def G1 -255
+!gem-def G1 -257
 !def G2 [gm +255]
 
 title {
@@ -22,7 +22,7 @@ perf 52
 content 4d[
   wa wa wa wa wa wa wa wa
   wa wa -- -- -- wa 1x wa
-  wa G1 -- -- -- -- -- wa
+  wa -- -- G1 -- -- -- wa
   -- -- -- wa wa wa -- wa
   -- wa cy bx -- wa -- wa
   -- -- G2 wa -- -- -- wa
