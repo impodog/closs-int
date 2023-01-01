@@ -317,6 +317,10 @@ TileType construct_go_to(TilePos pos, SDL_Surface *img, int level) {
     return new Go_To(pos, img, level);
 }
 
+TileType construct_blue(TilePos pos, SDL_Surface *img, int) {
+    return new Blue(pos, img);
+}
+
 tile_types_map_t tile_type_map = {
         {tile_undefined,   construct_undefined},
         {tile_cyan,        construct_cyan},
@@ -325,7 +329,8 @@ tile_types_map_t tile_type_map = {
         {tile_destination, construct_dest},
         {tile_gem,         construct_gem},
         {tile_picture,     construct_picture},
-        {tile_go_to,       construct_go_to}
+        {tile_go_to,       construct_go_to},
+        {tile_blue,        construct_blue}
 };
 
 Cyan::Cyan(TilePos pos, SDL_Surface *m_img) : Tile(pos, m_img) {}
@@ -381,17 +386,13 @@ void Gem::show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const D
 
 Picture::Picture(TilePos pos, SDL_Surface *m_img) : Tile(pos, m_img) {}
 
-tile_types Picture::get_type() const {
-    return tile_picture;
-}
+tile_types Picture::get_type() const { return tile_picture; }
 
 Go_To::Go_To(TilePos pos, SDL_Surface *m_img, int level) : Tile(pos, m_img) {
     m_level = level;
 }
 
-tile_types Go_To::get_type() const {
-    return tile_go_to;
-}
+tile_types Go_To::get_type() const { return tile_go_to; }
 
 direction_t Go_To::acq_req(const Movement_Request &req) const {
     if (req.sender->get_type() == tile_cyan) {
@@ -400,3 +401,10 @@ direction_t Go_To::acq_req(const Movement_Request &req) const {
     return Tile::acq_req(req);
 }
 
+Blue::Blue(TilePos pos, SDL_Surface *m_img) : Tile(pos, m_img) {}
+
+tile_types Blue::get_type() const { return tile_blue; }
+
+direction_t Blue::acq_req(const Movement_Request &req) const {
+    return req.direction;
+}

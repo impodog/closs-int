@@ -356,6 +356,7 @@ Display::Display() {
                               SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                               (int) (info.w * SCR_RATIO), (int) (info.h * SCR_RATIO),
                               SDL_WINDOW_RESIZABLE);
+    SDL_SetWindowIcon(window, img_icon);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     SDL_RenderSetLogicalSize(renderer, SCR_WIDTH, SCR_HEIGHT);
     m_page = page_lobby;
@@ -437,8 +438,9 @@ void Display::process_room() {
 
     move_room_to_visible();
 
-    m_room->move_independents(key_c);
-
+    if (m_room->m_animating.empty())
+        m_room->move_independents(key_c);
+    
     m_room->animate_tiles(animation_speed * framerate_ratio);
 
     if (m_room->m_animating.empty())

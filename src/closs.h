@@ -228,4 +228,13 @@ public:
     direction_t acq_req(const Movement_Request &req) const override;
 };
 
+class Blue : public Tile {
+public:
+    Blue(TilePos pos, SDL_Surface *m_img);
+
+    tile_types get_type() const override;
+
+    direction_t acq_req(const Movement_Request &req) const override;
+};
+
 #endif //CLOSS_INT_CLOSS_H

@@ -17,6 +17,8 @@
 !def gm 5
 !def pic 6
 !def goto 7
+!def bl 8
+!def bb bl
 
 !%undef background
 !%undef ud
@@ -28,12 +30,16 @@
 !%undef gm
 !%undef pic
 !%undef goto
+!%undef bl
+!%undef bb
 
 !def 1c [ds cy]
 !def 1x [ds bx]
+!def 1b [ds bl]
 
 !%undef 1c
 !%undef 1x
+!%undef 1b
 
 !templ-repl !to ..\Closs\(%filename).json
 

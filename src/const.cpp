@@ -45,7 +45,11 @@ type_names_t type_names = {
         {tile_cyan,        "Cyan"},
         {tile_box,         "Box"},
         {tile_wall,        "Wall"},
-        {tile_destination, "Dest"}
+        {tile_destination, "Dest"},
+        {tile_gem,         "Gem"},
+        {tile_picture,     "Pic"},
+        {tile_go_to,       "Goto"},
+        {tile_blue,        "Blue"}
 };
 
 

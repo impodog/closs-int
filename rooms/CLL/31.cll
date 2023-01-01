@@ -1,0 +1,27 @@
+!process-only
+!add C_InT.cll
+!gem-def G1 -2
+!gem-def G2 -2
+
+title {
+  en="Tranportation"
+  zh_cn="交通"
+}
+
+help {
+  en={
+    "Observe"="Find the best path for each box"
+    "Transportation"="Don't block the way of transportation"
+  }
+  zh_cn={
+    "观察"="找到每个箱子的最优路径"
+    "交通"="别把交通路堵住了"
+  }
+}
+
+perf 63
+
+content 4d[
+    wa wa -- wa -- wa wa wa wa
+    cy bl -- -- -- -- -- -- 1b
+]

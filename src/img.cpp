@@ -32,7 +32,7 @@ FontType Font_Family::sized(int size) {
 Font_Family arial(ARIAL_PATH), consolas(CONSOLAS_PATH), simhei(SIMHEI_PATH);
 
 SDL_Surface_ptr img_arrow, img_settings, img_Closs_InT, img_help, img_manual, img_levels;
-SDL_Surface_ptr img_none;
+SDL_Surface_ptr img_none, img_icon;
 SDL_Surface_ptr img_chapter1;
 
 language_fonts_t language_fonts = {
@@ -51,23 +51,45 @@ void init_img() {
     IMG_Init(IMG_INIT_PNG);
 
     // load tile graphics
-    auto img_tile_background = IMG_Load(IMG_PATH "tile_background.png"),
-            img_undefined = IMG_Load(IMG_PATH "undefined.png"),
-            img_cyan = IMG_Load(IMG_PATH "cyan.png"),
-            img_box = IMG_Load(IMG_PATH "box.png"),
-            img_wall = IMG_Load(IMG_PATH "wall.png"),
-            img_dest = IMG_Load(IMG_PATH "dest.png"),
-            img_gem = IMG_Load(IMG_PATH "gem.png"),
-            img_box2 = IMG_Load(IMG_PATH "box2.png"),
-            img_go_to = IMG_Load(IMG_PATH "go_to.png");
+    auto img_tile_background = IMG_Load(IMG_PATH
+    "tile_background.png"),
+    img_undefined = IMG_Load(IMG_PATH
+    "undefined.png"),
+    img_cyan = IMG_Load(IMG_PATH
+    "cyan.png"),
+    img_box = IMG_Load(IMG_PATH
+    "box.png"),
+    img_wall = IMG_Load(IMG_PATH
+    "wall.png"),
+    img_dest = IMG_Load(IMG_PATH
+    "dest.png"),
+    img_gem = IMG_Load(IMG_PATH
+    "gem.png"),
+    img_box2 = IMG_Load(IMG_PATH
+    "box2.png"),
+    img_go_to = IMG_Load(IMG_PATH
+    "go_to.png"),
+    img_blue = IMG_Load(IMG_PATH
+    "blue.png"),
+    img_box3 = IMG_Load(IMG_PATH
+    "box3.png");
     // load global graphics
-    img_arrow = IMG_Load(IMG_PATH "arrow.png");
-    img_settings = IMG_Load(IMG_PATH "settings.png");
-    img_Closs_InT = IMG_Load(IMG_PATH "Closs_InT.png");
-    img_help = IMG_Load(IMG_PATH "help.png");
-    img_manual = IMG_Load(IMG_PATH "manual.png");
-    img_levels = IMG_Load(IMG_PATH "levels.png");
-    img_chapter1 = IMG_Load(IMG_PATH "chapter1.png");
+    img_arrow = IMG_Load(IMG_PATH
+    "arrow.png");
+    img_settings = IMG_Load(IMG_PATH
+    "settings.png");
+    img_Closs_InT = IMG_Load(IMG_PATH
+    "Closs_InT.png");
+    img_help = IMG_Load(IMG_PATH
+    "help.png");
+    img_manual = IMG_Load(IMG_PATH
+    "manual.png");
+    img_levels = IMG_Load(IMG_PATH
+    "levels.png");
+    img_icon = IMG_Load(IMG_PATH
+    "C_InT_Icon.png");
+    img_chapter1 = IMG_Load(IMG_PATH
+    "chapter1.png");
 
     img_none = SDL_CreateRGBSurface(0, 1, 1, 32, 0, 0, 0, 0);
 
@@ -79,9 +101,11 @@ void init_img() {
                                   img_wall,
                                   img_dest,
                                   img_gem,
-                                  img_go_to,
-
                                   img_box2,
+                                  img_go_to,
+                                  img_blue,
+                                  img_box3,
+
 
                                   img_arrow,
                                   img_settings,
@@ -90,6 +114,8 @@ void init_img() {
                                   img_manual,
                                   img_levels,
 
+                                  img_icon,
+
                                   img_chapter1
                           });
 
@@ -97,18 +123,22 @@ void init_img() {
     types_img_map[tile_background] = img_tile_background;
     types_img_map[tile_undefined] = img_undefined;
     types_img_map[tile_cyan] = img_cyan;
-    types_img_map[tile_box] = img_box;
+    types_img_map[tile_box] = img_box3;
     types_img_map[tile_wall] = img_wall;
     types_img_map[tile_destination] = img_dest;
     types_img_map[tile_gem] = img_gem;
     types_img_map[tile_picture] = img_none;
     types_img_map[tile_go_to] = img_go_to;
+    types_img_map[tile_blue] = img_blue;
+    // Free unused
+    SDL_FreeSurface(img_box);
+    SDL_FreeSurface(img_box2);
 }
 
 void free_img() {
-    vector<SDL_Surface *> freed_surface;
+    vector < SDL_Surface * > freed_surface;
     for (auto pair: types_img_map)
-        if (find(freed_surface.begin(), freed_surface.end(), pair.second) != freed_surface.end()) {
+        if (find(freed_surface.begin(), freed_surface.end(), pair.second) == freed_surface.end()) {
             SDL_FreeSurface(pair.second);
             freed_surface.push_back(pair.second);
         }
@@ -120,6 +150,7 @@ void free_img() {
     SDL_FreeSurface(img_manual);
     SDL_FreeSurface(img_levels);
     SDL_FreeSurface(img_none);
+    SDL_FreeSurface(img_icon);
     SDL_FreeSurface(img_chapter1);
 }
 

@@ -103,7 +103,7 @@ void load_json_space(const json &json_space, const TilePos &pos, SpaceType space
 		try {
 			space->push_back(
 					tile_type_map.at(code)(pos, types_img_map.at(code), type_arg));
-		} catch (const out_of_range &e) {
+		} catch (const out_of_range &) {
 			throw closs_room_error("invalid type code " + to_string(code));
 		}
 	}
