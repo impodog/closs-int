@@ -1,7 +1,6 @@
 !process-only
 !add C_InT.cll
 !gem-def G1 -7
-!gem-def G2 -7
 !goto-def -2
 !pic-def PW wa
 
@@ -25,5 +24,5 @@ content 4d[
     wa wa wa wa wa wa wa
     -- cy 1x 1b wa wa --
     wa wa -- -- bl bx --
-    -- -- -- -- wa wa --
+    -- -- -- G1 wa wa --
 ]

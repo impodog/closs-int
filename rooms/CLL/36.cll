@@ -1,6 +1,9 @@
 !process-only
 !add C_InT.cll
-!gem-def G1 -1
+!gem-def G1 +255
+!gem-def G2 -256
+!gem-def G3 +255
+!gem-def G4 -256
 
 title {
   en="Symmetry"
@@ -22,10 +25,10 @@ perf 27
 
 content 4d[
     wa wa wa wa wa wa wa
-    wa 1x -- -- -- 1x wa
+    wa 1x -- G2 -- 1x wa
     wa -- bb bx bb -- wa
-    wa -- bx cy bx -- wa
+    wa G1 bx cy bx G3 wa
     wa -- bb bx bb -- wa
-    wa 1x -- -- -- 1x wa
+    wa 1x -- G4 -- 1x wa
     wa wa wa wa wa wa wa
 ]
