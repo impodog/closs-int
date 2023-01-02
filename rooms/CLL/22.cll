@@ -1,6 +1,6 @@
 !process-only
 !add C_InT.cll
-!gem-def G1 -1
+!gem-def G1 -2
 
 title {
   en="Warped Space"
@@ -21,7 +21,7 @@ perf 13
 content 4d[
     1c wa -- wa wa wa
     wa wa -- -- -- --
-    -- wa wa wa wa --
+    -- wa G1 wa wa --
     -- wa wa wa cy wa
     -- wa -- -- -- wa
 ]

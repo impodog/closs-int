@@ -424,7 +424,7 @@ void Display::process_room_winning() {
         }
         save_user();
         start_game();
-        if (chapter_end != nullptr)
+        if (chapter_end != nullptr && !m_room->m_is_second_play)
             m_page = chapter_end;
     }
 }

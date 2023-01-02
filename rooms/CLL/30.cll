@@ -19,14 +19,14 @@ help {
   }
 }
 
-perf 63
+perf 45
 
 content 4d[
     wa wa -- wa -- wa wa wa wa
-    wa wa -- wa -- -- wa G2 wa
+    wa wa -- wa -- -- wa G1 wa
     -- cy 1x wa wa bx -- bx --
-    wa wa wa G1 -- -- wa -- --
+    wa wa wa -- -- -- wa -- --
     wa -- bx -- -- -- wa wa --
     wa -- wa wa -- -- -- -- --
-    wa -- 1x -- -- -- wa -- 1x
+    wa -- 1x -- -- -- wa G2 1x
 ]

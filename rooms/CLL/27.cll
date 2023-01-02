@@ -1,6 +1,6 @@
 !process-only
 !add C_InT.cll
-!gem-def G1 -1
+!gem-def G1 -2
 
 title {
   en="Edge Channel"
@@ -16,7 +16,7 @@ help {
   }
 }
 
-perf 44
+perf 42
 
 content 4d[
     wa -- -- -- wa wa

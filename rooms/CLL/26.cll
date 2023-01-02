@@ -1,6 +1,6 @@
 !process-only
 !add C_InT.cll
-!gem-def G1 -1
+!gem-def G1 +0
 
 title {
   en="Edge And Boxes"
@@ -16,10 +16,10 @@ help {
   }
 }
 
-perf 51
+perf 43
 
 content 4d[
-    wa -- -- -- wa -- wa cy
+    wa -- -- G1 wa -- wa cy
     wa wa -- wa wa -- bx --
     wa -- -- -- -- -- -- wa
     wa 1x -- wa wa -- bx --
