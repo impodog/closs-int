@@ -1,34 +1,27 @@
 !process-only
 !add C_InT.cll
-!gem-def G1 +255
-!gem-def G2 -256
-!gem-def G3 +255
-!gem-def G4 -256
+!gem-def G1 -1
 
 title {
-  en="Symmetry"
-  zh_cn="对称"
+  en="Port of Edges"
+  zh_cn="边缘端口"
 }
 
 help {
   en={
-    "Focus"="Move as few blue boxes as you can"
-    "Try"="Don't give up. It might require some swinging to reach dests"
+    "One by one"="Just put them in one by one"
   }
   zh_cn={
-    "专一"="尽量少移动蓝色箱子"
-    "尝试"="不要放弃. 可能需要回旋来解决终点"
+    "一个接一个"="只需要一个一个地把它们放进去"
   }
 }
 
-perf 27
+perf 54
 
 content 4d[
-    wa wa wa wa wa wa wa
-    wa 1x -- G2 -- 1x wa
-    wa -- bb bx bb -- wa
-    wa G1 bx cy bx G3 wa
-    wa -- bb bx bb -- wa
-    wa 1x -- G4 -- 1x wa
-    wa wa wa wa wa wa wa
+    -- wa wa wa wa wa
+    cy G1 1b 1b wa --
+    bl wa -- -- -- bx
+    bl -- -- -- wa bx
+    -- wa 1x 1x -- --
 ]

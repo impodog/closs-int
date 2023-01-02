@@ -1,28 +1,27 @@
 !process-only
 !add C_InT.cll
-!gem-def G1 -7
-!goto-def -2
-!pic-def PW wa
+!gem-def G1 -3
 
 title {
-  en="Snake Turning"
-  zh_cn="蛇形转弯"
+  en="Color Swap"
+  zh_cn="交换颜色"
 }
 
 help {
   en={
-    "Turning"="Turn the blue one first, and follow by the regular one"
+    "Edges"="Don't block the important edge paths"
   }
   zh_cn={
-    "转弯"="先转蓝色箱子, 再跟上普通箱子"
+    "边缘"="不要挡住重要的边缘路"
   }
 }
 
-perf 31
+perf 32
 
 content 4d[
-    wa wa wa wa wa wa wa
-    -- cy 1x 1b wa wa --
-    wa wa -- -- bl bx --
-    -- -- -- G1 wa wa --
+    wa wa wa -- wa
+    wa cy bx -- --
+    wa 1b -- -- --
+    wa -- wa -- wa
+    -- 1x bl -- G1
 ]

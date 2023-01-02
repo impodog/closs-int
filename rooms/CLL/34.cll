@@ -1,27 +1,28 @@
 !process-only
 !add C_InT.cll
-!gem-def G1 -1
+!gem-def G1 -7
+!goto-def -2
+!pic-def PW wa
 
 title {
-  en="Line of Colors"
-  zh_cn="颜色一线"
+  en="Snake Turning"
+  zh_cn="蛇形转弯"
 }
 
 help {
   en={
-    "Sorting"="Sort the boxes, then push them"
+    "Turning"="Turn the blue one first, and follow by the regular one"
   }
   zh_cn={
-    "排序"="把箱子排序, 再推动它们"
+    "转弯"="先转蓝色箱子, 再跟上普通箱子"
   }
 }
 
-perf 24
+perf 31
 
 content 4d[
-    wa wa wa -- wa wa wa
-    wa wa wa -- wa wa wa
-    cy -- bx G1 bl -- --
-    wa wa -- 1b wa wa --
-    wa wa wa 1x -- -- --
+    wa wa wa wa wa wa wa
+    -- cy 1x 1b wa wa --
+    wa wa -- -- bl bx --
+    -- -- -- G1 wa wa --
 ]

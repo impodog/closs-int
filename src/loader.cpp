@@ -97,9 +97,9 @@ void load_json_space(const json &json_space, const TilePos &pos, SpaceType space
 			code = json_tile[0];
 			type_arg = json_tile[1];
 		}
-		
+
 		if (code == 0) continue;
-		
+
 		try {
 			space->push_back(
 					tile_type_map.at(code)(pos, types_img_map.at(code), type_arg));
@@ -185,6 +185,10 @@ void shift_animation(bool down) {
 	else if (animation_speed > MIN_ANIMATION) current_user[USER_K_ANIMATION_SPEED] = animation_speed - 1;
 }
 
+bool can_shift_to_level(int level) {
+    return level >= MIN_LEVEL_NUMBER && level <= current_user.at(USER_K_UNLOCKED);
+}
+
 bool is_second_play() {
 	return current_user.at(USER_K_ROOM) < current_user.at(USER_K_UNLOCKED);
 }
@@ -222,6 +226,7 @@ bool contains_literal(const json &array, const json &value) {
 		if (cmp == value) return true;
 	return false;
 }
+
 
 // declared in closs.h
 json &get_user(){

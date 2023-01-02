@@ -1,32 +1,27 @@
 !process-only
 !add C_InT.cll
-!gem-def G1 -7
-!gem-def G2 -7
-!goto-def -2
-!pic-def PW wa
+!gem-def G1 -1
 
 title {
-  en="Blue Rescue"
-  zh_cn="蓝色救援"
+  en="Line of Colors"
+  zh_cn="颜色一线"
 }
 
 help {
   en={
-    "Focus"="Care about the blue box only"
+    "Sorting"="Sort the boxes, then push them"
   }
   zh_cn={
-    "专一"="只注意蓝色箱子"
+    "排序"="把箱子排序, 再推动它们"
   }
 }
 
-perf 18
+perf 24
 
 content 4d[
-    wa wa wa -- wa PW
-    1b cy -- -- wa PW
-    wa -- wa bx wa wa
-    -- bl wa -- wa wa
-    -- bx bx -- -- wa
-    G2 -- bx -- G1 wa
-    wa wa wa wa wa GT
+    wa wa wa -- wa wa wa
+    wa wa wa -- wa wa wa
+    cy -- bx G1 bl -- --
+    wa wa -- 1b wa wa --
+    wa wa wa 1x -- -- --
 ]

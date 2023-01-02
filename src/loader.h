@@ -6,7 +6,8 @@
 #define CLOSS_INT_LOADER_H
 
 #define OPEN_CLOSS_ROOM(path) open_room("Closs/" path)
-#define USER_SENSITIVITY (int)((int)current_user.at(USER_K_SENSITIVITY))
+#define USER_SENSITIVITY (int)current_user.at(USER_K_SENSITIVITY)
+#define USER_ROOM (int)current_user.at(USER_K_ROOM)
 #define USER_LANG (string)current_user.at(USER_K_LANGUAGE)
 #define USER_FRAMERATE (int)current_user.at(USER_K_FRAMERATE)
 #define USER_LEVELS (int)current_user.at(USER_K_LEVELS)
@@ -53,6 +54,8 @@ void shift_text_renderer(bool down);
 void shift_levels(bool down, int amount = 1);
 
 void shift_animation(bool down);
+
+bool can_shift_to_level(int level);
 
 bool is_second_play();
 

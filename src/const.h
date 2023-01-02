@@ -46,7 +46,7 @@ void get_scr_info(Screen_Info &info);
 #endif
 
 
-#define VERSION "v0.4.7"
+#define VERSION "v0.5.0"
 
 #define TITLE "Closs : Inside the Tapes " VERSION
 #define SCR_WIDTH 2000
@@ -158,6 +158,7 @@ void get_scr_info(Screen_Info &info);
 #define IN_GAME_K_STEPS "steps"
 #define IN_GAME_K_LEVELS "levels"
 #define IN_GAME_K_CHAPTER1 "chapter1"
+#define IN_GAME_K_CHAPTER2 "chapter2"
 
 #define KEY_SHIFT_UP SDLK_w
 #define KEY_SHIFT_LEFT SDLK_a
@@ -170,6 +171,9 @@ void get_scr_info(Screen_Info &info);
 #define KEY_MOVE_RIGHT SDLK_RIGHT
 
 #define MOVEMENT_KEYS {KEY_MOVE_UP,KEY_MOVE_LEFT,KEY_MOVE_DOWN,KEY_MOVE_RIGHT}
+
+#define KEY_NEXT SDLK_n
+#define KEY_BACK SDLK_b
 
 #define KEY_SETTINGS {SDLK_q, SDLK_ESCAPE}
 #define KEY_CONFIRM {SDLK_c, SDLK_RETURN}

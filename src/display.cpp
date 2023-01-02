@@ -158,7 +158,7 @@ void init_pages() {
                                                      shift_levels(false, 10);
                                                  } else if (key_c(KEY_CONFIRM)) {
                                                      current_user[USER_K_ROOM] = current_user.at(USER_K_LEVELS);
-                                                     start_game();
+                                                     refresh_user_game();
                                                  }
                                              }
                                      },
@@ -183,7 +183,8 @@ void reload_pages() {
     free_variable_pages();
     page_manual = new Text_Page{img_manual, txt_manual, false};
     level_pic_map = {
-            {20, new Text_Page{img_chapter1, txt_in_game.at(IN_GAME_K_CHAPTER1), false}}
+            {20, new Text_Page{img_chapter1, txt_in_game.at(IN_GAME_K_CHAPTER1), false}},
+            {1, new Text_Page{img_chapter2, txt_in_game.at(IN_GAME_K_CHAPTER2), false}}
     };
 }
 
@@ -258,6 +259,11 @@ void start_game() {
     auto room = open_room(get_room_path());
     display->change_room(room);
     display->m_page = nullptr;
+}
+
+void refresh_user_game() {
+    save_user();
+    start_game();
 }
 
 Selection_Page::Selection_Page(SDL_Surface *title, selection_generators_const_t generators,
@@ -402,7 +408,11 @@ void Display::collect_loop_info() {
 void Display::process_room_winning() {
     bool confirm = key_c(KEY_CONFIRM);
     PageType chapter_end = nullptr;
-    if (m_room->m_is_winning && (confirm || key_c(KEY_SAVE_AND_REPLAY))) {
+    int to_shift = 0;
+    if (confirm && m_room->m_pending_go_to != 0) {
+        current_user[USER_K_ROOM] = m_room->m_pending_go_to;
+        refresh_user_game();
+    } else if (m_room->m_is_winning && (confirm || key_c(KEY_SAVE_AND_REPLAY))) {
         try {
             chapter_end = level_pic_map.at(current_user[USER_K_ROOM]);
         } catch (const out_of_range &) {}
@@ -422,10 +432,16 @@ void Display::process_room_winning() {
         } else if (confirm) {
             current_user[USER_K_ROOM] = (string) m_room->m_next;
         }
-        save_user();
-        start_game();
+        refresh_user_game();
         if (chapter_end != nullptr && !m_room->m_is_second_play)
             m_page = chapter_end;
+    } else if (key_c(KEY_NEXT))
+        to_shift = USER_ROOM + 1;
+    else if (key_c(KEY_BACK))
+        to_shift = USER_ROOM - 1;
+    if (can_shift_to_level(to_shift)) {
+        current_user[USER_K_ROOM] = to_shift;
+        refresh_user_game();
     }
 }
 
@@ -452,10 +468,6 @@ void Display::process_room() {
     process_room_winning();
 
     if (key_d(KEY_HELP)) m_page = new Text_Page(img_help, m_room->m_help_map, true);
-    if (key_c(KEY_CONFIRM) && m_room->m_pending_go_to != 0) {
-        current_user[USER_K_ROOM] = m_room->m_pending_go_to;
-        start_game();
-    }
 }
 
 void Display::process_content() {

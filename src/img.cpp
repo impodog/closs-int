@@ -32,7 +32,7 @@ Font_Family_Type arial, consolas, simhei;
 
 SDL_Surface_ptr img_arrow, img_settings, img_Closs_InT, img_help, img_manual, img_levels;
 SDL_Surface_ptr img_none, img_icon;
-SDL_Surface_ptr img_chapter1;
+SDL_Surface_ptr img_chapter1, img_chapter2;
 
 language_fonts_t language_fonts;
 
@@ -86,6 +86,8 @@ void init_img() {
                         "C_InT_Icon.png");
     img_chapter1 = IMG_Load(IMG_PATH
                             "chapter1.png");
+    img_chapter2 = IMG_Load(IMG_PATH
+                            "chapter2.png");
 
     img_none = SDL_CreateRGBSurface(0, 1, 1, 32, 0, 0, 0, 0);
 
@@ -112,7 +114,8 @@ void init_img() {
 
                                   img_icon,
 
-                                  img_chapter1
+                                  img_chapter1,
+                                  img_chapter2
                           });
 
     // put into image map
@@ -147,6 +150,7 @@ void free_img() {
     SDL_FreeSurface(img_levels);
     SDL_FreeSurface(img_icon);
     SDL_FreeSurface(img_chapter1);
+    SDL_FreeSurface(img_chapter2);
 }
 
 void init_font() {
@@ -154,8 +158,8 @@ void init_font() {
     consolas = new Font_Family(CONSOLAS_PATH);
     simhei = new Font_Family(SIMHEI_PATH);
     language_fonts = {
-        { "en", arial },
-        { "zh_cn", simhei }
+            {"en",    arial},
+            {"zh_cn", simhei}
     };
 }
 

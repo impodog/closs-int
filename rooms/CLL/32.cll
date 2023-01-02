@@ -1,27 +1,26 @@
 !process-only
 !add C_InT.cll
-!gem-def G1 -3
+!gem-def G1 -2
 
 title {
-  en="Color Swap"
-  zh_cn="交换颜色"
+  en="Unpleasant Neighbor"
+  zh_cn="令人生厌的邻居"
 }
 
 help {
   en={
-    "Edges"="Don't block the important edge paths"
+    "Move It Away"="Put the box away"
   }
   zh_cn={
-    "边缘"="不要挡住重要的边缘路"
+    "把它移走"="把箱子放到一边去"
   }
 }
 
-perf 32
+perf 30
 
 content 4d[
-    wa wa wa -- wa
-    wa cy bx -- --
-    wa 1b -- -- --
-    wa -- wa -- wa
-    -- 1x bl -- G1
+    wa wa wa -- wa 1b
+    wa G1 wa -- -- --
+    wa -- bl -- wa --
+    wa cy bx -- -- --
 ]

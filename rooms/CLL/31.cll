@@ -1,10 +1,11 @@
 !process-only
 !add C_InT.cll
 !gem-def G1 -2
+!gem-def G2 -2
 
 title {
-  en="The Blue"
-  zh_cn="蓝色"
+  en="Traffic Lights"
+  zh_cn="交通灯"
 }
 
 help {
@@ -19,8 +20,9 @@ help {
 perf 30
 
 content 4d[
-    wa wa wa -- wa 1b
-    wa G1 wa -- -- --
-    wa -- bl -- wa --
-    wa cy bx -- -- --
+    wa wa wa wa wa wa wa
+    1b -- -- -- -- -- 1x
+    wa -- -- wa -- -- wa
+    wa wa bx wa bl wa wa
+    wa G1 -- cy -- G2 wa
 ]

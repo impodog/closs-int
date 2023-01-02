@@ -209,4 +209,6 @@ extern DisplayType display;
 
 void start_game();
 
+void refresh_user_game();
+
 #endif //CLOSS_INT_DISPLAY_H
