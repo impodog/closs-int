@@ -1,0 +1,32 @@
+!process-only
+!add C_InT.cll
+!gem-def G1 -7
+!gem-def G2 -7
+!goto-def -2
+!pic-def PW wa
+
+title {
+  en="Blue Rescue"
+  zh_cn="蓝色救援"
+}
+
+help {
+  en={
+    "Focus"="Care about the blue box only"
+  }
+  zh_cn={
+    "专一"="只注意蓝色箱子"
+  }
+}
+
+perf 18
+
+content 4d[
+    wa wa wa -- wa PW
+    1b cy -- -- wa PW
+    wa -- wa bx wa wa
+    -- bl wa -- wa wa
+    -- bx bx -- -- wa
+    G2 -- bx -- G1 wa
+    wa wa wa wa wa GT
+]

@@ -11,6 +11,7 @@
 #define USER_FRAMERATE (int)current_user.at(USER_K_FRAMERATE)
 #define USER_LEVELS (int)current_user.at(USER_K_LEVELS)
 #define USER_ANIMATION_SPEED (long double)current_user.at(USER_K_ANIMATION_SPEED)
+#define USER_BONUS current_user.at(USER_K_BONUS)
 
 #include "closs.h"
 

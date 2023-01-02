@@ -406,13 +406,13 @@ void Display::process_room_winning() {
         try {
             chapter_end = level_pic_map.at(current_user[USER_K_ROOM]);
         } catch (const out_of_range &) {}
-        if (m_room->can_get_perf_play()) {
+        if (m_room->can_get_perf_play())
             current_user[USER_K_PERF].push_back(current_user.at(USER_K_ROOM));
-
-            if (m_room->m_unlock_bonus != 0) current_user[USER_K_BONUS].push_back(m_room->m_unlock_bonus);
-        }
-        if (m_room->can_get_gem_play())
+        if (m_room->can_get_gem_play()) {
             current_user[USER_K_GEM].push_back(current_user.at(USER_K_ROOM));
+            if (m_room->m_unlock_bonus != 0 && !contains_literal(USER_BONUS, m_room->m_unlock_bonus))
+                current_user[USER_K_BONUS].push_back(m_room->m_unlock_bonus);
+        }
         if (m_room->m_next.is_number_integer()) {
             int next = (int) m_room->m_next;
             if (confirm) current_user[USER_K_ROOM] = next;
@@ -440,7 +440,7 @@ void Display::process_room() {
 
     if (m_room->m_animating.empty())
         m_room->move_independents(key_c);
-    
+
     m_room->animate_tiles(animation_speed * framerate_ratio);
 
     if (m_room->m_animating.empty())

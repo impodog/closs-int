@@ -1,0 +1,22 @@
+!process-only
+!add C_InT.cll
+!gem-def G1 -2
+!pic-def PW wa
+!repl GW G1,PW
+
+!unlock-b 2
+
+next 34
+
+perf 14
+
+content 4d[
+    wa wa wa wa wa wa wa wa
+    cy bx -- -- -- bx -- --
+    wa wa wa GW wa wa -- wa
+    -- bx -- -- -- bx -- --
+    -- wa wa wa wa wa wa wa
+    -- bx -- -- -- bx -- --
+    wa wa wa GW wa wa -- wa
+    1c bx -- -- -- bx -- --
+]

@@ -1,13 +1,18 @@
 !process-only
 !add C_InT.cll
+!gem-def G1 -2
+!repl Gx G1,bx
+
 !unlock-b 1
 
 next 9
 
+perf 6
+
 content 4d[
     wa -- cy wa wa
     wa bx bx -- wa
-    wa -- bx bx --
+    wa -- Gx bx --
     wa bx -- bx --
     wa wa wa -- 1c
 ]
