@@ -376,10 +376,10 @@ Display::~Display() {
 }
 
 void Display::apply_settings() {
-    m_sensitivity = USER_SENSITIVITY;
+    framerate_ratio = (long double) STANDARD_FRAMERATE / USER_FRAMERATE;
+    m_sensitivity = min(USER_SENSITIVITY * framerate_ratio, 1.0l);
     m_delay = 1000 / USER_FRAMERATE;
     animation_speed = USER_ANIMATION_SPEED / MAX_ANIMATION;
-    framerate_ratio = (long double) STANDARD_FRAMERATE / USER_FRAMERATE;
     text_renderer = text_renderer_map.at(current_user.at(USER_K_TEXT_RENDERER));
     reload_pages();
 }
