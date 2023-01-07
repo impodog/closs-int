@@ -35,7 +35,7 @@ public:
 class Tile {
 public:
     struct Movement_Request {
-        const Tile *sender;
+        Tile *sender;
         direction_t direction;
     };
     public_code_t m_pubCode;
@@ -56,12 +56,14 @@ public:
 
     virtual tile_types get_type() const;
 
-    virtual direction_t acq_req(const Movement_Request &req) const;
+    virtual direction_t acq_req(Movement_Request req);
 
     virtual direction_t respond_keys(key_predicate_t predicate) const;
 
     virtual void show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
                                  long double stretch_ratio) const;
+
+    virtual void end_of_step();
 };
 
 using TileType = Tile *;
@@ -106,6 +108,8 @@ public:
     void del(TileConst tile);
 
     void add(TileType tile);
+
+    void destroy(TileType tile);
 
     TilePos get_dest(TileType tile, direction_t dir) const;
 
@@ -154,7 +158,7 @@ direction_vec_t find_keys(key_predicate_t predicate, const direction_vec_t &want
 extern RoomType public_room;
 
 // defined in loader.cpp
-json &get_user();
+extern json &public_user;
 
 class Destination : public Tile {
 public:
@@ -178,7 +182,7 @@ public:
 
     tile_types get_type() const override;
 
-    direction_t acq_req(const Movement_Request &req) const override;
+    direction_t acq_req(Movement_Request req) override;
 
     direction_t respond_keys(key_predicate_t predicate) const override;
 };
@@ -189,7 +193,7 @@ public:
 
     tile_types get_type() const override;
 
-    direction_t acq_req(const Movement_Request &req) const override;
+    direction_t acq_req(Movement_Request req) override;
 };
 
 class Wall : public Tile {
@@ -198,7 +202,7 @@ public:
 
     tile_types get_type() const override;
 
-    direction_t acq_req(const Movement_Request &req) const override;
+    direction_t acq_req(Movement_Request req) override;
 };
 
 class Gem : public Tile {
@@ -228,7 +232,7 @@ public:
 
     tile_types get_type() const override;
 
-    direction_t acq_req(const Movement_Request &req) const override;
+    direction_t acq_req(Movement_Request req) override;
 };
 
 class Blue : public Tile {
@@ -237,7 +241,20 @@ public:
 
     tile_types get_type() const override;
 
-    direction_t acq_req(const Movement_Request &req) const override;
+    direction_t acq_req(Movement_Request req) override;
+};
+
+class Spike : public Tile {
+public:
+    vector<TileType> m_to_destroy;
+
+    Spike(TilePos pos, SDL_Surface *m_img);
+
+    tile_types get_type() const override;
+
+    direction_t acq_req(Movement_Request req) override;
+
+    void end_of_step() override;
 };
 
 #endif //CLOSS_INT_CLOSS_H

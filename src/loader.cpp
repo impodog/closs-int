@@ -6,6 +6,7 @@
 
 json default_user, current_user;
 json txt_settings, txt_lobby, txt_in_game, txt_manual;
+json &public_user = current_user;
 
 void init_default_user() {
 	ifstream default_file(DEFAULT_JSON_PATH, ios::in);
@@ -225,11 +226,5 @@ bool contains_literal(const json &array, const json &value) {
 	for (const auto &cmp: array)
 		if (cmp == value) return true;
 	return false;
-}
-
-
-// declared in closs.h
-json &get_user(){
-	return current_user;
 }
 

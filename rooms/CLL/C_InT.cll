@@ -19,6 +19,7 @@
 !def goto 7
 !def bl 8
 !def bb bl
+!def sp 9
 
 !%undef background
 !%undef ud
@@ -32,6 +33,7 @@
 !%undef goto
 !%undef bl
 !%undef bb
+!%undef sp
 
 !def 1c [ds cy]
 !def 1x [ds bx]

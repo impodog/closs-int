@@ -34,16 +34,16 @@ bool Tile::is_independent() const { return false; }
 
 tile_types Tile::get_type() const { return tile_undefined; }
 
-direction_t Tile::acq_req(const Movement_Request &req) const { return 0; }
+direction_t Tile::acq_req(Movement_Request req) { return 0; }
 
 direction_t Tile::respond_keys(key_predicate_t predicate) const { return 0; }
 
 void Tile::show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
                            long double stretch_ratio) const {}
 
-void Tile::process() {
+void Tile::process() {}
 
-}
+void Tile::end_of_step() {}
 
 Room::Room(int each, TilePos size) {
     for (size_t h = 0; h != size.h; h++) {
@@ -86,10 +86,7 @@ void Room::refresh_gems() {
             for (auto tile: *space)
                 if (tile->get_type() == tile_gem) {
                     if (ROOM_CONTAINS_GEMS) m_gems.push_back(tile);
-                    else {
-                        del(tile);
-                        delete tile;
-                    }
+                    else destroy(tile);
                 }
 }
 
@@ -104,6 +101,12 @@ void Room::del(TileConst tile) {
 
 void Room::add(TileType tile) {
     at(tile->m_pos)->push_back(tile);
+
+}
+
+void Room::destroy(TileType tile) {
+    del(tile);
+    delete tile;
 }
 
 TilePos Room::get_dest(TileType tile, direction_t dir) const {
@@ -189,8 +192,7 @@ void Room::detect_gems() {
             if (gem->m_addition >= 0 || m_steps > -gem->m_addition) m_steps += gem->m_addition;
             else m_steps = 0;
             m_gems.erase(std::find(m_gems.begin(), m_gems.end(), gem));
-            del(gem);
-            delete gem;
+            destroy(gem);
         }
     }
 }
@@ -212,6 +214,10 @@ void Room::animate_tiles(long double animation_speed) {
 }
 
 void Room::end_of_step() {
+    for (auto lane: *this)
+        for (auto space: *lane)
+            for (auto tile: *space)
+                tile->end_of_step();
     m_is_winning = true;
     for (auto dest: m_dest)
         if (!((Destination *) dest)->detect_requirement(at(dest->m_pos))) {
@@ -323,6 +329,10 @@ TileType construct_blue(TilePos pos, SDL_Surface *img, int) {
     return new Blue(pos, img);
 }
 
+TileType construct_spike(TilePos pos, SDL_Surface *img, int) {
+    return new Spike(pos, img);
+}
+
 tile_types_map_t tile_type_map = {
         {tile_undefined,   construct_undefined},
         {tile_cyan,        construct_cyan},
@@ -332,7 +342,8 @@ tile_types_map_t tile_type_map = {
         {tile_gem,         construct_gem},
         {tile_picture,     construct_picture},
         {tile_go_to,       construct_go_to},
-        {tile_blue,        construct_blue}
+        {tile_blue,        construct_blue},
+        {tile_spike,       construct_spike}
 };
 
 Cyan::Cyan(TilePos pos, SDL_Surface *m_img) : Tile(pos, m_img) {}
@@ -341,7 +352,7 @@ bool Cyan::is_independent() const { return true; }
 
 tile_types Cyan::get_type() const { return tile_cyan; }
 
-direction_t Cyan::acq_req(const Movement_Request &req) const { return req.direction; }
+direction_t Cyan::acq_req(Movement_Request req) { return req.direction; }
 
 direction_t Cyan::respond_keys(key_predicate_t predicate) const {
     auto pending = find_keys(predicate, MOVEMENT_KEYS);
@@ -353,7 +364,7 @@ Box::Box(TilePos pos, SDL_Surface *m_img) : Tile(pos, m_img) {}
 
 tile_types Box::get_type() const { return tile_box; }
 
-direction_t Box::acq_req(const Movement_Request &req) const {
+direction_t Box::acq_req(Movement_Request req) {
     return req.direction;
 }
 
@@ -361,7 +372,7 @@ Wall::Wall(TilePos pos, SDL_Surface *m_img) : Tile(pos, m_img) {}
 
 tile_types Wall::get_type() const { return tile_wall; }
 
-direction_t Wall::acq_req(const Movement_Request &req) const {
+direction_t Wall::acq_req(Movement_Request req) {
     return -1;
 }
 
@@ -396,7 +407,7 @@ Go_To::Go_To(TilePos pos, SDL_Surface *m_img, int level) : Tile(pos, m_img) {
 
 tile_types Go_To::get_type() const { return tile_go_to; }
 
-direction_t Go_To::acq_req(const Movement_Request &req) const {
+direction_t Go_To::acq_req(Movement_Request req) {
     if (req.sender->get_type() == tile_cyan) {
         public_room->m_pending_go_to = m_level;
     }
@@ -407,6 +418,24 @@ Blue::Blue(TilePos pos, SDL_Surface *m_img) : Tile(pos, m_img) {}
 
 tile_types Blue::get_type() const { return tile_blue; }
 
-direction_t Blue::acq_req(const Movement_Request &req) const {
+direction_t Blue::acq_req(Movement_Request req) {
     return req.direction;
+}
+
+Spike::Spike(TilePos pos, SDL_Surface *m_img) : Tile(pos, m_img) {}
+
+tile_types Spike::get_type() const { return tile_spike; }
+
+direction_t Spike::acq_req(Movement_Request req) {
+    if (req.sender->get_type() == tile_cyan) m_to_destroy.push_back(req.sender);
+    return 0;
+}
+
+void Spike::end_of_step() {
+    bool remove_flag = false;
+    for (auto tile: m_to_destroy) {
+        public_room->destroy(tile);
+        if (!remove_flag) remove_flag = true;
+    }
+    if (remove_flag) m_to_destroy.clear();
 }

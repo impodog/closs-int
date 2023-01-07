@@ -296,14 +296,14 @@ void Selection_Page::process() {
     m_processors.at(m_index)();
 }
 
-Text_Page::Text_Page(SDL_Surface *title, json &help_map, bool release) {
+Text_Page::Text_Page(SDL_Surface *title, json &text_map, bool release) {
     m_release = release;
     m_title = title;
     m_title_pos = {(SCR_WIDTH - m_title->w) / 2, 0};
     SDL_Surface *surface = nullptr;
     int height = SCR_HEIGHT;
     bool goto_flag = true;
-    for (const auto &pair: help_map.at(USER_LANG).get<help_map_t>()) {
+    for (const auto &pair: text_map.at(USER_LANG).get<help_map_t>()) {
         content_height_refresh:
         int content_height = height + (TEXT_PAGE_EACH - TEXT_PAGE_SIZE) / 2;
         if (content_height > SCR_HEIGHT - TEXT_PAGE_EACH - m_title->h && goto_flag) {

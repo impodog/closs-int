@@ -115,7 +115,7 @@ public:
 
     string m_language = current_user.at(USER_K_LANGUAGE);
 
-    Text_Page(SDL_Surface *title, json &help_map, bool release);
+    Text_Page(SDL_Surface *title, json &text_map, bool release);
 
     ~Text_Page();
 

@@ -46,7 +46,7 @@ void get_scr_info(Screen_Info &info);
 #endif
 
 
-#define VERSION "v0.5.1"
+#define VERSION "v0.5.2"
 
 #define TITLE "Closs : Inside the Tapes " VERSION
 #define SCR_WIDTH 2000
@@ -246,7 +246,8 @@ enum tile_types {
     tile_gem = 5,
     tile_picture,
     tile_go_to,
-    tile_blue
+    tile_blue,
+    tile_spike
 };
 
 enum text_renderer_types {
