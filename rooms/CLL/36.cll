@@ -3,20 +3,20 @@
 !gem-def G1 -1
 
 title {
-  en="Port of Edges"
-  zh_cn="边缘端口"
+    en="Port of Edges"
+    zh_cn="边缘端口"
 }
 
 help {
-  en={
-    "One by one"="Just put them in one by one"
-  }
-  zh_cn={
-    "一个接一个"="只需要一个一个地把它们放进去"
-  }
+    en={
+        "One by one"="Just put them in one by one"
+    }
+    zh_cn={
+        "一个接一个"="只需要一个一个地把它们放进去"
+    }
 }
 
-perf 54
+perf 39
 
 content 4d[
     -- wa wa wa wa wa

@@ -3,17 +3,17 @@
 !gem-def G1 -2
 
 title {
-  en="Crossing" 
-  zh_cn="十字路口"
+    en="Crossing" 
+    zh_cn="十字路口"
 }
 
 help {
-  en={
-    "Tips"="Try to find a straight path to the destination"
-  } 
-  zh_cn={
-    "提示"="试着找到到终点的一条直路"
-  }
+    en={
+        "Tips"="Try to find a straight path to the destination"
+    } 
+    zh_cn={
+        "提示"="试着找到到终点的一条直路"
+    }
 }
 
 perf 28

@@ -4,17 +4,17 @@
 !def G2 [gm +255]
 
 title {
-  en="Box Slot" 
-  zh_cn="箱子槽"
+    en="Box Slot" 
+    zh_cn="箱子槽"
 }
 
 help {
-  en={
-    "Just go!"="Make sure you don't put the box in corners and you'll be fine"
-  } 
-  zh_cn={
-    "直接走!"="确保你不把箱子推到角上就好"
-  }
+    en={
+        "Just go!"="Make sure you don't put the box in corners and you'll be fine"
+    } 
+    zh_cn={
+        "直接走!"="确保你不把箱子推到角上就好"
+    }
 }
 
 perf 52

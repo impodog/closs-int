@@ -1,0 +1,28 @@
+!process-only
+!add C_InT.cll
+!gem-def G1 -2
+
+title {
+    en="Long Journey 3"
+    zh_cn="长途旅行 3"
+}
+
+help {
+    en={
+        "Move Up"="Use the extra blue boxes to make a path up"
+    }
+    zh_cn={
+        "向上移"="用多余的蓝色箱子开向上的路"
+    }
+}
+
+perf 154
+
+content 4d[
+    wa wa -- wa wa wa wa -- wa wa
+    wa wa -- 1x wa G1 wa -- wa wa
+    cy -- -- sp -- -- bl bl -- wa
+    -- -- -- sp wa -- bl bl -- wa
+    -- -- wa -- wa -- wa -- -- --
+    -- bx -- -- sp -- -- -- wa wa
+]

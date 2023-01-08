@@ -3,17 +3,17 @@
 !gem-def G1 +0
 
 title {
-  en="Edge And Boxes"
-  zh_cn="边缘与箱子"
+    en="Edge And Boxes"
+    zh_cn="边缘与箱子"
 }
 
 help {
-  en={
-    "The Only Paths"="Find the only paths to the dest"
-  }
-  zh_cn={
-    "唯一的路径"="找到去终点的唯一路径"
-  }
+    en={
+        "The Only Paths"="Find the only paths to the dest"
+    }
+    zh_cn={
+        "唯一的路径"="找到去终点的唯一路径"
+    }
 }
 
 perf 43

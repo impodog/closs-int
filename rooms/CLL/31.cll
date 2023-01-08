@@ -4,17 +4,17 @@
 !gem-def G2 -2
 
 title {
-  en="Traffic Lights"
-  zh_cn="交通灯"
+    en="Traffic Lights"
+    zh_cn="交通灯"
 }
 
 help {
-  en={
-    "Blue(boxes)"="The dest marked Blue requires blue boxes"
-  }
-  zh_cn={
-    "蓝(箱)"="写有Blue的终点要求蓝色箱子"
-  }
+    en={
+        "Blue(boxes)"="The dest marked Blue requires blue boxes"
+    }
+    zh_cn={
+        "蓝(箱)"="写有Blue的终点要求蓝色箱子"
+    }
 }
 
 perf 30

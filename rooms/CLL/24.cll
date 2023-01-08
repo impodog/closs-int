@@ -3,17 +3,17 @@
 !gem-def G1 -1
 
 title {
-  en="Every Side"
-  zh_cn="每一边"
+    en="Every Side"
+    zh_cn="每一边"
 }
 
 help {
-  en={
-    "The Box Dest"="How to finish it?"
-  }
-  zh_cn={
-    "箱子终点"="怎么完成它?"
-  }
+    en={
+        "The Box Dest"="How to finish it?"
+    }
+    zh_cn={
+        "箱子终点"="怎么完成它?"
+    }
 }
 
 perf 18

@@ -1,25 +1,27 @@
 !process-only
 !add C_InT.cll
-!gem-def G1 -4
+!gem-def G1 +255
+!gem-def G2 -255-2
 
 title {
-  en="Pressure Meter"
-  zh_cn="压力表"
+    en="Break a Line"
+    zh_cn="破线"
 }
 
 help {
-  en={
-    "Sequence"="See if one of the dests matters more than the other"
-  }
-  zh_cn={
-    "次序"="看看是否哪个终点比另一个更重要"
-  }
+    en={
+        "Gap"="Use the gap to break the two boxs' line"
+    }
+    zh_cn={
+        "空隙"="用空隙打破两箱子的线"
+    }
 }
 
 perf 29
 
 content 4d[
-    -- wa wa 1x wa wa --
-    -- -- 1b sp -- -- --
-    bx sp -- cy -- sp bb
+    wa wa sp wa --
+    bx G2 cy G1 bx
+    wa sp -- sp wa
+    wa 1x 1x -- --
 ]

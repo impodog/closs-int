@@ -3,17 +3,17 @@
 !gem-def G1 -2
 
 title {
-  en="Going Up" 
-  zh_cn="上行"
+    en="Going Up" 
+    zh_cn="上行"
 }
 
 help {
-  en={
-    "Destination"="Now  destinations(aka green symbols) can also require boxes on it"
-  } 
-  zh_cn={
-    "终点"="现在  终点(又称绿色符号)也有可能要求箱子(box)在上面"
-  }
+    en={
+        "Destination"="Now  destinations(aka green symbols) can also require boxes on it"
+    } 
+    zh_cn={
+        "终点"="现在  终点(又称绿色符号)也有可能要求箱子(box)在上面"
+    }
 }
 
 perf 13

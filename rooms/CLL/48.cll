@@ -1,0 +1,28 @@
+!process-only
+!add C_InT.cll
+!gem-def G1 +255
+!gem-def G2 -255
+
+title {
+    en="Line Out of Colors"
+    zh_cn="无色成线"
+}
+
+help {
+    en={
+        "Space"="Use the left space to move some boxes"
+    }
+    zh_cn={
+        "空间"="用左侧空间来移动一些箱子"
+    }
+}
+
+perf 57
+
+content 4d[
+    wa wa wa 1x wa wa wa
+    -- -- -- 1x wa wa wa
+    cy G2 bx sp bl bx G1
+    wa wa -- -- 1b wa wa
+    wa wa wa -- wa wa wa
+]

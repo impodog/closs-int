@@ -3,17 +3,17 @@
 !gem-def G1 -2
 
 title {
-  en="Edge Channel"
-  zh_cn="边缘海峡"
+    en="Edge Channel"
+    zh_cn="边缘海峡"
 }
 
 help {
-  en={
-    "Edges"="Those two dest needs to cross the edge to reach"
-  }
-  zh_cn={
-    "边缘"="那两个终点需要跨过边缘来到达"
-  }
+    en={
+        "Edges"="Those two dest needs to cross the edge to reach"
+    }
+    zh_cn={
+        "边缘"="那两个终点需要跨过边缘来到达"
+    }
 }
 
 perf 42

@@ -3,17 +3,17 @@
 !gem-def G1 -6
 
 title {
-  en="Swinging and Roadblocks"
-  zh_cn="回旋与路障"
+    en="Swinging and Roadblocks"
+    zh_cn="回旋与路障"
 }
 
 help {
-  en={
-    "Space"="Make use of the space on the left"
-  }
-  zh_cn={
-    "空间"="利用左边的空间"
-  }
+    en={
+        "Space"="Make use of the space on the left"
+    }
+    zh_cn={
+        "空间"="利用左边的空间"
+    }
 }
 
 perf 46

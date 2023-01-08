@@ -5,17 +5,17 @@
 !pic-def PW wa
 
 title {
-  en="Snake Turning"
-  zh_cn="蛇形转弯"
+    en="Snake Turning"
+    zh_cn="蛇形转弯"
 }
 
 help {
-  en={
-    "Turning"="Turn the blue one first, and follow by the regular one"
-  }
-  zh_cn={
-    "转弯"="先转蓝色箱子, 再跟上普通箱子"
-  }
+    en={
+        "Turning"="Turn the blue one first, and follow by the regular one"
+    }
+    zh_cn={
+        "转弯"="先转蓝色箱子, 再跟上普通箱子"
+    }
 }
 
 perf 31

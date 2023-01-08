@@ -4,17 +4,17 @@
 !gem-def G2 +54
 
 title {
-  en="Quarantine Room"
-  zh_cn="隔离间"
+    en="Quarantine Room"
+    zh_cn="隔离间"
 }
 
 help {
-  en={
-    "Get Box Up!"="Move the box up. There's only one way"
-  }
-  zh_cn={
-    "把箱子移上来!"="把箱子向上移. 仅有一条路"
-  }
+    en={
+        "Get Box Up!"="Move the box up. There's only one way"
+    }
+    zh_cn={
+        "把箱子移上来!"="把箱子向上移. 仅有一条路"
+    }
 }
 
 perf 77

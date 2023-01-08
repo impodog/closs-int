@@ -8,12 +8,12 @@ title {
 }
 
 help {
-  en={
-    "Observe"="See which one needs to go through a round"
-  } 
-  zh_cn={
-    "观察"="看哪一个需要经过轮回"
-  }
+    en={
+        "Observe"="See which one needs to go through a round"
+    } 
+    zh_cn={
+        "观察"="看哪一个需要经过轮回"
+    }
 }
 
 perf 26

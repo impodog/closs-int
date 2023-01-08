@@ -3,17 +3,17 @@
 !gem-def G1 -4
 
 title {
-  en="End of the Steps"
-  zh_cn="步数终点"
+    en="End of the Steps"
+    zh_cn="步数终点"
 }
 
 help {
-  en={
-    "Winning"="Winning does NOT have to do with cyan, you can also win without it present"
-  }
-  zh_cn={
-    "赢"="赢与青色方块无关, 没有它存在你也可以赢"
-  }
+    en={
+        "Winning"="Winning does NOT have to do with cyan, you can also win without it present"
+    }
+    zh_cn={
+        "赢"="赢与青色方块无关, 没有它存在你也可以赢"
+    }
 }
 
 perf 36

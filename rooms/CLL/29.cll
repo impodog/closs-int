@@ -4,17 +4,17 @@
 !gem-def G2 +255
 
 title {
-  en="Long Journey 2"
-  zh_cn="漫长旅行 2"
+    en="Long Journey 2"
+    zh_cn="漫长旅行 2"
 }
 
 help {
-  en={
-    "Edges"="You may want to go to the left to reach the right"
-  }
-  zh_cn={
-    "边缘"="你可能想要先去左边来到达右边"
-  }
+    en={
+        "Edges"="You may want to go to the left to reach the right"
+    }
+    zh_cn={
+        "边缘"="你可能想要先去左边来到达右边"
+    }
 }
 
 perf 58

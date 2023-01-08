@@ -4,19 +4,19 @@
 !gem-def G2 -2
 
 title {
-  en="Transportation"
-  zh_cn="交通"
+    en="Transportation"
+    zh_cn="交通"
 }
 
 help {
-  en={
-    "Observe"="Find the best path for each box"
-    "Transportation"="Don't block the way of transportation"
-  }
-  zh_cn={
-    "观察"="找到每个箱子的最优路径"
-    "交通"="别把交通路堵住了"
-  }
+    en={
+        "Observe"="Find the best path for each box"
+        "Transportation"="Don't block the way of transportation"
+    }
+    zh_cn={
+        "观察"="找到每个箱子的最优路径"
+        "交通"="别把交通路堵住了"
+    }
 }
 
 perf 45

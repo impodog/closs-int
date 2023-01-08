@@ -3,17 +3,17 @@
 !gem-def G1 -4
 
 title {
-  en="Easy Pathfinder" 
-  zh_cn="简单寻路"
+    en="Easy Pathfinder" 
+    zh_cn="简单寻路"
 }
 
 help {
-  en={
-    "Hi There!"="Nothing much to say. Follow your heart!"
-  } 
-  zh_cn={
-    "你好!"="没什么可以说的. 跟感觉走吧!"
-  }
+    en={
+        "Hi There!"="Nothing much to say. Follow your heart!"
+    } 
+    zh_cn={
+        "你好!"="没什么可以说的. 跟感觉走吧!"
+    }
 }
 
 perf 16

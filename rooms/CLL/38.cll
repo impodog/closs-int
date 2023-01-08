@@ -6,19 +6,19 @@
 !gem-def G4 -256
 
 title {
-  en="Symmetry"
-  zh_cn="对称"
+    en="Symmetry"
+    zh_cn="对称"
 }
 
 help {
-  en={
-    "Focus"="Move as few blue boxes as you can"
-    "Try"="Don't give up. It might require some swinging to reach dests"
-  }
-  zh_cn={
-    "专一"="尽量少移动蓝色箱子"
-    "尝试"="不要放弃. 可能需要回旋来解决终点"
-  }
+    en={
+        "Focus"="Move as few blue boxes as you can"
+        "Try"="Don't give up. It might require some swinging to reach dests"
+    }
+    zh_cn={
+        "专一"="尽量少移动蓝色箱子"
+        "尝试"="不要放弃. 可能需要回旋来解决终点"
+    }
 }
 
 perf 27

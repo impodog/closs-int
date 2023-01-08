@@ -5,17 +5,17 @@
 !pic-def PW wa
 
 title {
-  en="Box Loops to Push" 
-  zh_cn="推箱子环"
+    en="Box Loops to Push" 
+    zh_cn="推箱子环"
 }
 
 help {
-  en={
-    "Go Up from the Bottom"="Push the lower box and find a way"
-  } 
-  zh_cn={
-    "从下到上"="推下面的箱子再找路"
-  }
+    en={
+        "Go Up from the Bottom"="Push the lower box and find a way"
+    } 
+    zh_cn={
+        "从下到上"="推下面的箱子再找路"
+    }
 }
 
 perf 15

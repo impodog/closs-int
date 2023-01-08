@@ -3,17 +3,17 @@
 !gem-def G1 -1
 
 title {
-  en="Line of Colors"
-  zh_cn="颜色一线"
+    en="Line of Colors"
+    zh_cn="颜色一线"
 }
 
 help {
-  en={
-    "Sorting"="Sort the boxes, then push them"
-  }
-  zh_cn={
-    "排序"="把箱子排序, 再推动它们"
-  }
+    en={
+        "Sorting"="Sort the boxes, then push them"
+    }
+    zh_cn={
+        "排序"="把箱子排序, 再推动它们"
+    }
 }
 
 perf 24

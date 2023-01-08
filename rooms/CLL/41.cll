@@ -1,19 +1,20 @@
 !process-only
 !add C_InT.cll
-!gem-def G1 -24
+!gem-def G1 +2
+!gem-def G2 -2
 
 title {
-  en="Road Crossing"
-  zh_cn="过马路"
+    en="Road Crossing"
+    zh_cn="过马路"
 }
 
 help {
-  en={
-    "Spikes"="Spikes kill the player on touch. However, the do nothing to boxes"
-  }
-  zh_cn={
-    "刺"="刺在接触时杀死玩家. 然而, 它们对箱子没有作用"
-  }
+    en={
+        "Spikes"="Spikes kill the player on touch. However, the do nothing to boxes"
+    }
+    zh_cn={
+        "刺"="刺在接触时杀死玩家. 然而, 它们对箱子没有作用"
+    }
 }
 
 perf 28
@@ -23,5 +24,5 @@ content 4d[
     wa sp wa wa wa
     cy -- bx -- wa
     wa -- bx -- wa
-    wa -- wa -- wa
+    wa G1 wa G2 wa
 ]

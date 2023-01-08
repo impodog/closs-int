@@ -6,17 +6,17 @@
 !pic-def PW wa
 
 title {
-  en="Blue Rescue"
-  zh_cn="蓝色救援"
+    en="Blue Rescue"
+    zh_cn="蓝色救援"
 }
 
 help {
-  en={
-    "Focus"="Care about the blue box only"
-  }
-  zh_cn={
-    "专一"="只注意蓝色箱子"
-  }
+    en={
+        "Focus"="Care about the blue box only"
+    }
+    zh_cn={
+        "专一"="只注意蓝色箱子"
+    }
 }
 
 perf 18

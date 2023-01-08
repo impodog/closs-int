@@ -3,17 +3,17 @@
 !gem-def G1 -2
 
 title {
-  en="Unpleasant Neighbor"
-  zh_cn="令人生厌的邻居"
+    en="Unpleasant Neighbor"
+    zh_cn="令人生厌的邻居"
 }
 
 help {
-  en={
-    "Move It Away"="Put the box away"
-  }
-  zh_cn={
-    "把它移走"="把箱子放到一边去"
-  }
+    en={
+        "Move It Away"="Put the box away"
+    }
+    zh_cn={
+        "把它移走"="把箱子放到一边去"
+    }
 }
 
 perf 30

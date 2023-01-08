@@ -3,17 +3,17 @@
 !gem-def G1 -1
 
 title {
-  en="We're Just Moving"
-  zh_cn="我们只是在移动"
+    en="We're Just Moving"
+    zh_cn="我们只是在移动"
 }
 
 help {
-  en={
-    "Sequence"="Which dest does not mess up the other?"
-  }
-  zh_cn={
-    "次序"="哪个终点不会扰乱另一个?"
-  }
+    en={
+        "Sequence"="Which dest does not mess up the other?"
+    }
+    zh_cn={
+        "次序"="哪个终点不会扰乱另一个?"
+    }
 }
 
 perf 44
