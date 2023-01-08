@@ -1,28 +1,27 @@
 !process-only
 !add C_InT.cll
-!gem-def G1 -4
+!gem-def G1 -24
 
 title {
-  en="End of the Steps"
-  zh_cn="步数终点"
+  en="Quadruple Bridge"
+  zh_cn="四倍桥"
 }
 
 help {
   en={
-    "Winning"="Winning does NOT have to do with cyan, you can also win without it present"
+    "Spikes"="Spikes kill the player on touch. However, the do nothing to boxes"
   }
   zh_cn={
-    "赢"="赢与青色方块无关, 没有它存在你也可以赢"
+    "刺"="刺在接触时杀死玩家. 然而, 它们对箱子没有作用"
   }
 }
 
 perf 36
 
 content 4d[
-    wa wa wa wa G1 wa
-    -- cy -- sp -- 1x
-    wa -- wa wa -- wa
-    wa -- bx -- -- --
-    wa bx -- -- -- --
-    wa -- -- wa -- wa
+    wa -- -- -- wa -- -- --
+    wa -- bx bx wa wa wa --
+    cy -- -- -- sp -- -- --
+    wa wa bx bx wa wa wa 1x
+    wa wa -- -- -- -- wa wa
 ]

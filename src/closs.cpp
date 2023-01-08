@@ -426,16 +426,10 @@ Spike::Spike(TilePos pos, SDL_Surface *m_img) : Tile(pos, m_img) {}
 
 tile_types Spike::get_type() const { return tile_spike; }
 
-direction_t Spike::acq_req(Movement_Request req) {
-    if (req.sender->get_type() == tile_cyan) m_to_destroy.push_back(req.sender);
-    return 0;
-}
+direction_t Spike::acq_req(Movement_Request req) { return 0; }
 
 void Spike::end_of_step() {
-    bool remove_flag = false;
-    for (auto tile: m_to_destroy) {
-        public_room->destroy(tile);
-        if (!remove_flag) remove_flag = true;
-    }
-    if (remove_flag) m_to_destroy.clear();
+    for (auto tile: *public_room->at(m_pos))
+        if (tile->get_type() == tile_cyan)
+            public_room->destroy(tile);
 }

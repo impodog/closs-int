@@ -1,0 +1,25 @@
+!process-only
+!add C_InT.cll
+!gem-def G1 -4
+
+title {
+  en="Pressure Meter"
+  zh_cn="压力表"
+}
+
+help {
+  en={
+    "Sequence"="See if one of the dests matters more than the other"
+  }
+  zh_cn={
+    "次序"="看看是否哪个终点比另一个更重要"
+  }
+}
+
+perf 29
+
+content 4d[
+    -- wa wa 1x wa wa --
+    -- -- 1b sp -- -- --
+    bx sp -- cy -- sp bb
+]

@@ -246,8 +246,6 @@ public:
 
 class Spike : public Tile {
 public:
-    vector<TileType> m_to_destroy;
-
     Spike(TilePos pos, SDL_Surface *m_img);
 
     tile_types get_type() const override;
