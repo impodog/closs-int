@@ -10,8 +10,9 @@ RoomType public_room;
 
 const type_parsing_seq_t type_parsing_seq = {
         tile_cyan,
+        tile_robot,
         tile_conveyor,
-        tile_undefined
+        tile_undefined,
 };
 
 closs_room_error::closs_room_error(const string &arg) : runtime_error(arg) {}
@@ -52,6 +53,12 @@ void Tile::process() {}
 void Tile::end_of_step() {}
 
 void Tile::add_to_parser(pending_series_t &pending_series) {}
+
+void Tile::begin_request(direction_t dir) {}
+
+void Tile::react_to_movement_result(direction_t dir) {}
+
+bool Tile::suppress_request(const Movement_Request &req) { return false; }
 
 Room::Room(int each, TilePos size) {
     for (size_t h = 0; h != size.h; h++) {
@@ -117,7 +124,15 @@ TilePos Room::get_dest(TileType tile, direction_t dir) const {
 }
 
 bool Room::send_req_from(TileType tile, direction_t dir, uint8_t times) {
-    if (times == 0) return false;
+    switch (times) {
+        case 0:
+            return true;
+        case 1:
+            tile->begin_request(dir);
+            break;
+        default:
+            break;
+    }
     bool result = true;
     auto space = at(get_dest(tile, dir));
     Movement_Request req = {tile, dir};
@@ -125,6 +140,7 @@ bool Room::send_req_from(TileType tile, direction_t dir, uint8_t times) {
         direction_t dest_dir = dest_tile->acq_req(req);
         if (dest_dir > 0) result &= send_req_from(dest_tile, dest_dir, times + 1);
         else if (result && dest_dir < 0) result = false;
+        tile->react_to_movement_result(dest_dir);
     }
     if (result) pending_move(tile, dir);
     return result;
@@ -134,8 +150,8 @@ void Room::pending_move(TileType tile, direction_t dir) {
     m_pending_move[tile] = get_dest(tile, dir);
 }
 
-void Room::pending_series(TileType tile, direction_t dir) {
-    m_pending_series[tile] = dir;
+void Room::pending_series(TileType tile, Movement_Request req) {
+    m_pending_series[tile] = req;
 }
 
 void Room::parse_series() {
@@ -146,7 +162,8 @@ void Room::parse_series() {
                 }
     for (auto pair: m_pending_series) {
         if (parsing_type == tile_undefined || pair.first->get_type() == parsing_type) {
-            send_req_from(pair.first, pair.second);
+            if (!pair.first->suppress_request(pair.second))
+                auto result = send_req_from(pair.first, pair.second.direction);
             moved_tiles.push_back(pair.first);
         }
     }
@@ -155,10 +172,6 @@ void Room::parse_series() {
     if (++m_parsing_index == type_parsing_seq.size()) {
         m_parsing_index = 0;
         m_pending_series.clear();
-        if (m_can_add_step) {
-            m_steps++;
-            m_can_add_step = false;
-        }
     }
 }
 
@@ -191,12 +204,12 @@ void Room::move_independents(key_predicate_t predicate) {
     FOREACH_TILE if (tile->is_independent()) {
                     auto dir = tile->respond_keys(predicate);
                     if (dir > 0) {
-                        pending_series(tile, dir);
+                        pending_series(tile, {tile, dir});
                         if (next_step_flag && tile->get_type() == tile_cyan)
                             next_step_flag = false;
                     }
                 }
-    m_can_add_step = m_is_moving = !next_step_flag && !m_pending_series.empty();
+    m_is_moving = !next_step_flag && !m_pending_series.empty();
 }
 
 void Room::detect_gems() {
@@ -218,7 +231,6 @@ void Room::detect_gems() {
 }
 
 void Room::animate_tiles(long double animation_speed) {
-    bool end_animation_flag = false;
     Space pending_remove;
     for (auto tile: m_animating) {
         F_ABS_SUB(tile->m_shift.w, animation_speed);
@@ -228,15 +240,15 @@ void Room::animate_tiles(long double animation_speed) {
     }
     for (auto tile: pending_remove) {
         m_animating.erase(std::find(m_animating.begin(), m_animating.end(), tile));
-        end_animation_flag = true;
+        m_end_animation_flag = true;
     }
-    m_is_end_of_animation = end_animation_flag && m_animating.empty();
+    m_is_end_of_animation = m_end_animation_flag && m_animating.empty() && m_parsing_index == 0;
 }
 
 
 void Room::end_of_step() {
     FOREACH_TILE tile->end_of_step();
-    m_is_winning = true;
+    m_end_animation_flag = false;
     for (auto dest: m_dest)
         if (!((Destination *) dest)->detect_requirement(at(dest->m_pos))) {
             m_is_winning = false;
@@ -363,6 +375,10 @@ TileType construct_conveyor(TilePos pos, SDL_Surface *img, int dir) {
     return new Conveyor(pos, img, dir);
 }
 
+TileType construct_robot(TilePos pos, SDL_Surface *img, int dir) {
+    return new Robot(pos, img, dir);
+}
+
 tile_types_map_t tile_type_map = {
         {tile_undefined,   construct_undefined},
         {tile_cyan,        construct_cyan},
@@ -374,7 +390,8 @@ tile_types_map_t tile_type_map = {
         {tile_go_to,       construct_go_to},
         {tile_blue,        construct_blue},
         {tile_spike,       construct_spike},
-        {tile_conveyor,    construct_conveyor}
+        {tile_conveyor,    construct_conveyor},
+        {tile_robot,       construct_robot}
 };
 
 Cyan::Cyan(TilePos pos, SDL_Surface *img) : Tile(pos, img) {}
@@ -479,6 +496,52 @@ direction_t Conveyor::acq_req(Movement_Request req) { return 0; }
 void Conveyor::add_to_parser(pending_series_t &pending_series) {
     for (auto tile: *public_room->at(m_pos))
         if (tile != this) {
-            pending_series.insert({tile, m_dir});
+            pending_series.insert({tile, {this, m_dir}});
         }
 }
+
+Robot::Robot(TilePos pos, SDL_Surface *img, direction_t dir) : Tile(pos, img) {
+    m_dir = dir;
+    m_img = direction_img_robot.at(m_dir);
+}
+
+bool Robot::is_independent() const {
+    return true;
+}
+
+tile_types Robot::get_type() const {
+    return tile_robot;
+}
+
+direction_t Robot::acq_req(Movement_Request req) {
+    change_dir(req.direction);
+    if (req.sender->get_type() == tile_cyan) m_is_moved = true;
+    return m_dir;
+}
+
+direction_t Robot::respond_keys(key_predicate_t) const {
+    return m_dir;
+}
+
+void Robot::begin_request(direction_t dir) {
+    change_dir(dir);
+}
+
+void Robot::change_dir(direction_t dir) {
+    m_dir = dir;
+    m_img = direction_img_robot.at(m_dir);
+    m_is_moved = true;
+}
+
+void Robot::end_of_step() {
+    m_is_moved = false;
+}
+
+void Robot::react_to_movement_result(direction_t dir) {
+    if (dir < 0) change_dir(invert(m_dir));
+}
+
+bool Robot::suppress_request(const Movement_Request &req) {
+    return m_is_moved && req.sender == this;
+}
+

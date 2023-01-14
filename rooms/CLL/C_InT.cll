@@ -21,6 +21,7 @@
 !def bb bl
 !def sp 9
 !def cv 10
+!def rb 11
 
 !%undef background
 !%undef ud
@@ -37,17 +38,34 @@
 !%undef sp
 !%undef cv
 
+!def dir_up 1073741906
+!def dir_lt 1073741904
+!def dir_dw 1073741905
+!def dir_rt 1073741903
+
 !def 1c [ds cy]
 !def 1x [ds bx]
 !def 1b [ds bl]
-!def 2u [cv 1073741906]
-!def 2l [cv 1073741904]
-!def 2d [cv 1073741905]
-!def 2r [cv 1073741903]
+!def 2u [cv dir_up]
+!def 2l [cv dir_lt]
+!def 2d [cv dir_dw]
+!def 2r [cv dir_rt]
+!def 3u [rb dir_up]
+!def 3l [rb dir_lt]
+!def 3d [rb dir_dw]
+!def 3r [rb dir_rt]
 
 !%undef 1c
 !%undef 1x
 !%undef 1b
+!%undef 2u
+!%undef 2l
+!%undef 2d
+!%undef 2r
+!%undef 3u
+!%undef 3l
+!%undef 3d
+!%undef 3r
 
 !templ-repl !to ..\Closs\(%filename).json
 

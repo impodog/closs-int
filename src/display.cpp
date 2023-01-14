@@ -457,12 +457,11 @@ void Display::process_room() {
     if (m_room->can_move_independents())
         m_room->move_independents(key_c);
 
-    m_room->animate_tiles(animation_speed * framerate_ratio);
     if (m_room->can_parse_movements()) {
         m_room->parse_series();
         m_room->do_pending_moves();
     }
-
+    m_room->animate_tiles(animation_speed * framerate_ratio);
     if (m_room->m_is_end_of_animation) {
         m_room->detect_gems();
         m_room->end_of_step();

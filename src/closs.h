@@ -39,7 +39,7 @@ public:
         direction_t direction;
     };
     using pending_movements_t = unordered_map<Tile *, TilePos>;
-    using pending_series_t = unordered_map<Tile *, direction_t>;
+    using pending_series_t = unordered_map<Tile *, Movement_Request>;
     public_code_t m_pubCode;
     TilePos m_pos;
     SDL_Surface *m_img;
@@ -67,7 +67,14 @@ public:
 
     virtual void end_of_step();
 
+    /*Notice: Do NOT use this function to move the tile itself, use .is_independent() + .respond_keys() instead*/
     virtual void add_to_parser(pending_series_t &pending_series);
+
+    virtual void begin_request(direction_t dir);
+
+    virtual void react_to_movement_result(direction_t dir);
+
+    virtual bool suppress_request(const Movement_Request &req);
 };
 
 using TileType = Tile *;
@@ -98,7 +105,7 @@ public:
     tile_distribute_t m_distribute;
     int m_each, m_pending_go_to = 0, m_unlock_bonus = 0;
     size_t m_steps = 0, m_perf, m_parsing_index = 0;
-    bool m_is_winning = false, m_is_moving = false, m_is_end_of_animation = false, m_is_second_play = false, m_is_perf_play = false, m_is_gem_play = false, m_can_add_step = false;
+    bool m_is_winning = false, m_is_moving = false, m_is_end_of_animation = false, m_is_second_play = false, m_is_perf_play = false, m_is_gem_play = false, m_end_animation_flag;
 
     json m_title, m_help_map, m_next;
 
@@ -132,7 +139,7 @@ public:
 
     void parse_series();
 
-    void pending_series(TileType tile, direction_t dir);
+    void pending_series(TileType tile, Movement_Request req);
 
     void do_pending_moves();
 
@@ -146,9 +153,7 @@ public:
 
     void animate_tiles(long double animation_speed);
 
-
     void end_of_step();
-
 
     DisplayPos total_size() const;
 
@@ -289,6 +294,32 @@ public:
     direction_t acq_req(Movement_Request req) override;
 
     void add_to_parser(pending_series_t &pending_series) override;
+};
+
+class Robot : public Tile {
+public:
+    direction_t m_dir;
+    bool m_is_moved = false;
+
+    Robot(TilePos pos, SDL_Surface *, direction_t dir);
+
+    bool is_independent() const override;
+
+    tile_types get_type() const override;
+
+    direction_t acq_req(Movement_Request req) override;
+
+    direction_t respond_keys(key_predicate_t) const override;
+
+    void begin_request(direction_t dir) override;
+
+    void change_dir(direction_t dir);
+
+    void end_of_step() override;
+
+    void react_to_movement_result(direction_t dir) override;
+
+    bool suppress_request(const Movement_Request &req) override;
 };
 
 #endif //CLOSS_INT_CLOSS_H

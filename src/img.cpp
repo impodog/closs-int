@@ -43,9 +43,10 @@ text_renderer_map_t text_renderer_map = {
         {text_renderer_blended, TTF_RenderUTF8_Blended}
 };
 
-direction_img_t direction_img_conveyor;
+direction_img_t direction_img_conveyor, direction_img_robot;
 direction_img_vec_t direction_img_vec = {
-        &direction_img_conveyor
+        &direction_img_conveyor,
+        &direction_img_robot
 };
 
 void init_img() {
@@ -68,7 +69,11 @@ void init_img() {
             img_conveyor_up = IMG_Load(IMG_PATH "conveyor_up.png"),
             img_conveyor_lt = IMG_Load(IMG_PATH "conveyor_lt.png"),
             img_conveyor_dw = IMG_Load(IMG_PATH "conveyor_dw.png"),
-            img_conveyor_rt = IMG_Load(IMG_PATH "conveyor_rt.png");
+            img_conveyor_rt = IMG_Load(IMG_PATH "conveyor_rt.png"),
+            img_robot_up = IMG_Load(IMG_PATH "robot_up.png"),
+            img_robot_lt = IMG_Load(IMG_PATH "robot_lt.png"),
+            img_robot_dw = IMG_Load(IMG_PATH "robot_dw.png"),
+            img_robot_rt = IMG_Load(IMG_PATH "robot_rt.png");
     // load global graphics
     img_arrow = IMG_Load(IMG_PATH "arrow.png");
     img_settings = IMG_Load(IMG_PATH "settings.png");
@@ -100,6 +105,10 @@ void init_img() {
                                   img_conveyor_lt,
                                   img_conveyor_dw,
                                   img_conveyor_rt,
+                                  img_robot_up,
+                                  img_robot_lt,
+                                  img_robot_dw,
+                                  img_robot_rt,
 
 
                                   img_arrow,
@@ -128,12 +137,19 @@ void init_img() {
     types_img_map[tile_blue] = img_blue;
     types_img_map[tile_spike] = img_spike;
     types_img_map[tile_conveyor] = img_none;
+    types_img_map[tile_robot] = img_none;
     // direction_img map
     direction_img_conveyor = {
             {KEY_MOVE_UP,    img_conveyor_up},
             {KEY_MOVE_LEFT,  img_conveyor_lt},
             {KEY_MOVE_DOWN,  img_conveyor_dw},
             {KEY_MOVE_RIGHT, img_conveyor_rt}
+    };
+    direction_img_robot = {
+            {KEY_MOVE_UP,    img_robot_up},
+            {KEY_MOVE_LEFT,  img_robot_lt},
+            {KEY_MOVE_DOWN,  img_robot_dw},
+            {KEY_MOVE_RIGHT, img_robot_rt}
     };
     // Free unused
     SDL_FreeSurface(img_box);
