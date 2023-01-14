@@ -45,6 +45,12 @@ extern text_renderer_t text_renderer;
 using text_renderer_map_t = map<text_renderer_types, text_renderer_t>;
 extern text_renderer_map_t text_renderer_map;
 
+using direction_img_t = unordered_map<direction_t, SDL_Surface *>;
+extern direction_img_t direction_img_conveyor;
+
+using direction_img_vec_t = vector<direction_img_t *>;
+extern direction_img_vec_t direction_img_vec;
+
 void init_img();
 
 void free_img();

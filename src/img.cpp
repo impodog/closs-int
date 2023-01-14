@@ -43,6 +43,11 @@ text_renderer_map_t text_renderer_map = {
         {text_renderer_blended, TTF_RenderUTF8_Blended}
 };
 
+direction_img_t direction_img_conveyor;
+direction_img_vec_t direction_img_vec = {
+        &direction_img_conveyor
+};
+
 void init_img() {
     IMG_Init(IMG_INIT_PNG);
 
@@ -59,7 +64,11 @@ void init_img() {
             img_blue = IMG_Load(IMG_PATH "blue.png"),
             img_box3 = IMG_Load(IMG_PATH "box3.png"),
             img_dest_new = IMG_Load(IMG_PATH "dest_new.png"),
-            img_spike = IMG_Load(IMG_PATH "spike.png");
+            img_spike = IMG_Load(IMG_PATH "spike.png"),
+            img_conveyor_up = IMG_Load(IMG_PATH "conveyor_up.png"),
+            img_conveyor_lt = IMG_Load(IMG_PATH "conveyor_lt.png"),
+            img_conveyor_dw = IMG_Load(IMG_PATH "conveyor_dw.png"),
+            img_conveyor_rt = IMG_Load(IMG_PATH "conveyor_rt.png");
     // load global graphics
     img_arrow = IMG_Load(IMG_PATH "arrow.png");
     img_settings = IMG_Load(IMG_PATH "settings.png");
@@ -87,6 +96,10 @@ void init_img() {
                                   img_box3,
                                   img_dest_new,
                                   img_spike,
+                                  img_conveyor_up,
+                                  img_conveyor_lt,
+                                  img_conveyor_dw,
+                                  img_conveyor_rt,
 
 
                                   img_arrow,
@@ -114,6 +127,14 @@ void init_img() {
     types_img_map[tile_go_to] = img_go_to;
     types_img_map[tile_blue] = img_blue;
     types_img_map[tile_spike] = img_spike;
+    types_img_map[tile_conveyor] = img_none;
+    // direction_img map
+    direction_img_conveyor = {
+            {KEY_MOVE_UP,    img_conveyor_up},
+            {KEY_MOVE_LEFT,  img_conveyor_lt},
+            {KEY_MOVE_DOWN,  img_conveyor_dw},
+            {KEY_MOVE_RIGHT, img_conveyor_rt}
+    };
     // Free unused
     SDL_FreeSurface(img_box);
     SDL_FreeSurface(img_box2);
@@ -128,6 +149,15 @@ void free_img() {
             freed_surface.push_back(pair.second);
         }
     types_img_map.clear();
+    for (auto direction_img: direction_img_vec) {
+        for (auto pair: *direction_img)
+            if (find(freed_surface.begin(), freed_surface.end(), pair.second) == freed_surface.end()) {
+                SDL_FreeSurface(pair.second);
+                freed_surface.push_back(pair.second);
+            }
+        direction_img->clear();
+    }
+    direction_img_vec.clear();
     SDL_FreeSurface(img_settings);
     SDL_FreeSurface(img_arrow);
     SDL_FreeSurface(img_Closs_InT);

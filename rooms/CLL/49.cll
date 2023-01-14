@@ -16,11 +16,11 @@ help {
     }
 }
 
-perf 32
+perf 29
 
 content 4d[
     wa wa wa -- wa --
-    -- -- 1x -- sp cy
+    -- -- 1x 1b sp cy
     wa -- bb sp -- --
     wa G1 sp bx bx --
     wa sp -- -- -- --

@@ -74,4 +74,19 @@ void output(DoublePos pos) {
     cout << pos.w << "," << pos.h << endl;
 }
 
+direction_t invert(direction_t dir) {
+    switch (dir) {
+        case KEY_MOVE_UP:
+            return KEY_MOVE_DOWN;
+        case KEY_MOVE_LEFT:
+            return KEY_MOVE_RIGHT;
+        case KEY_MOVE_DOWN:
+            return KEY_MOVE_UP;
+        case KEY_MOVE_RIGHT:
+            return KEY_MOVE_LEFT;
+        default:
+            throw runtime_error("Direction not a keycode");
+    }
+}
+
 json empty_json;

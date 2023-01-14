@@ -454,13 +454,15 @@ void Display::process_room() {
 
     move_room_to_visible();
 
-    if (m_room->m_animating.empty())
+    if (m_room->can_move_independents())
         m_room->move_independents(key_c);
 
     m_room->animate_tiles(animation_speed * framerate_ratio);
-
-    if (m_room->m_animating.empty())
+    if (m_room->can_parse_movements()) {
+        m_room->parse_series();
         m_room->do_pending_moves();
+    }
+
     if (m_room->m_is_end_of_animation) {
         m_room->detect_gems();
         m_room->end_of_step();
@@ -584,7 +586,7 @@ void Display::show_room_winning() const {
 
 void Display::show_room() {
     size_t w, h = 0;
-    for (const auto &lane: *m_room) {
+    for (const auto &lane: m_room->m_distribute) {
         w = 0;
         for (const auto &space: *lane) {
             show_img(types_img_map[tile_background], {w, h});
@@ -592,7 +594,7 @@ void Display::show_room() {
         }
         h++;
     }
-    for (const auto &lane: *m_room)
+    for (const auto &lane: m_room->m_distribute)
         for (const auto &space: *lane)
             for (const auto &tile: *space) {
                 show_tile(*tile);

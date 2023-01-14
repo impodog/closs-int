@@ -8,6 +8,12 @@ volatile public_code_t public_code = 0;
 
 RoomType public_room;
 
+const type_parsing_seq_t type_parsing_seq = {
+        tile_cyan,
+        tile_conveyor,
+        tile_undefined
+};
+
 closs_room_error::closs_room_error(const string &arg) : runtime_error(arg) {}
 
 closs_room_error::closs_room_error(const char *arg) : runtime_error(arg) {}
@@ -45,6 +51,8 @@ void Tile::process() {}
 
 void Tile::end_of_step() {}
 
+void Tile::add_to_parser(pending_series_t &pending_series) {}
+
 Room::Room(int each, TilePos size) {
     for (size_t h = 0; h != size.h; h++) {
         auto lane = new Lane;
@@ -52,14 +60,14 @@ Room::Room(int each, TilePos size) {
         for (size_t w = 0; w != size.w; w++)
             lane->push_back(new Space);
 
-        push_back(lane);
+        m_distribute.push_back(lane);
     }
     m_each = each;
     m_size = size;
 }
 
 Room::~Room() {
-    for (auto lane: *this) {
+    for (auto lane: m_distribute) {
         for (auto space: *lane) {
             for (auto tile: *space)
                 delete tile;
@@ -67,45 +75,37 @@ Room::~Room() {
         }
         delete lane;
     }
-    clear();
 }
 
 void Room::refresh_dest() {
     m_dest.clear();
-    for (auto lane: *this)
-        for (auto space: *lane)
-            for (auto tile: *space)
-                if (tile->get_type() == tile_destination)
+    FOREACH_TILE if (tile->get_type() == tile_destination)
                     m_dest.push_back(tile);
 }
 
 void Room::refresh_gems() {
     m_gems.clear();
-    for (auto lane: *this)
-        for (auto space: *lane)
-            for (auto tile: *space)
-                if (tile->get_type() == tile_gem) {
+    FOREACH_TILE if (tile->get_type() == tile_gem) {
                     if (ROOM_CONTAINS_GEMS) m_gems.push_back(tile);
                     else destroy(tile);
                 }
 }
 
 SpaceType Room::at(const TilePos &pos) {
-    return vector::at(pos.h)->at(pos.w);
+    return m_distribute.at(pos.h)->at(pos.w);
 }
 
-void Room::del(TileConst tile) {
+void Room::remove(TileConst tile) {
     auto space = at(tile->m_pos);
     space->erase(find(space->begin(), space->end(), tile));
 }
 
 void Room::add(TileType tile) {
     at(tile->m_pos)->push_back(tile);
-
 }
 
 void Room::destroy(TileType tile) {
-    del(tile);
+    remove(tile);
     delete tile;
 }
 
@@ -131,23 +131,46 @@ bool Room::send_req_from(TileType tile, direction_t dir, uint8_t times) {
 }
 
 void Room::pending_move(TileType tile, direction_t dir) {
-    m_pending[tile] = get_dest(tile, dir);
+    m_pending_move[tile] = get_dest(tile, dir);
 }
 
-void Room::do_pending_moves() {
-    if (m_is_moving) {
-        bool next_step_flag = false;
-        for (auto pair: m_pending) {
-            move_tile(pair.first, pair.second);
-            next_step_flag = true;
+void Room::pending_series(TileType tile, direction_t dir) {
+    m_pending_series[tile] = dir;
+}
+
+void Room::parse_series() {
+    Space moved_tiles;
+    tile_types parsing_type = type_parsing_seq.at(m_parsing_index);
+    FOREACH_TILE if (tile->get_type() == parsing_type) {
+                    tile->add_to_parser(m_pending_series);
+                }
+    for (auto pair: m_pending_series) {
+        if (parsing_type == tile_undefined || pair.first->get_type() == parsing_type) {
+            send_req_from(pair.first, pair.second);
+            moved_tiles.push_back(pair.first);
         }
-        if (next_step_flag && !IS_WINNING_GEM) m_steps++;
-        m_pending.clear();
+    }
+    for (auto tile: moved_tiles)
+        m_pending_series.erase(tile);
+    if (++m_parsing_index == type_parsing_seq.size()) {
+        m_parsing_index = 0;
+        m_pending_series.clear();
+        if (m_can_add_step) {
+            m_steps++;
+            m_can_add_step = false;
+        }
     }
 }
 
+void Room::do_pending_moves() {
+    for (auto pair: m_pending_move) {
+        move_tile(pair.first, pair.second);
+    }
+    m_pending_move.clear();
+}
+
 void Room::move_tile(TileType tile, const TilePos &dest) {
-    del(tile);
+    remove(tile);
     tile->m_shift = {(long double) tile->m_pos.w - dest.w, (long double) tile->m_pos.h - dest.h};
     tile->m_pos = dest;
     m_animating.push_back(tile);
@@ -165,18 +188,15 @@ DisplayPos Room::total_size() const {
 void Room::move_independents(key_predicate_t predicate) {
     bool next_step_flag = true;
     m_is_moving = false;
-    for (auto lane: *this)
-        for (auto space: *lane)
-            for (auto tile: *space)
-                if (tile->is_independent()) {
+    FOREACH_TILE if (tile->is_independent()) {
                     auto dir = tile->respond_keys(predicate);
                     if (dir > 0) {
-                        send_req_from(tile, dir);
-                        if (next_step_flag)
+                        pending_series(tile, dir);
+                        if (next_step_flag && tile->get_type() == tile_cyan)
                             next_step_flag = false;
                     }
                 }
-    m_is_moving = !next_step_flag && !m_pending.empty();
+    m_can_add_step = m_is_moving = !next_step_flag && !m_pending_series.empty();
 }
 
 void Room::detect_gems() {
@@ -213,11 +233,9 @@ void Room::animate_tiles(long double animation_speed) {
     m_is_end_of_animation = end_animation_flag && m_animating.empty();
 }
 
+
 void Room::end_of_step() {
-    for (auto lane: *this)
-        for (auto space: *lane)
-            for (auto tile: *space)
-                tile->end_of_step();
+    FOREACH_TILE tile->end_of_step();
     m_is_winning = true;
     for (auto dest: m_dest)
         if (!((Destination *) dest)->detect_requirement(at(dest->m_pos))) {
@@ -236,6 +254,14 @@ bool Room::can_get_perf_play() const {
 
 bool Room::can_get_gem_play() const {
     return is_perf_play() && m_is_perf_play && m_gems.empty() && !m_is_gem_play;
+}
+
+bool Room::can_move_independents() const {
+    return m_parsing_index == 0 && m_animating.empty();
+}
+
+bool Room::can_parse_movements() const {
+    return m_is_moving && m_animating.empty();
 }
 
 
@@ -333,6 +359,10 @@ TileType construct_spike(TilePos pos, SDL_Surface *img, int) {
     return new Spike(pos, img);
 }
 
+TileType construct_conveyor(TilePos pos, SDL_Surface *img, int dir) {
+    return new Conveyor(pos, img, dir);
+}
+
 tile_types_map_t tile_type_map = {
         {tile_undefined,   construct_undefined},
         {tile_cyan,        construct_cyan},
@@ -343,10 +373,11 @@ tile_types_map_t tile_type_map = {
         {tile_picture,     construct_picture},
         {tile_go_to,       construct_go_to},
         {tile_blue,        construct_blue},
-        {tile_spike,       construct_spike}
+        {tile_spike,       construct_spike},
+        {tile_conveyor,    construct_conveyor}
 };
 
-Cyan::Cyan(TilePos pos, SDL_Surface *m_img) : Tile(pos, m_img) {}
+Cyan::Cyan(TilePos pos, SDL_Surface *img) : Tile(pos, img) {}
 
 bool Cyan::is_independent() const { return true; }
 
@@ -360,7 +391,7 @@ direction_t Cyan::respond_keys(key_predicate_t predicate) const {
     return pending[0];
 }
 
-Box::Box(TilePos pos, SDL_Surface *m_img) : Tile(pos, m_img) {}
+Box::Box(TilePos pos, SDL_Surface *img) : Tile(pos, img) {}
 
 tile_types Box::get_type() const { return tile_box; }
 
@@ -368,7 +399,7 @@ direction_t Box::acq_req(Movement_Request req) {
     return req.direction;
 }
 
-Wall::Wall(TilePos pos, SDL_Surface *m_img) : Tile(pos, m_img) {}
+Wall::Wall(TilePos pos, SDL_Surface *img) : Tile(pos, img) {}
 
 tile_types Wall::get_type() const { return tile_wall; }
 
@@ -376,7 +407,7 @@ direction_t Wall::acq_req(Movement_Request req) {
     return -1;
 }
 
-Gem::Gem(TilePos pos, SDL_Surface *m_img, int addition) : Tile(pos, m_img) {
+Gem::Gem(TilePos pos, SDL_Surface *img, int addition) : Tile(pos, img) {
     m_addition = addition;
 }
 
@@ -397,11 +428,11 @@ void Gem::show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const D
     SDL_FreeSurface(surface);
 }
 
-Picture::Picture(TilePos pos, SDL_Surface *m_img) : Tile(pos, m_img) {}
+Picture::Picture(TilePos pos, SDL_Surface *img) : Tile(pos, img) {}
 
 tile_types Picture::get_type() const { return tile_picture; }
 
-Go_To::Go_To(TilePos pos, SDL_Surface *m_img, int level) : Tile(pos, m_img) {
+Go_To::Go_To(TilePos pos, SDL_Surface *img, int level) : Tile(pos, img) {
     m_level = level;
 }
 
@@ -414,7 +445,7 @@ direction_t Go_To::acq_req(Movement_Request req) {
     return Tile::acq_req(req);
 }
 
-Blue::Blue(TilePos pos, SDL_Surface *m_img) : Tile(pos, m_img) {}
+Blue::Blue(TilePos pos, SDL_Surface *img) : Tile(pos, img) {}
 
 tile_types Blue::get_type() const { return tile_blue; }
 
@@ -422,7 +453,7 @@ direction_t Blue::acq_req(Movement_Request req) {
     return req.direction;
 }
 
-Spike::Spike(TilePos pos, SDL_Surface *m_img) : Tile(pos, m_img) {}
+Spike::Spike(TilePos pos, SDL_Surface *img) : Tile(pos, img) {}
 
 tile_types Spike::get_type() const { return tile_spike; }
 
@@ -432,4 +463,22 @@ void Spike::end_of_step() {
     for (auto tile: *public_room->at(m_pos))
         if (tile->get_type() == tile_cyan)
             public_room->destroy(tile);
+}
+
+Conveyor::Conveyor(TilePos pos, SDL_Surface *img, direction_t dir) : Tile(pos, img) {
+    m_dir = dir;
+    m_img = direction_img_conveyor.at(m_dir);
+}
+
+tile_types Conveyor::get_type() const {
+    return tile_conveyor;
+}
+
+direction_t Conveyor::acq_req(Movement_Request req) { return 0; }
+
+void Conveyor::add_to_parser(pending_series_t &pending_series) {
+    for (auto tile: *public_room->at(m_pos))
+        if (tile != this) {
+            pending_series.insert({tile, m_dir});
+        }
 }

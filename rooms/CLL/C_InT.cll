@@ -20,6 +20,7 @@
 !def bl 8
 !def bb bl
 !def sp 9
+!def cv 10
 
 !%undef background
 !%undef ud
@@ -34,10 +35,15 @@
 !%undef bl
 !%undef bb
 !%undef sp
+!%undef cv
 
 !def 1c [ds cy]
 !def 1x [ds bx]
 !def 1b [ds bl]
+!def 2u [cv 1073741906]
+!def 2l [cv 1073741904]
+!def 2d [cv 1073741905]
+!def 2r [cv 1073741903]
 
 !%undef 1c
 !%undef 1x

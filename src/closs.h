@@ -7,11 +7,11 @@
 
 #define ROOM_CONTAINS_GEMS (m_is_perf_play && !m_is_gem_play)
 #define IS_WINNING_GEM (m_is_winning && ROOM_CONTAINS_GEMS)
+#define FOREACH_TILE for (auto lane: m_distribute) for (auto space: *lane) for (auto tile: *space)
 
 #include "img.h"
 
 using public_code_t = unsigned long long;
-using direction_t = SDL_Keycode;
 using key_down_map_t = unordered_map<direction_t, bool>;
 using direction_vec_t = vector<direction_t>;
 using key_predicate_t = bool (*)(direction_t key);
@@ -38,13 +38,15 @@ public:
         Tile *sender;
         direction_t direction;
     };
+    using pending_movements_t = unordered_map<Tile *, TilePos>;
+    using pending_series_t = unordered_map<Tile *, direction_t>;
     public_code_t m_pubCode;
     TilePos m_pos;
     SDL_Surface *m_img;
 
     DoublePos m_shift = {0, 0};
 
-    Tile(TilePos pos, SDL_Surface *m_img);
+    Tile(TilePos pos, SDL_Surface *img);
 
     SDL_Rect srcrect() const;
 
@@ -64,6 +66,8 @@ public:
                                  long double stretch_ratio) const;
 
     virtual void end_of_step();
+
+    virtual void add_to_parser(pending_series_t &pending_series);
 };
 
 using TileType = Tile *;
@@ -79,19 +83,28 @@ using LaneConst = const Lane *;
 
 using Movement_Request = Tile::Movement_Request;
 
-using pending_movements_t = unordered_map<TileType, TilePos>;
+using pending_movements_t = Tile::pending_movements_t;
+using pending_series_t = Tile::pending_series_t;
+
+using tile_distribute_t = vector<vector<SpaceType> *>;
+
+using type_parsing_seq_t = const vector<tile_types>;
+
+extern const type_parsing_seq_t type_parsing_seq;
 
 
-class Room : public vector<vector<SpaceType> *> {
+class Room {
 public:
+    tile_distribute_t m_distribute;
     int m_each, m_pending_go_to = 0, m_unlock_bonus = 0;
-    size_t m_steps = 0, m_perf;
-    bool m_is_winning = false, m_is_moving = false, m_is_end_of_animation = false, m_is_second_play = false, m_is_perf_play = false, m_is_gem_play = false;
+    size_t m_steps = 0, m_perf, m_parsing_index = 0;
+    bool m_is_winning = false, m_is_moving = false, m_is_end_of_animation = false, m_is_second_play = false, m_is_perf_play = false, m_is_gem_play = false, m_can_add_step = false;
 
     json m_title, m_help_map, m_next;
 
     TilePos m_size;
-    pending_movements_t m_pending;
+    pending_movements_t m_pending_move;
+    pending_series_t m_pending_series;
 
     Space m_dest, m_gems, m_animating;
 
@@ -105,7 +118,7 @@ public:
 
     SpaceType at(const TilePos &pos);
 
-    void del(TileConst tile);
+    void remove(TileConst tile);
 
     void add(TileType tile);
 
@@ -116,6 +129,10 @@ public:
     bool send_req_from(TileType tile, direction_t dir, uint8_t times = 1);
 
     void pending_move(TileType tile, direction_t dir);
+
+    void parse_series();
+
+    void pending_series(TileType tile, direction_t dir);
 
     void do_pending_moves();
 
@@ -129,7 +146,9 @@ public:
 
     void animate_tiles(long double animation_speed);
 
+
     void end_of_step();
+
 
     DisplayPos total_size() const;
 
@@ -138,6 +157,10 @@ public:
     bool can_get_perf_play() const;
 
     bool can_get_gem_play() const;
+
+    bool can_move_independents() const;
+
+    bool can_parse_movements() const;
 };
 
 
@@ -176,7 +199,7 @@ public:
 
 class Cyan : public Tile {
 public:
-    Cyan(TilePos pos, SDL_Surface *m_img);
+    Cyan(TilePos pos, SDL_Surface *img);
 
     bool is_independent() const override;
 
@@ -189,7 +212,7 @@ public:
 
 class Box : public Tile {
 public:
-    Box(TilePos pos, SDL_Surface *m_img);
+    Box(TilePos pos, SDL_Surface *img);
 
     tile_types get_type() const override;
 
@@ -198,7 +221,7 @@ public:
 
 class Wall : public Tile {
 public:
-    Wall(TilePos pos, SDL_Surface *m_img);
+    Wall(TilePos pos, SDL_Surface *img);
 
     tile_types get_type() const override;
 
@@ -209,7 +232,7 @@ class Gem : public Tile {
 public:
     int m_addition;
 
-    Gem(TilePos pos, SDL_Surface *m_img, int addition);
+    Gem(TilePos pos, SDL_Surface *img, int addition);
 
     tile_types get_type() const override;
 
@@ -219,7 +242,7 @@ public:
 
 class Picture : public Tile {
 public:
-    Picture(TilePos pos, SDL_Surface *m_img);
+    Picture(TilePos pos, SDL_Surface *img);
 
     tile_types get_type() const override;
 };
@@ -228,7 +251,7 @@ class Go_To : public Tile {
 public:
     int m_level;
 
-    Go_To(TilePos pos, SDL_Surface *m_img, int level);
+    Go_To(TilePos pos, SDL_Surface *img, int level);
 
     tile_types get_type() const override;
 
@@ -237,7 +260,7 @@ public:
 
 class Blue : public Tile {
 public:
-    Blue(TilePos pos, SDL_Surface *m_img);
+    Blue(TilePos pos, SDL_Surface *img);
 
     tile_types get_type() const override;
 
@@ -246,13 +269,26 @@ public:
 
 class Spike : public Tile {
 public:
-    Spike(TilePos pos, SDL_Surface *m_img);
+    Spike(TilePos pos, SDL_Surface *img);
 
     tile_types get_type() const override;
 
     direction_t acq_req(Movement_Request req) override;
 
     void end_of_step() override;
+};
+
+class Conveyor : public Tile {
+public:
+    direction_t m_dir;
+
+    Conveyor(TilePos pos, SDL_Surface *, direction_t dir);
+
+    tile_types get_type() const override;
+
+    direction_t acq_req(Movement_Request req) override;
+
+    void add_to_parser(pending_series_t &pending_series) override;
 };
 
 #endif //CLOSS_INT_CLOSS_H

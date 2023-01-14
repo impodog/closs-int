@@ -46,7 +46,7 @@ void get_scr_info(Screen_Info &info);
 #endif
 
 
-#define VERSION "v0.5.4"
+#define VERSION "v0.6.0"
 
 #define TITLE "Closs : Inside the Tapes " VERSION
 #define SCR_WIDTH 2000
@@ -247,7 +247,8 @@ enum tile_types {
     tile_picture,
     tile_go_to,
     tile_blue,
-    tile_spike
+    tile_spike,
+    tile_conveyor = 10
 };
 
 enum text_renderer_types {
@@ -256,6 +257,7 @@ enum text_renderer_types {
 };
 
 using c_str = const char *;
+using direction_t = SDL_Keycode;
 
 using help_map_t = map<string, string>;
 
@@ -280,6 +282,8 @@ bool is0(long double ld);
 int sym(long double ld);
 
 void output(DoublePos pos);
+
+direction_t invert(direction_t dir);
 
 
 #endif //CLOSS_INT_CONST_H
