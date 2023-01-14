@@ -38,13 +38,15 @@ public:
         Tile *sender;
         direction_t direction;
     };
-    using pending_movements_t = unordered_map<Tile *, TilePos>;
+    using pending_movements_t = unordered_map<Tile *, direction_t>;
     using pending_series_t = unordered_map<Tile *, Movement_Request>;
     public_code_t m_pubCode;
     TilePos m_pos;
     SDL_Surface *m_img;
 
     DoublePos m_shift = {0, 0};
+    DisplayPos m_shift_sym = {0, 0};
+    bool can_end_animation = false;
 
     Tile(TilePos pos, SDL_Surface *img);
 
@@ -99,13 +101,21 @@ using type_parsing_seq_t = const vector<tile_types>;
 
 extern const type_parsing_seq_t type_parsing_seq;
 
+struct Animation_Info {
+    bool is_edge = false;
+};
+struct Dest_Info {
+    TilePos dest;
+    Animation_Info info;
+};
+using animations_t = unordered_map<TileType, Animation_Info>;
 
 class Room {
 public:
     tile_distribute_t m_distribute;
     int m_each, m_pending_go_to = 0, m_unlock_bonus = 0;
     size_t m_steps = 0, m_perf, m_parsing_index = 0;
-    bool m_is_winning = false, m_is_moving = false, m_is_end_of_animation = false, m_is_second_play = false, m_is_perf_play = false, m_is_gem_play = false, m_end_animation_flag;
+    bool m_is_winning = false, m_is_moving = false, m_is_end_of_animation = false, m_is_second_play = false, m_is_perf_play = false, m_is_gem_play = false, m_end_animation_flag = false, m_can_move_flag = false;
 
     json m_title, m_help_map, m_next;
 
@@ -113,7 +123,8 @@ public:
     pending_movements_t m_pending_move;
     pending_series_t m_pending_series;
 
-    Space m_dest, m_gems, m_animating;
+    Space m_dest, m_gems;
+    animations_t m_animating;
 
     explicit Room(int each, TilePos size);
 
@@ -133,6 +144,8 @@ public:
 
     TilePos get_dest(TileType tile, direction_t dir) const;
 
+    Dest_Info get_dest_info(TileType tile, direction_t dir) const;
+
     bool send_req_from(TileType tile, direction_t dir, uint8_t times = 1);
 
     void pending_move(TileType tile, direction_t dir);
@@ -143,7 +156,7 @@ public:
 
     void do_pending_moves();
 
-    void move_tile(TileType tile, const TilePos &dest);
+    void move_tile(TileType tile, const TilePos &dest, const Animation_Info &info = {});
 
     void move_tile(TileType tile, direction_t dir);
 
@@ -154,6 +167,8 @@ public:
     void animate_tiles(long double animation_speed);
 
     void end_of_step();
+
+    void clear_move_status();
 
     DisplayPos total_size() const;
 
@@ -167,7 +182,6 @@ public:
 
     bool can_parse_movements() const;
 };
-
 
 using RoomType = Room *;
 

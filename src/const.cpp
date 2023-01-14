@@ -49,7 +49,10 @@ type_names_t type_names = {
         {tile_gem,         "Gem"},
         {tile_picture,     "Pic"},
         {tile_go_to,       "Goto"},
-        {tile_blue,        "Blue"}
+        {tile_blue,        "Blue"},
+        {tile_spike,       "Spike"},
+        {tile_conveyor,    "Conv"},
+        {tile_robot,       "Robot"}
 };
 
 

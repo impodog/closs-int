@@ -459,6 +459,7 @@ void Display::process_room() {
 
     if (m_room->can_parse_movements()) {
         m_room->parse_series();
+        if (!m_room->m_can_move_flag) m_room->clear_move_status(); // this is usable because cyan always comes first
         m_room->do_pending_moves();
     }
     m_room->animate_tiles(animation_speed * framerate_ratio);

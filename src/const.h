@@ -46,7 +46,7 @@ void get_scr_info(Screen_Info &info);
 #endif
 
 
-#define VERSION "v0.6.1"
+#define VERSION "v0.6.2"
 
 #define TITLE "Closs : Inside the Tapes " VERSION
 #define SCR_WIDTH 2000
@@ -184,7 +184,7 @@ void get_scr_info(Screen_Info &info);
 
 #define RENDER_TEXT text_renderer
 
-#define F_ABS_SUB(x, y) x = sym(x) * max(fabs(x)-y, 0.0l)
+#define WH_ANY_IS_INF(wh) (isinf(wh.w) || isinf(wh.h))
 #define WH_IS0(wh) (is0(wh.w) && is0(wh.h))
 
 #define TIME_LOG(s) cout << s << " : " << system_clock::to_time_t(system_clock::now()) << endl

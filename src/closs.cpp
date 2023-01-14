@@ -123,6 +123,16 @@ TilePos Room::get_dest(TileType tile, direction_t dir) const {
     return dest;
 }
 
+Dest_Info Room::get_dest_info(TileType tile, direction_t dir) const {
+    Animation_Info info;
+    auto &dir_ref = key_pos_map.at(dir);
+    auto dest = tile->m_pos + m_size + dir_ref;
+    info.is_edge = tile->m_pos.w + dir_ref.w > m_size.w - 1 || tile->m_pos.h + dir_ref.h > m_size.h - 1;
+    dest.w %= m_size.w;
+    dest.h %= m_size.h;
+    return {dest, info};
+}
+
 bool Room::send_req_from(TileType tile, direction_t dir, uint8_t times) {
     switch (times) {
         case 0:
@@ -147,7 +157,7 @@ bool Room::send_req_from(TileType tile, direction_t dir, uint8_t times) {
 }
 
 void Room::pending_move(TileType tile, direction_t dir) {
-    m_pending_move[tile] = get_dest(tile, dir);
+    m_pending_move[tile] = dir;
 }
 
 void Room::pending_series(TileType tile, Movement_Request req) {
@@ -163,12 +173,14 @@ void Room::parse_series() {
     for (auto pair: m_pending_series) {
         if (parsing_type == tile_undefined || pair.first->get_type() == parsing_type) {
             if (!pair.first->suppress_request(pair.second))
-                auto result = send_req_from(pair.first, pair.second.direction);
+                send_req_from(pair.first, pair.second.direction);
             moved_tiles.push_back(pair.first);
         }
     }
     for (auto tile: moved_tiles)
         m_pending_series.erase(tile);
+    for (auto pair: m_pending_move)
+        if (pair.first->get_type() == tile_cyan) m_can_move_flag = true;
     if (++m_parsing_index == type_parsing_seq.size()) {
         m_parsing_index = 0;
         m_pending_series.clear();
@@ -182,16 +194,19 @@ void Room::do_pending_moves() {
     m_pending_move.clear();
 }
 
-void Room::move_tile(TileType tile, const TilePos &dest) {
+void Room::move_tile(TileType tile, const TilePos &dest, const Animation_Info &info) {
     remove(tile);
     tile->m_shift = {(long double) tile->m_pos.w - dest.w, (long double) tile->m_pos.h - dest.h};
+    tile->m_shift_sym = {sym(tile->m_shift.w), sym(tile->m_shift.h)};
+    tile->can_end_animation = false;
     tile->m_pos = dest;
-    m_animating.push_back(tile);
+    m_animating.insert({tile, info});
     add(tile);
 }
 
 void Room::move_tile(TileType tile, direction_t dir) {
-    move_tile(tile, get_dest(tile, dir));
+    auto dest_info = get_dest_info(tile, dir);
+    move_tile(tile, dest_info.dest, dest_info.info);
 }
 
 DisplayPos Room::total_size() const {
@@ -232,14 +247,40 @@ void Room::detect_gems() {
 
 void Room::animate_tiles(long double animation_speed) {
     Space pending_remove;
-    for (auto tile: m_animating) {
-        F_ABS_SUB(tile->m_shift.w, animation_speed);
-        F_ABS_SUB(tile->m_shift.h, animation_speed);
-        if (WH_IS0(tile->m_shift))
-            pending_remove.push_back(tile);
+    for (auto pair: m_animating) {
+        bool end_cur_animation_flag = false;
+        if (pair.second.is_edge) {
+            if ((fabs(pair.first->m_shift.w) > m_size.w || fabs(pair.first->m_shift.h) > m_size.h) &&
+                !pair.first->can_end_animation) {
+                pair.first->m_shift.w = -pair.first->m_shift.w + pair.first->m_shift_sym.w;
+                pair.first->m_shift.h = -pair.first->m_shift.h + pair.first->m_shift_sym.h;
+                pair.first->can_end_animation = true;
+            } else {
+                pair.first->m_shift.w =
+                        pair.first->m_shift.w + pair.first->m_shift_sym.w * animation_speed;
+                pair.first->m_shift.h =
+                        pair.first->m_shift.h + pair.first->m_shift_sym.h * animation_speed;
+                if (pair.first->can_end_animation) {
+                    if (pair.first->m_shift_sym.w * pair.first->m_shift.w > 0) pair.first->m_shift.w = INFINITY;
+                    if (pair.first->m_shift_sym.h * pair.first->m_shift.h > 0) pair.first->m_shift.h = INFINITY;
+                }
+            }
+            end_cur_animation_flag = WH_ANY_IS_INF(pair.first->m_shift);
+        } else {
+            pair.first->can_end_animation = true;
+            pair.first->m_shift.w =
+                    pair.first->m_shift_sym.w * max(fabs(pair.first->m_shift.w) - animation_speed, 0.0l);
+            pair.first->m_shift.h =
+                    pair.first->m_shift_sym.h * max(fabs(pair.first->m_shift.h) - animation_speed, 0.0l);
+            end_cur_animation_flag = WH_IS0(pair.first->m_shift);
+        }
+        if (end_cur_animation_flag && pair.first->can_end_animation) {
+            pair.first->m_shift = {0, 0};
+            pending_remove.push_back(pair.first);
+        }
     }
     for (auto tile: pending_remove) {
-        m_animating.erase(std::find(m_animating.begin(), m_animating.end(), tile));
+        m_animating.erase(tile);
         m_end_animation_flag = true;
     }
     m_is_end_of_animation = m_end_animation_flag && m_animating.empty() && m_parsing_index == 0;
@@ -248,12 +289,21 @@ void Room::animate_tiles(long double animation_speed) {
 
 void Room::end_of_step() {
     FOREACH_TILE tile->end_of_step();
-    m_end_animation_flag = false;
+    m_can_move_flag = m_end_animation_flag = false;
+    m_is_winning = true;
     for (auto dest: m_dest)
         if (!((Destination *) dest)->detect_requirement(at(dest->m_pos))) {
             m_is_winning = false;
             break;
         }
+    m_steps++;
+}
+
+void Room::clear_move_status() {
+    m_pending_series.clear();
+    m_pending_move.clear();
+    m_animating.clear();
+    m_end_animation_flag = false;
 }
 
 bool Room::is_perf_play() const {
