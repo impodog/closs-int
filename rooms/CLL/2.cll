@@ -19,10 +19,10 @@ help {
 perf 16
 
 content 4d[
-  wa wa wa wa wa wa wa
-  wa -- -- -- wa -- 1c
-  wa -- wa cy wa -- wa
-  wa -- -- wa -- -- wa
-  wa -- wa wa -- wa wa
-  wa -- -- -- -- -- G1
+    wa wa wa wa wa wa wa
+    wa -- -- -- wa -- 1c
+    wa -- wa cy wa -- wa
+    wa -- -- wa -- -- wa
+    wa -- wa wa -- wa wa
+    wa -- -- -- -- -- G1
 ]

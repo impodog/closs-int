@@ -19,9 +19,9 @@ help {
 perf 13
 
 content 4d[
-  wa wa wa wa wa wa
-  G1 -- -- -- 1x wa
-  wa -- wa -- wa wa
-  wa -- wa bx wa wa
-  wa cy -- -- wa wa
+    wa wa wa wa wa wa
+    G1 -- -- -- 1x wa
+    wa -- wa -- wa wa
+    wa -- wa bx wa wa
+    wa cy -- -- wa wa
 ]

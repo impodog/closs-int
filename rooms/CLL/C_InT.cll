@@ -75,6 +75,13 @@
 !templ-cmd !unlock-b !set unlock_bonus (%arg1)
 !templ-cmd !unlock-bonus !unlock-b (%arg1)
 
+!templ-repl !def_c filestring (%DQUOTE)(%filename)(%DQUOTE)
+!templ-cmd !is-todo !templ-repl !this-is-todo (%DQUOTE)(%find.(%arg1))(%find." is todo in level ")(%find.filestring)(%DQUOTE)
+!templ-cmd !descr-is-todo !is-todo "Description"
+!templ-cmd !perf-is-todo !is-todo "Perfection Steps"
+!templ-cmd !gem-is-todo !is-todo "Gem Layout"
+!templ-cmd !note !templ-repl !this-is-todo (%DQUOTE)(%find."Editing Note : \"")(%find.(%arg1))(%find."\" in level ")(%find.filestring)(%DQUOTE)
+
 !%templ-repl !set width len((%content)[0])
 !%templ-repl !set height len((%content))
 

@@ -1,0 +1,29 @@
+!process-only
+!add C_InT.cll
+!gem-def G1 +255
+!gem-def G2 -270
+!note "future 8/10"
+
+title {
+    en="Downstream Up"
+    zh_cn="下游向上"
+}
+
+help {
+    en={
+        "No Binding"="Don't bind boxes"
+    }
+    zh_cn={
+        "不组合"="不要组合箱子"
+    }
+}
+
+perf 22
+
+content 4d[
+    wa wa bx wa cy wa
+    -- 1x -- 1x -- --
+    wa wa wa wa wa --
+    wa cy bx -- -- --
+    wa wa G2 wa wa G1
+]

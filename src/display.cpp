@@ -131,19 +131,31 @@ void init_pages() {
                                      {
                                              [](bool b) {
                                                  SDL_Color color = WHITE;
+                                                 json levels = current_user.at(USER_K_LEVELS);
                                                  if (b) {
                                                      if (contains_literal(current_user.at(USER_K_PERF),
-                                                                          current_user.at(USER_K_LEVELS))) {
+                                                                          levels)) {
                                                          if (contains_literal(current_user.at(USER_K_GEM),
-                                                                              current_user.at(USER_K_LEVELS)))
+                                                                              levels))
                                                              color = GOLD;
                                                          else color = HALF_LIGHT_GREEN;
                                                      } else color = LIGHT_CYAN;
                                                  }
                                                  return create_text(txt_in_game.at(IN_GAME_K_LEVELS), LEVELS_SIZE,
                                                                     color,
-                                                                    to_string(current_user.at(USER_K_LEVELS)) + "/" +
+                                                                    to_string(levels) + "/" +
                                                                     to_string(current_user.at(USER_K_UNLOCKED)));
+                                             },
+                                             [](bool b) {
+                                                 json bonus_levels = current_user.at(USER_K_BONUS_LEVELS);
+                                                 SDL_Color color = WHITE;
+                                                 if (b) color = bonus_levels == 0 ? LIGHT_RED : LIGHT_CYAN;
+                                                 return create_text(txt_in_game.at(
+                                                                            USER_BONUS.empty() ? IN_GAME_K_BONUS_LEVELS_LOCKED
+                                                                                               : IN_GAME_K_BONUS_LEVELS),
+                                                                    LEVELS_SIZE,
+                                                                    color,
+                                                                    to_string(bonus_levels));
                                              }
                                      },
                                      {
@@ -152,12 +164,23 @@ void init_pages() {
                                                      shift_levels(true, 1);
                                                  } else if (key_c(KEY_MOVE_LEFT)) {
                                                      shift_levels(false, 1);
-                                                 } else if (key_c(KEY_MOVE_DOWN)) {
+                                                 } else if (key_c(KEY_NEXT)) {
                                                      shift_levels(true, 10);
-                                                 } else if (key_c(KEY_MOVE_UP)) {
+                                                 } else if (key_c(KEY_BACK)) {
                                                      shift_levels(false, 10);
                                                  } else if (key_c(KEY_CONFIRM)) {
                                                      current_user[USER_K_ROOM] = current_user.at(USER_K_LEVELS);
+                                                     refresh_user_game();
+                                                 }
+                                             },
+                                             [] {
+                                                 if (key_c(KEY_MOVE_RIGHT)) {
+                                                     shift_bonus_levels(true);
+                                                 } else if (key_c(KEY_MOVE_LEFT)) {
+                                                     shift_bonus_levels(false);
+                                                 } else if (key_c(KEY_CONFIRM)) {
+                                                     current_user[USER_K_ROOM] =
+                                                             (-(int) current_user.at(USER_K_BONUS_LEVELS)) * 5 - 1;
                                                      refresh_user_game();
                                                  }
                                              }
@@ -201,7 +224,7 @@ void init_key_map(direction_t code) {
     key_down_map[code] = key_clicking_map[code] = false;
 }
 
-void init_key_map(const initializer_list<direction_t> &codes) {
+void init_key_map(const initializer_list <direction_t> &codes) {
     for (auto code: codes)
         init_key_map(code);
 }
@@ -221,7 +244,7 @@ bool key_d(direction_t code) {
     return key_down_map[code];
 }
 
-bool key_d(initializer_list<direction_t> codes) {
+bool key_d(initializer_list <direction_t> codes) {
     return any_of(codes.begin(), codes.end(), [](direction_t code) { return key_d(code); });
 }
 
@@ -234,7 +257,7 @@ bool key_c(direction_t code) {
     return key_click_map.at(code);
 }
 
-bool key_c(initializer_list<direction_t> codes) {
+bool key_c(initializer_list <direction_t> codes) {
     return any_of(codes.begin(), codes.end(), [](direction_t code) { return key_c(code); });
 }
 
@@ -566,7 +589,7 @@ void Display::show_room_info() const {
             } else steps_color = GREEN;
         } else {
             long double steps_percent = m_room->m_steps / (long double) m_room->m_perf, rev_percent = 1 - steps_percent;
-            steps_color = {(Uint8) (200 * steps_percent), (Uint8) (200 * rev_percent), (Uint8) (200 * rev_percent)};
+            steps_color = {(Uint8)(200 * steps_percent), (Uint8)(200 * rev_percent), (Uint8)(200 * rev_percent)};
         }
         steps_text += "/" + to_string(m_room->m_perf);
     }

@@ -11,6 +11,14 @@
     "en": "Levels (Press Confirm(C) to Start) : ",
     "zh_cn": "关卡 (按确认(C)来开始) : "
   },
+  "bonus_levels": {
+    "en": "Bonus Level Set (Press Confirm(C) to Start) : ",
+    "zh_cn": "奖励关组 (按确认(C)来开始) : "
+  },
+  "bonus_levels_locked": {
+    "en": "Bonus Level Set (Find Hidden Levels and Gems!) : ",
+    "zh_cn": "奖励关组 (找隐藏关和宝石!) : "
+  },
   "chapter1": {
     "en": {
       "Chapter 1 Clear!": "You cleared level 1~20!"

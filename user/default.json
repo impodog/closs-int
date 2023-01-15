@@ -9,5 +9,6 @@
   "gem": [],
   "levels": 1,
   "bonus": [],
-  "text_renderer": 0
+  "text_renderer": 0,
+  "bonus_levels": 0
 }

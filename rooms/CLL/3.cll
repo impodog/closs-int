@@ -20,13 +20,13 @@ help {
 perf 15
 
 content 4d[
-  1c wa wa cy wa wa wa G1 wa
+    1c wa wa cy wa wa wa G1 wa
   -- wa -- -- -- wa wa -- wa
   -- wa -- wa -- -- wa -- wa
   -- wa -- -- wa -- -- -- wa
   -- -- wa -- -- wa wa -- wa
-  wa -- -- -- -- -- -- -- wa
-  wa wa -- wa wa wa -- wa wa
-  wa wa -- wa -- -- -- -- G2
-  wa wa wa wa wa wa wa wa wa
+    wa -- -- -- -- -- -- -- wa
+    wa wa -- wa wa wa -- wa wa
+    wa wa -- wa -- -- -- -- G2
+    wa wa wa wa wa wa wa wa wa
 ]

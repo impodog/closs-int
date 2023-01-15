@@ -1,0 +1,30 @@
+!process-only
+!add C_InT.cll
+!gem-def G1 +0
+!gem-def G2 -13
+
+title {
+    en="Welcome" 
+    zh_cn="欢迎"
+}
+
+help {
+    en={
+        "To the BONUS LEVEL"="You must be really smart to find this"
+        "Note"="Every bonus level set consists of 5 levels, which CANNOT be saved"
+    } 
+    zh_cn={
+        "来到*隐藏关*"="你一定很聪明, 才能找到这个"
+        "说明"="每个奖励关组由5个关卡组成, 不能保存"
+    }
+}
+
+content 4d[
+    wa wa wa wa wa wa wa
+    -- cy 1x 1x 1x -- wa
+    -- wa bx wa wa -- wa
+    -- bx bx -- bx -- wa
+    -- wa bx wa wa -- wa
+    -- -- bx -- -- -- wa
+    1x wa 1x wa wa 1x wa
+]

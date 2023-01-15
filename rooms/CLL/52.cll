@@ -1,0 +1,28 @@
+!process-only
+!add C_InT.cll
+!gem-def G1 +255
+!gem-def G2 -255
+
+
+title {
+    en="Let's Do It"
+    zh_cn="一起来"
+}
+
+help {
+    en={
+        "Slotting"="With one player in a slot, you can get boxes away from walls"
+    }
+    zh_cn={
+        "入槽"="有一个玩家在槽中, 你可以把箱子推离墙"
+    }
+}
+
+perf 8
+
+content 4d[
+    wa wa wa wa wa
+    wa wa wa G1 wa
+    cy bx -- -- cy
+    1x wa G2 -- --
+]

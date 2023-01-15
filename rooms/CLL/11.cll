@@ -20,10 +20,10 @@ help {
 perf 19
 
 content 4d[
-  wa wa wa wa wa wa wa
-  wa G2 cy -- -- -- G1
+    wa wa wa wa wa wa wa
+    wa G2 cy -- -- -- G1
   -- -- -- 1x wa wa wa
   -- -- -- bx wa wa wa
-  wa bx 1x -- -- wa wa
-  wa -- -- -- -- wa wa
+    wa bx 1x -- -- wa wa
+    wa -- -- -- -- wa wa
 ]

@@ -19,8 +19,8 @@ help {
 perf 22
 
 content 4d[
-  wa wa wa wa wa wa wa
+    wa wa wa wa wa wa wa
   -- -- -- wa -- -- wa
-  G1 -- bx -- -- -- wa
-  wa wa wa 1x -- -- cy
+    G1 -- bx -- -- -- wa
+    wa wa wa 1x -- -- cy
 ]

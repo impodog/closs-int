@@ -11,6 +11,7 @@
 #define USER_LANG (string)current_user.at(USER_K_LANGUAGE)
 #define USER_FRAMERATE (int)current_user.at(USER_K_FRAMERATE)
 #define USER_LEVELS (int)current_user.at(USER_K_LEVELS)
+#define USER_BONUS_LEVELS (int)current_user.at(USER_K_BONUS_LEVELS)
 #define USER_ANIMATION_SPEED (long double)current_user.at(USER_K_ANIMATION_SPEED)
 #define USER_BONUS current_user.at(USER_K_BONUS)
 
@@ -52,6 +53,8 @@ void shift_framerate(bool down);
 void shift_text_renderer(bool down);
 
 void shift_levels(bool down, int amount = 1);
+
+void shift_bonus_levels(bool down);
 
 void shift_animation(bool down);
 

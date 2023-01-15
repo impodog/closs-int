@@ -20,9 +20,9 @@ help {
 perf 52
 
 content 4d[
-  wa wa wa wa wa wa wa wa
-  wa wa -- -- -- wa 1x wa
-  wa -- -- G1 -- -- -- wa
+    wa wa wa wa wa wa wa wa
+    wa wa -- -- -- wa 1x wa
+    wa -- -- G1 -- -- -- wa
   -- -- -- wa wa wa -- wa
   -- wa cy bx -- wa -- wa
   -- -- G2 wa -- -- -- wa

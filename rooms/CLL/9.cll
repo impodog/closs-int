@@ -21,10 +21,10 @@ help {
 perf 15
 
 content 4d[
-  wa -- -- wa wa wa wa
-  1x cy bx -- -- -- wa
-  wa -- -- wa -- -- wa
-  wa -- -- wa G1 PW PW
-  wa -- bx -- -- wa PW
-  wa wa wa -- -- wa GT
+    wa -- -- wa wa wa wa
+    1x cy bx -- -- -- wa
+    wa -- -- wa -- -- wa
+    wa -- -- wa G1 PW PW
+    wa -- bx -- -- wa PW
+    wa wa wa -- -- wa GT
 ]

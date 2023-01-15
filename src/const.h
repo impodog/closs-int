@@ -46,7 +46,7 @@ void get_scr_info(Screen_Info &info);
 #endif
 
 
-#define VERSION "v0.6.2"
+#define VERSION "v0.6.3"
 
 #define TITLE "Closs : Inside the Tapes " VERSION
 #define SCR_WIDTH 2000
@@ -139,6 +139,7 @@ void get_scr_info(Screen_Info &info);
 #define USER_K_LEVELS "levels"
 #define USER_K_BONUS "bonus"
 #define USER_K_TEXT_RENDERER "text_renderer"
+#define USER_K_BONUS_LEVELS "bonus_levels"
 
 #define SETTINGS_K_LANGUAGE "language"
 #define SETTINGS_K_SENSITIVITY "sensitivity"
@@ -157,6 +158,8 @@ void get_scr_info(Screen_Info &info);
 #define IN_GAME_K_WINNING "winning"
 #define IN_GAME_K_STEPS "steps"
 #define IN_GAME_K_LEVELS "levels"
+#define IN_GAME_K_BONUS_LEVELS "bonus_levels"
+#define IN_GAME_K_BONUS_LEVELS_LOCKED "bonus_levels_locked"
 #define IN_GAME_K_CHAPTER1 "chapter1"
 #define IN_GAME_K_CHAPTER2 "chapter2"
 
@@ -204,6 +207,7 @@ const SDL_Color LIGHT_GREEN{100, 200, 150, 255};
 const SDL_Color HALF_LIGHT_GREEN{50, 200, 75, 255};
 const SDL_Color LIGHT_CYAN{100, 200, 200, 255};
 const SDL_Color GOLD{255, 215, 0, 255};
+const SDL_Color LIGHT_RED{200, 50, 100, 255};
 
 template<typename T1>
 struct Pos2D {
