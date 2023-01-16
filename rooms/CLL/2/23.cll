@@ -1,0 +1,28 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -2
+
+title {
+    en="Teleportation"
+    zh_cn="传送"
+}
+
+help {
+    en={
+        "Edge-Crossing 2"="Boxes can also cross the edge"
+    }
+    zh_cn={
+        "跨过边缘 2"="箱子也可以跨过边缘"
+    }
+}
+
+perf 23
+
+content 4d[
+    wa wa wa -- wa -- -- wa
+    wa G1 wa bx wa -- -- wa
+    wa -- -- -- -- -- -- wa
+    wa -- wa wa wa -- -- wa
+    wa -- wa wa wa wa wa wa
+    wa cy -- -- wa -- -- 1x
+]

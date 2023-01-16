@@ -1,0 +1,34 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 +255
+!gem-def G2 -256
+!gem-def G3 +255
+!gem-def G4 -256
+
+title {
+    en="Symmetry"
+    zh_cn="对称"
+}
+
+help {
+    en={
+        "Focus"="Move as few blue boxes as you can"
+        "Try"="Don't give up. It might require some swinging to reach dests"
+    }
+    zh_cn={
+        "专一"="尽量少移动蓝色箱子"
+        "尝试"="不要放弃. 可能需要回旋来解决终点"
+    }
+}
+
+perf 27
+
+content 4d[
+    wa wa wa wa wa wa wa
+    wa 1x -- G2 -- 1x wa
+    wa -- bl bx bl -- wa
+    wa G1 bx cy bx G3 wa
+    wa -- bl bx bl -- wa
+    wa 1x -- G4 -- 1x wa
+    wa wa wa wa wa wa wa
+]

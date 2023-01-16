@@ -1,0 +1,29 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -3
+!gem-def G2 -4
+
+title {
+    en="Two Spots" 
+    zh_cn="双位"
+}
+
+help {
+    en={
+        "Two Dest"="You'll need to put the right blocks on both of dests to win"
+    } 
+    zh_cn={
+        "双终点"="你将会需要把正确的方块都分别放在终点上来赢"
+    }
+}
+
+perf 19
+
+content 4d[
+    wa wa wa wa wa wa wa
+    wa G2 cy -- -- -- G1
+  -- -- -- 1x wa wa wa
+  -- -- -- bx wa wa wa
+    wa bx 1x -- -- wa wa
+    wa -- -- -- -- wa wa
+]

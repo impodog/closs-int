@@ -1,0 +1,28 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -2
+!gem-def G2 -2
+
+title {
+    en="Traffic Lights"
+    zh_cn="交通灯"
+}
+
+help {
+    en={
+        "Blue(boxes)"="The dest marked Blue requires blue boxes"
+    }
+    zh_cn={
+        "蓝(箱)"="写有Blue的终点要求蓝色箱子"
+    }
+}
+
+perf 30
+
+content 4d[
+    wa wa wa wa wa wa wa
+    1b -- -- -- -- -- 1x
+    wa -- -- wa -- -- wa
+    wa wa bx wa bl wa wa
+    wa G1 -- cy -- G2 wa
+]

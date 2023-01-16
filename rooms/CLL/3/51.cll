@@ -1,0 +1,29 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -2
+!gem-def G2 -2
+
+title {
+    en="Companion"
+    zh_cn="同伴"
+}
+
+help {
+    en={
+        "Companion"="Most of the time, it's good to have a companion"
+        "Multiple Players"="All the players respond to the same single press"
+    }
+    zh_cn={
+        "同伴"="大部分时候, 有个同伴挺好的"
+        "多个玩家"="所有玩家响应同个按键"
+    }
+}
+
+perf 10
+
+content 4d[
+    cy 1x wa 1x cy
+    bx wa wa wa bx
+    -- -- wa -- --
+    wa G1 wa G2 wa
+]

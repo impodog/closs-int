@@ -1,0 +1,27 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -1
+
+title {
+    en="Line of Colors"
+    zh_cn="颜色一线"
+}
+
+help {
+    en={
+        "Sorting"="Sort the boxes, then push them"
+    }
+    zh_cn={
+        "排序"="把箱子排序, 再推动它们"
+    }
+}
+
+perf 24
+
+content 4d[
+    wa wa wa -- wa wa wa
+    wa wa wa -- wa wa wa
+    cy -- bx G1 bl -- --
+    wa wa -- 1b wa wa --
+    wa wa wa 1x -- -- --
+]

@@ -1,0 +1,32 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 1
+!gem-def G2 -1
+
+title {
+    en="Shaped Cross"
+    zh_cn="塑形叉"
+}
+
+help {
+    en={
+        "How to Think"="Separate the dest, finish them as two groups"
+        "Crossing"="You may notice the crossings. They are important for the left and bottom dest"
+    }
+    zh_cn={
+        "如何思考"="把终点分开, 按两组解决它们"
+        "十字路口"="你可能注意到了十字, 它们对于左和下的终点很重要"
+    }
+}
+
+perf 146
+
+content 4d[
+    wa wa wa wa wa wa wa wa wa wa wa wa wa
+    wa wa wa wa wa wa wa -- -- wa wa G1 --
+    wa -- -- -- -- -- -- -- -- -- 1x -- --
+    wa -- wa -- -- -- wa -- wa 1x wa 1x --
+    wa -- bx bx wa -- -- -- -- G2 1x wa --
+    wa -- bx bx -- -- wa -- wa -- wa wa --
+    wa cy -- -- -- -- -- -- -- -- -- -- --
+]

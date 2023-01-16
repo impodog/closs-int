@@ -1,0 +1,27 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -1
+
+title {
+    en="Pressure Meter"
+    zh_cn="压强表"
+}
+
+help {
+    en={
+        "Sequence"="See if one of the dests matters more than the other"
+        "Infinity"="When a line of objects with cyan is pushed towards the edge, they will stop"
+    }
+    zh_cn={
+        "次序"="看看是否哪个终点比另一个更重要"
+        "无尽"="当一队有青色方块的物品被向着边缘推动, 他们会停下"
+    }
+}
+
+perf 29
+
+content 4d[
+    -- wa wa 1x wa wa --
+    G1 -- 1b sp -- -- --
+    bx sp -- cy -- sp bl
+]

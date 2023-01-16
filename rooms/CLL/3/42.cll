@@ -1,0 +1,27 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -24
+
+title {
+    en="Quadruple Bridge"
+    zh_cn="四倍桥"
+}
+
+help {
+    en={
+        "Spikes"="Spikes kill the player on touch. However, the do nothing to boxes"
+    }
+    zh_cn={
+        "刺"="刺在接触时杀死玩家. 然而, 它们对箱子没有作用"
+    }
+}
+
+perf 36
+
+content 4d[
+    wa -- -- -- wa -- -- --
+    wa -- bx bx wa wa wa --
+    cy -- -- -- sp G1 -- --
+    wa wa bx bx wa wa wa 1x
+    wa wa -- -- -- -- wa wa
+]

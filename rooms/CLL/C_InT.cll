@@ -67,7 +67,7 @@
 !%undef 3d
 !%undef 3r
 
-!templ-repl !to ..\Closs\(%filename).json
+!templ-repl !to ..\..\Closs\(%filename).json
 
 !templ-cmd !pic-def !def (%arg1) [pic (%arg2)]
 !templ-cmd !goto-def !def GT [goto (%arg1)]
@@ -76,14 +76,15 @@
 !templ-cmd !unlock-bonus !unlock-b (%arg1)
 
 !templ-repl !def_c filestring (%DQUOTE)(%filename)(%DQUOTE)
-!templ-cmd !is-todo !templ-repl !this-is-todo (%DQUOTE)(%find.(%arg1))(%find." is todo in level ")(%find.filestring)(%DQUOTE)
-!templ-cmd !descr-is-todo !is-todo "Description"
-!templ-cmd !perf-is-todo !is-todo "Perfection Steps"
-!templ-cmd !gem-is-todo !is-todo "Gem Layout"
+
+!templ-cmd !x-is-todo !templ-cmd !(%arg1)-is-todo !templ-repl !this-is-todo (%DQUOTE)(%find.(%arg2))(%find." is todo in level ")(%find.filestring)(%DQUOTE)
+!x-is-todo descr "Description"
+!x-is-todo perf "Perfection Steps"
+!x-is-todo gem "Gem Layout"
 !templ-cmd !note !templ-repl !this-is-todo (%DQUOTE)(%find."Editing Note : \"")(%find.(%arg1))(%find."\" in level ")(%find.filestring)(%DQUOTE)
 
-!%templ-repl !set width len((%content)[0])
-!%templ-repl !set height len((%content))
+!%templ-repl !set width len((%json.content)[0])
+!%templ-repl !set height len((%json.content))
 
 !not-custom width height
 

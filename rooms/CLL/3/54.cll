@@ -1,0 +1,28 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -9
+
+title {
+    en="Synced and Away"
+    zh_cn="同步和远去"
+}
+
+help {
+    en={
+        "Stacking"="Stack boxes up to make a bridge"
+    }
+    zh_cn={
+        "堆叠"="把箱子堆成桥"
+    }
+}
+
+perf 9
+
+content 4d[
+    wa cy wa cy -- -- wa
+    -- -- wa wa -- -- wa
+    -- sp wa wa bx -- wa
+    -- -- wa sp sp -- wa
+    wa -- bx sp G1 1x wa
+    wa wa wa wa wa wa wa
+]

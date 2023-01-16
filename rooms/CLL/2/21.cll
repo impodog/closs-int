@@ -1,0 +1,28 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -6
+
+title {
+    en="Up Down Shifting"
+    zh_cn="上下切换"
+}
+
+help {
+    en={
+        "Edge-Crossing"="Go to the edge to reach the other side!"
+    }
+    zh_cn={
+        "跨过边缘"="经过边缘来到达另一侧!"
+    }
+}
+
+perf 14
+
+content 4d[
+    wa wa wa -- wa --
+    wa G1 wa -- wa --
+    wa -- -- bx -- --
+    wa cy wa -- wa wa
+    wa -- -- wa 1c --
+    wa wa -- -- wa --
+]

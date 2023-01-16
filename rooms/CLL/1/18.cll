@@ -1,0 +1,28 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 0
+
+title {
+    en="True Twist"
+    zh_cn="真正的转折"
+}
+
+help {
+    en={
+        "Boxes"="The top two boxes can be tricky, but move them one by one"
+    }
+    zh_cn={
+        "箱子"="顶部的两个箱子可能很巧妙, 但是一个一个地移动它们"
+    }
+}
+
+perf 49
+
+content 4d[
+    wa wa wa wa wa wa wa
+    cy -- -- wa wa wa wa
+    wa -- -- bx bx -- wa
+    wa -- -- wa 1x -- --
+    wa -- bx -- G1 wa --
+    wa 1x wa -- -- -- 1x
+]

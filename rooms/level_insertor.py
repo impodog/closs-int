@@ -1,18 +1,17 @@
 import sys
 import os
 import argparse
+#fixme
 
 CLL_path = os.path.join(os.path.split(__file__)[0], "CLL")
-max_level = 0
-for file in os.listdir(CLL_path):
-    try:
-        max_level = max(max_level, int(os.path.split(file)[1].split(".")[0]))
-    except ValueError:
-        ...
+max_level = 56
 
 
 def get_path(level):
-    return os.path.join(CLL_path, str(level)+".cll")
+    if isinstance(level,int):
+        return os.path.join(CLL_path,str((level-1)//20+1), str(level)+".cll")
+    else:
+        return os.path.join(CLL_path, str(level)+".cll")
 
 
 parser = argparse.ArgumentParser()

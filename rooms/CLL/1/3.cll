@@ -1,0 +1,32 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -10
+!gem-def G2 -10
+
+title {
+    en="Spilted Paths" 
+    zh_cn="分离的路"
+}
+
+help {
+    en={
+        "Still Remember How to Move?"="Press direction keys"
+    } 
+    zh_cn={
+        "还记得怎么移动吗?"="按方向键"
+    }
+}
+
+perf 15
+
+content 4d[
+    1c wa wa cy wa wa wa G1 wa
+  -- wa -- -- -- wa wa -- wa
+  -- wa -- wa -- -- wa -- wa
+  -- wa -- -- wa -- -- -- wa
+  -- -- wa -- -- wa wa -- wa
+    wa -- -- -- -- -- -- -- wa
+    wa wa -- wa wa wa -- wa wa
+    wa wa -- wa -- -- -- -- G2
+    wa wa wa wa wa wa wa wa wa
+]

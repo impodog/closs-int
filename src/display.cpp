@@ -64,7 +64,7 @@ void init_pages() {
                                                    else if (key_d(KEY_MOVE_LEFT))
                                                        shift_framerate(false);
                                                },
-                                               [] {
+                                               [] { // 4 animation
                                                    if (key_d(KEY_MOVE_RIGHT))
                                                        shift_animation(true);
                                                    else if (key_d(KEY_MOVE_LEFT))

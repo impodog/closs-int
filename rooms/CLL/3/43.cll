@@ -1,0 +1,28 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -4
+
+title {
+    en="End of the Steps"
+    zh_cn="步数终点"
+}
+
+help {
+    en={
+        "Winning"="Winning does NOT have to do with cyan, you can also win without it present"
+    }
+    zh_cn={
+        "赢"="赢与青色方块无关, 没有它存在你也可以赢"
+    }
+}
+
+perf 36
+
+content 4d[
+    wa wa wa wa G1 wa
+    -- cy -- sp -- 1x
+    wa -- wa wa -- wa
+    wa -- bx -- -- --
+    wa bx -- -- -- --
+    wa -- -- wa -- wa
+]

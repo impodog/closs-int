@@ -1,0 +1,26 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -2
+
+title {
+    en="Unpleasant Neighbor"
+    zh_cn="令人生厌的邻居"
+}
+
+help {
+    en={
+        "Move It Away"="Put the box away"
+    }
+    zh_cn={
+        "把它移走"="把箱子放到一边去"
+    }
+}
+
+perf 30
+
+content 4d[
+    wa wa wa -- wa 1b
+    wa G1 wa -- -- --
+    wa -- bl -- wa --
+    wa cy bx -- -- --
+]

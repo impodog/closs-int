@@ -1,0 +1,29 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -1
+!gem-def G2 -1
+
+title {
+    en="Spreading Boxes"
+    zh_cn="四散分离"
+}
+
+help {
+    en={
+        "Order is the key"="Put those in order that does not mess up with others"
+    }
+    zh_cn={
+        "顺序是关键"="把它们以不会扰乱别的的顺序归位"
+    }
+}
+
+perf 23
+
+content 4d[
+    wa wa wa wa wa wa
+    G2 -- -- 1x -- wa
+    cy bx bx -- -- wa
+    -- bx -- wa 1x wa
+    wa wa -- -- -- wa
+    wa 1x -- -- G1 wa
+]

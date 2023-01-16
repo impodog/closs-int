@@ -1,0 +1,27 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -2
+
+title {
+    en="Going Up" 
+    zh_cn="上行"
+}
+
+help {
+    en={
+        "Destination"="Now  destinations(aka green symbols) can also require boxes on it"
+    } 
+    zh_cn={
+        "终点"="现在  终点(又称绿色符号)也有可能要求箱子(box)在上面"
+    }
+}
+
+perf 13
+
+content 4d[
+    wa wa wa wa wa wa
+    G1 -- -- -- 1x wa
+    wa -- wa -- wa wa
+    wa -- wa bx wa wa
+    wa cy -- -- wa wa
+]

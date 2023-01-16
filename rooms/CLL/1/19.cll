@@ -1,0 +1,29 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -10
+
+title {
+    en="Stacking Up"
+    zh_cn="堆放"
+}
+
+help {
+    en={
+        "Sequence"="The upper destination is the key, try to fill that one first"
+    }
+    zh_cn={
+        "次序"="上方的终点是关键, 试着先完成它"
+    }
+}
+
+perf 63
+
+content 4d[
+    wa wa wa wa -- -- wa 1x
+    wa -- bx -- -- -- wa --
+    wa -- -- wa -- -- -- 1x
+    wa -- -- -- wa -- wa --
+    wa cy -- bx -- -- bx 1x
+    wa -- wa wa -- -- wa wa
+    wa -- -- G1 wa wa wa wa
+]

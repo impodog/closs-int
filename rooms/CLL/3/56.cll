@@ -1,0 +1,29 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 +255
+!gem-def G2 -255
+
+title {
+    en="Go Together"
+    zh_cn="共同前进"
+}
+
+help {
+    en={
+        "Try to Deal with Them One by One"="Push them from the top, the bottom"
+    }
+    zh_cn={
+        "试着一个一个地移动它们"="从上面,下面推动"
+    }
+}
+
+perf 27
+
+content 4d[
+    wa wa wa G2 -- -- wa
+    cy bx -- -- -- -- wa
+    wa wa -- -- -- sp 1b
+    cy bb -- -- -- sp 1x
+    wa wa wa G1 wa wa wa
+    wa wa wa wa wa wa wa
+]

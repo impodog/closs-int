@@ -1,0 +1,28 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -6
+
+title {
+    en="Swinging and Roadblocks"
+    zh_cn="回旋与路障"
+}
+
+help {
+    en={
+        "Space"="Make use of the space on the left"
+    }
+    zh_cn={
+        "空间"="利用左边的空间"
+    }
+}
+
+perf 46
+
+content 4d[
+    wa wa wa wa wa wa wa
+    -- cy -- bl 1x 1b wa
+    -- -- -- bl bx 1b wa
+    -- wa 1x -- bx -- wa
+    -- wa wa -- wa -- wa
+    G1 wa wa -- -- -- wa
+]

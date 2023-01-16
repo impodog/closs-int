@@ -1,0 +1,29 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -56
+!gem-def G2 +54
+
+title {
+    en="Quarantine Room"
+    zh_cn="隔离间"
+}
+
+help {
+    en={
+        "Get Box Up!"="Move the box up. There's only one way"
+    }
+    zh_cn={
+        "把箱子移上来!"="把箱子向上移. 仅有一条路"
+    }
+}
+
+perf 77
+
+content 4d[
+    wa wa -- wa wa wa wa
+    wa -- -- -- wa G2 --
+    wa -- wa -- wa -- cy
+    wa 1b -- -- bl 1x --
+    wa wa -- wa wa -- --
+    wa G1 -- -- bx -- wa
+]

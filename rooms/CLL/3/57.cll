@@ -1,0 +1,28 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -2
+
+title {
+    en="Leaning for Swaps"
+    zh_cn="向交换倾斜"
+}
+
+help {
+    en={
+        "Sequence"="Think of how the boxes should be ordered"
+    }
+    zh_cn={
+        "顺序"="想想箱子应该怎么排序"
+    }
+}
+
+perf 29
+
+content 4d[
+    wa -- -- wa 1b wa
+    wa cy bx sp 1x wa
+    -- bl -- cy sp wa
+    -- -- -- -- -- wa
+    wa -- wa wa G1 wa
+    wa wa wa wa wa wa
+]

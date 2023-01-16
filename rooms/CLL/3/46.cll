@@ -1,0 +1,28 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 +255
+!gem-def G2 -255-4
+
+title {
+    en="Length of Steps"
+    zh_cn="步数的长度"
+}
+
+help {
+    en={
+        "Space"="Use the left space to move some boxes"
+    }
+    zh_cn={
+        "空间"="用左侧空间来移动一些箱子"
+    }
+}
+
+perf 45
+
+content 4d[
+    1b G2 sp bl cy sp bx bx
+    wa -- -- -- sp -- -- --
+    wa -- bx -- -- bx G1 wa
+    wa wa wa wa wa -- -- wa
+    wa wa wa wa wa wa wa wa
+]

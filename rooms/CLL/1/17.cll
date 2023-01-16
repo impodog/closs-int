@@ -1,0 +1,28 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -2
+
+title {
+    en="Down Is Up"
+    zh_cn="下即是上"
+}
+
+help {
+    en={
+        "Use Gaps"="Use the gap on the right well!"
+    }
+    zh_cn={
+        "使用空隙"="好好用右边的空隙!"
+    }
+}
+
+perf 26
+
+content 4d[
+    cy 1x -- G1 wa
+    wa bx bx wa wa
+    1x -- bx -- wa
+    bx -- -- -- wa
+    1x -- -- wa wa
+    wa wa wa wa wa
+]

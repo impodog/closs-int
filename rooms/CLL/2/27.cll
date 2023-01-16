@@ -1,0 +1,28 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -2
+
+title {
+    en="Edge Channel"
+    zh_cn="边缘海峡"
+}
+
+help {
+    en={
+        "Edges"="Those two dest needs to cross the edge to reach"
+    }
+    zh_cn={
+        "边缘"="那两个终点需要跨过边缘来到达"
+    }
+}
+
+perf 42
+
+content 4d[
+    wa -- -- -- wa wa
+    -- -- -- -- wa 1x
+    wa wa -- wa wa --
+    bx -- -- wa wa --
+    wa wa -- -- bx --
+    wa 1x cy wa wa G1
+]
