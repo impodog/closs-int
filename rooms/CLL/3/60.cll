@@ -1,0 +1,27 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -1
+
+title {
+    en="Times of Return"
+    zh_cn="返回的时光"
+}
+
+help {
+    en={
+        "Slotting"="Find the position of slotting, push some boxes across the spike"
+    }
+    zh_cn={
+        "入槽"="找到入槽点, 把一些箱子推过刺"
+    }
+}
+
+perf 30
+
+content 4d[
+    wa wa wa -- -- -- --
+    wa wa -- cy bx 1b --
+    wa wa wa wa -- sp wa
+    wa -- -- bb -- -- 1x
+    wa wa cy wa wa G1 wa
+]

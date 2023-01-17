@@ -1,0 +1,30 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 +255
+!gem-def G2 -256
+
+title {
+    en="Wall Staff"
+    zh_cn="墙壁专员"
+}
+
+help {
+    en={
+        "Progression"="Move both of the boxes at the same time, avoid getting stuck"
+    }
+    zh_cn={
+        "进度"="同时移动两个箱子, 防止卡住"
+    }
+}
+
+perf 59
+
+content 4d[
+    wa wa wa 1x wa wa wa
+    wa cy -- -- bl G2 cy
+    -- -- -- -- wa bx wa
+    wa -- wa G1 wa -- wa
+    wa -- -- -- -- 1b --
+    wa -- wa wa wa wa wa
+
+]

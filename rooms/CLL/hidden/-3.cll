@@ -1,0 +1,20 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 +0
+!pic-def Ps sp
+!def SG [Ps G1]
+
+!unlock-b 3
+
+next 50
+
+perf 32
+
+content 4d[
+    wa sp sp sp sp sp Ps Ps wa
+    Ps cy Ps Ps Ps SG wa 1c Ps
+    sp sp sp Ps Ps Ps sp sp sp
+    sp sp sp sp Ps Ps Ps Ps Ps
+    Ps 1c Ps sp sp sp sp cy Ps
+    Ps wa Ps sp sp sp sp sp sp
+]

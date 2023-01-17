@@ -1,6 +1,8 @@
 !process-only
 !add ../C_InT.cll
 !gem-def G1 -2
+!pic-def Pw wa
+!goto-def -3
 
 title {
     en="Long Journey 3"
@@ -19,8 +21,8 @@ help {
 perf 154
 
 content 4d[
-    wa wa -- wa wa wa wa -- wa wa
-    wa wa -- 1x wa G1 wa -- wa wa
+    wa wa -- wa wa wa wa -- wa GT
+    Pw wa -- 1x wa G1 wa -- wa Pw
     cy -- -- sp -- -- bl bl -- wa
     -- -- -- sp wa -- bl bl -- wa
     -- -- wa -- wa -- wa -- -- --

@@ -32,7 +32,7 @@ Font_Family_Type arial, consolas, simhei;
 
 SDL_Surface_ptr img_arrow, img_settings, img_Closs_InT, img_help, img_manual, img_levels;
 SDL_Surface_ptr img_none, img_icon;
-SDL_Surface_ptr img_chapter1, img_chapter2;
+SDL_Surface_ptr img_chapter1, img_chapter2, img_chapter3;
 
 language_fonts_t language_fonts;
 
@@ -84,6 +84,7 @@ void init_img() {
     img_icon = IMG_Load(IMG_PATH "C_InT_Icon.png");
     img_chapter1 = IMG_Load(IMG_PATH "chapter1.png");
     img_chapter2 = IMG_Load(IMG_PATH "chapter2.png");
+    img_chapter3 = IMG_Load(IMG_PATH "chapter3.png");
 
     img_none = SDL_CreateRGBSurface(0, 1, 1, 32, 0, 0, 0, 0);
 
@@ -183,6 +184,7 @@ void free_img() {
     SDL_FreeSurface(img_icon);
     SDL_FreeSurface(img_chapter1);
     SDL_FreeSurface(img_chapter2);
+    SDL_FreeSurface(img_chapter3);
 }
 
 void init_font() {
@@ -201,7 +203,7 @@ void free_font() {
     delete simhei;
 }
 
-void set_white_as_colorkey(const vector<SDL_Surface *> &surfaces) {
+void set_white_as_colorkey(initializer_list<SDL_Surface *> surfaces) {
     for (auto surface: surfaces)
         SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format, 255, 255, 255));
 }

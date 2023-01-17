@@ -2,7 +2,7 @@
 !add ../C_InT.cll
 !gem-def G1 -7
 !goto-def -1
-!pic-def PW wa
+!pic-def Pw wa
 
 title {
     en="Box Loops to Push" 
@@ -24,7 +24,7 @@ content 4d[
     wa -- -- wa wa wa wa
     1x cy bx -- -- -- wa
     wa -- -- wa -- -- wa
-    wa -- -- wa G1 PW PW
-    wa -- bx -- -- wa PW
+    wa -- -- wa G1 Pw Pw
+    wa -- bx -- -- wa Pw
     wa wa wa -- -- wa GT
 ]

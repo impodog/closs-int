@@ -1,8 +1,8 @@
 !process-only
 !add ../C_InT.cll
 !gem-def G1 -2
-!pic-def PW wa
-!repl GW G1,PW
+!pic-def Pw wa
+!repl GW G1,Pw
 
 !unlock-b 2
 

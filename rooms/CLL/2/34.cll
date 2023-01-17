@@ -2,7 +2,7 @@
 !add ../C_InT.cll
 !gem-def G1 -7
 !goto-def -2
-!pic-def PW wa
+!pic-def Pw wa
 
 title {
     en="Snake Turning"
