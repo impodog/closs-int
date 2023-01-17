@@ -207,6 +207,11 @@ void shift_animation(bool down) {
     else if (animation_speed > MIN_ANIMATION) current_user[USER_K_ANIMATION_SPEED] = animation_speed - 1;
 }
 
+void debug_unlock_levels() {
+    current_user[USER_K_UNLOCKED] = 128;
+    current_user[USER_K_BONUS] = {1, 2, 3, 4, 5};
+}
+
 bool can_shift_to_level(int level) {
     return level >= MIN_LEVEL_NUMBER && level <= current_user.at(USER_K_UNLOCKED);
 }
@@ -248,4 +253,5 @@ bool contains_literal(const json &array, const json &value) {
         if (cmp == value) return true;
     return false;
 }
+
 

@@ -1,0 +1,26 @@
+!process-only
+!add ../C_InT.cll
+
+title {
+    en="Illusion Castle" 
+    zh_cn="幻象城堡"
+}
+
+help {
+    en={
+        "Illusion"="Illusions trap you within"
+    } 
+    zh_cn={
+        "幻象"="幻象把你困在其中"
+    }
+}
+
+content 4d[
+    wa wa wa wa wa wa wa
+    wa -- bx -- 1x cy wa
+    wa -- -- bx 1x 1x wa
+    wa bx bx 1x bx bx wa
+    wa 1x 1x bx -- -- wa
+    wa 1x 1x -- bx -- wa
+    wa wa wa wa wa wa wa
+]

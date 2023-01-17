@@ -1,0 +1,24 @@
+!process-only
+!add ../C_InT.cll
+
+title {
+    en="Turning add Falling" 
+    zh_cn="转向和掉落"
+}
+
+help {
+    en={
+        "Familiar?"="This is level 5-3 before..."
+    } 
+    zh_cn={
+        "眼熟吗?"="这是以前的关卡5-3..."
+    }
+}
+
+content 4d[
+    -- cy wa 1x
+    bx bx 1x bx
+    -- -- bx --
+    1x -- 1x --
+    wa wa wa wa
+] 

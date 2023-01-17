@@ -46,7 +46,7 @@ void get_scr_info(Screen_Info &info);
 #endif
 
 
-#define VERSION "v0.7.1"
+#define VERSION "v0.7.2"
 
 #define TITLE "Closs : Inside the Tapes " VERSION
 #define SCR_WIDTH 2000
@@ -95,6 +95,8 @@ void get_scr_info(Screen_Info &info);
 #define MAX_LEVEL_NUMBER 2
 #define MIN_LEVEL_NUMBER 1
 
+#define DEBUGGER_CODE -1189850482
+
 
 #define PATH_BEGIN "../"
 
@@ -140,6 +142,7 @@ void get_scr_info(Screen_Info &info);
 #define USER_K_BONUS "bonus"
 #define USER_K_TEXT_RENDERER "text_renderer"
 #define USER_K_BONUS_LEVELS "bonus_levels"
+#define USER_K_DEBUGGER "debugger"
 
 #define SETTINGS_K_LANGUAGE "language"
 #define SETTINGS_K_SENSITIVITY "sensitivity"
@@ -162,6 +165,8 @@ void get_scr_info(Screen_Info &info);
 #define IN_GAME_K_BONUS_LEVELS_LOCKED "bonus_levels_locked"
 #define IN_GAME_K_CHAPTER1 "chapter1"
 #define IN_GAME_K_CHAPTER2 "chapter2"
+#define IN_GAME_K_CHAPTER3 "chapter3"
+#define IN_GAME_K_BONUS1 "bonus1"
 
 #define KEY_SHIFT_UP SDLK_w
 #define KEY_SHIFT_LEFT SDLK_a
@@ -184,6 +189,8 @@ void get_scr_info(Screen_Info &info);
 #define KEY_RESTART SDLK_r
 #define KEY_ESCAPE SDLK_ESCAPE
 #define KEY_SAVE_AND_REPLAY SDLK_x
+
+#define KEY_DEBUG_PERFECT SDLK_1
 
 #define RENDER_TEXT text_renderer
 

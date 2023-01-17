@@ -24,7 +24,7 @@
       "Chapter 1 Clear!": "You cleared level 1~20!"
     },
     "zh_cn": {
-      "章节 1 完成!": "你完成了关卡1~20!"
+      "章节 1 完成!": "你完成了关卡 1~20!"
     }
   },
   "chapter2": {
@@ -32,7 +32,23 @@
       "Chapter 2 Clear!": "You cleared level 21~40!"
     },
     "zh_cn": {
-      "章节 2 完成!": "你完成了关卡21~40!"
+      "章节 2 完成!": "你完成了关卡 21~40!"
+    }
+  },
+  "chapter3": {
+    "en": {
+      "Chapter 3 Clear!": "You cleared level 41~60!"
+    },
+    "zh_cn": {
+      "章节 3 完成!": "你完成了关卡 41~60!"
+    }
+  },
+  "bonus1": {
+    "en": {
+      "Bonus Level Set 1 Clear!": "Really confusing, huh?"
+    },
+    "zh_cn": {
+      "奖励关卡组 1 完成!": "挺令人迷惑的吧?"
     }
   }
 }

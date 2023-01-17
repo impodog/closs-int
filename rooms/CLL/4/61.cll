@@ -1,0 +1,27 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 +255
+!gem-def G2 -261
+
+title {
+    en="Forced Moving"
+    zh_cn="受迫移动"
+}
+
+help {
+    en={
+        "Conveyors"="Conveyors move all things above it in the shown direction"
+    }
+    zh_cn={
+        "传送带"="传送带把所有在它上面的物体以显示方向移动"
+    }
+}
+
+perf 12
+
+content 4d[
+    wa wa wa wa wa
+    cy -- 2d bx G2
+    wa 2u -- wa --
+    -- -- G1 -- 1x
+]

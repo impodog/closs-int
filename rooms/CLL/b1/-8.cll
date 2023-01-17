@@ -1,0 +1,26 @@
+!process-only
+!add ../C_InT.cll
+
+title {
+    en="Never Possible" 
+    zh_cn="从不可能"
+}
+
+help {
+    en={
+        "Chained"="Chained walls, chained boxes"
+    } 
+    zh_cn={
+        "链"="墙链, 箱链"
+    }
+}
+
+content 4d[
+    -- cy -- -- -- -- -- -- wa
+    -- bx wa bx wa bx wa -- wa
+    -- -- -- -- -- -- -- -- wa
+    wa wa -- wa -- wa -- -- --
+    wa -- -- -- -- -- -- -- --
+    1x -- -- 1x -- 1x -- wa wa
+    wa wa wa wa wa wa wa wa wa
+]

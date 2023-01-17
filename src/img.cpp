@@ -33,6 +33,7 @@ Font_Family_Type arial, consolas, simhei;
 SDL_Surface_ptr img_arrow, img_settings, img_Closs_InT, img_help, img_manual, img_levels;
 SDL_Surface_ptr img_none, img_icon;
 SDL_Surface_ptr img_chapter1, img_chapter2, img_chapter3;
+SDL_Surface_ptr img_bonus1;
 
 language_fonts_t language_fonts;
 
@@ -85,6 +86,7 @@ void init_img() {
     img_chapter1 = IMG_Load(IMG_PATH "chapter1.png");
     img_chapter2 = IMG_Load(IMG_PATH "chapter2.png");
     img_chapter3 = IMG_Load(IMG_PATH "chapter3.png");
+    img_bonus1 = IMG_Load(IMG_PATH "bonus1.png");
 
     img_none = SDL_CreateRGBSurface(0, 1, 1, 32, 0, 0, 0, 0);
 
@@ -122,7 +124,10 @@ void init_img() {
                                   img_icon,
 
                                   img_chapter1,
-                                  img_chapter2
+                                  img_chapter2,
+                                  img_chapter3,
+
+                                  img_bonus1
                           });
 
     // put into image map
@@ -185,6 +190,7 @@ void free_img() {
     SDL_FreeSurface(img_chapter1);
     SDL_FreeSurface(img_chapter2);
     SDL_FreeSurface(img_chapter3);
+    SDL_FreeSurface(img_bonus1);
 }
 
 void init_font() {

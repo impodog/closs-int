@@ -206,9 +206,10 @@ void reload_pages() {
     free_variable_pages();
     page_manual = new Text_Page{img_manual, txt_manual, false};
     level_pic_map = {
-            {20, new Text_Page{img_chapter1, txt_in_game.at(IN_GAME_K_CHAPTER1), false}},
-            {40, new Text_Page{img_chapter2, txt_in_game.at(IN_GAME_K_CHAPTER2), false}},
-            {60, new Text_Page{img_chapter3, txt_in_game.at(IN_GAME_K_CHAPTER2), false}}
+            {20,  new Text_Page{img_chapter1, txt_in_game.at(IN_GAME_K_CHAPTER1), false}},
+            {40,  new Text_Page{img_chapter2, txt_in_game.at(IN_GAME_K_CHAPTER2), false}},
+            {60,  new Text_Page{img_chapter3, txt_in_game.at(IN_GAME_K_CHAPTER3), false}},
+            {-10, new Text_Page{img_bonus1, txt_in_game.at(IN_GAME_K_BONUS1), false}}
     };
 }
 
@@ -225,7 +226,7 @@ void init_key_map(direction_t code) {
     key_down_map[code] = key_clicking_map[code] = false;
 }
 
-void init_key_map(const initializer_list <direction_t> &codes) {
+void init_key_map(const initializer_list<direction_t> &codes) {
     for (auto code: codes)
         init_key_map(code);
 }
@@ -245,7 +246,7 @@ bool key_d(direction_t code) {
     return key_down_map[code];
 }
 
-bool key_d(initializer_list <direction_t> codes) {
+bool key_d(initializer_list<direction_t> codes) {
     return any_of(codes.begin(), codes.end(), [](direction_t code) { return key_d(code); });
 }
 
@@ -258,7 +259,7 @@ bool key_c(direction_t code) {
     return key_click_map.at(code);
 }
 
-bool key_c(initializer_list <direction_t> codes) {
+bool key_c(initializer_list<direction_t> codes) {
     return any_of(codes.begin(), codes.end(), [](direction_t code) { return key_c(code); });
 }
 
@@ -280,9 +281,11 @@ void free_display() {
 }
 
 void start_game() {
-    auto room = open_room(get_room_path());
-    display->change_room(room);
-    display->m_page = nullptr;
+    try {
+        auto room = open_room(get_room_path());
+        display->change_room(room);
+        display->m_page = nullptr;
+    } catch (const std::runtime_error &) {}
 }
 
 void refresh_user_game() {
@@ -404,6 +407,8 @@ void Display::apply_settings() {
     m_sensitivity = min(USER_SENSITIVITY * framerate_ratio, 1.0l);
     m_delay = 1000 / USER_FRAMERATE;
     animation_speed = USER_ANIMATION_SPEED / MAX_ANIMATION;
+    m_debugger = current_user.at(USER_K_DEBUGGER) == DEBUGGER_CODE;
+    if (m_debugger) debug_unlock_levels();
     text_renderer = text_renderer_map.at(current_user.at(USER_K_TEXT_RENDERER));
     reload_pages();
 }
@@ -439,7 +444,7 @@ void Display::process_room_winning() {
     } else if (m_room->m_is_winning && (confirm || key_c(KEY_SAVE_AND_REPLAY))) {
         try {
             chapter_end = level_pic_map.at(current_user[USER_K_ROOM]);
-        } catch (const out_of_range &) {}
+        } catch (const out_of_range &err) {}
         if (m_room->can_get_perf_play())
             current_user[USER_K_PERF].push_back(current_user.at(USER_K_ROOM));
         if (m_room->can_get_gem_play()) {
@@ -457,13 +462,13 @@ void Display::process_room_winning() {
             current_user[USER_K_ROOM] = (string) m_room->m_next;
         }
         refresh_user_game();
-        if (chapter_end != nullptr && !m_room->m_is_second_play)
+        if (chapter_end != nullptr)
             m_page = chapter_end;
     } else if (key_c(KEY_NEXT))
         to_shift = USER_ROOM + 1;
     else if (key_c(KEY_BACK))
         to_shift = USER_ROOM - 1;
-    if (can_shift_to_level(to_shift)) {
+    if (can_shift_to_level(to_shift) || (m_debugger && to_shift != 0)) {
         current_user[USER_K_ROOM] = to_shift;
         refresh_user_game();
     }
@@ -474,7 +479,18 @@ void Display::process_room() {
     if (key_d(KEY_SHIFT_LEFT)) m_room_pos.w -= m_sensitivity;
     if (key_d(KEY_SHIFT_DOWN)) m_room_pos.h += m_sensitivity;
     if (key_d(KEY_SHIFT_RIGHT)) m_room_pos.w += m_sensitivity;
-    if (key_c(KEY_RESTART)) start_game();
+    if (key_c(KEY_RESTART)) refresh_user_game();
+    if (m_debugger) {
+        if (key_c(KEY_DEBUG_PERFECT)) {
+            auto old_steps = m_room->m_steps;
+            m_room->m_steps = m_room->m_perf;
+            if (m_room->can_get_perf_play()) {
+                current_user[USER_K_PERF].push_back(USER_ROOM);
+                refresh_user_game();
+            }
+            m_room->m_steps = old_steps;
+        }
+    }
 
     move_room_to_visible();
 
@@ -590,7 +606,7 @@ void Display::show_room_info() const {
             } else steps_color = GREEN;
         } else {
             long double steps_percent = m_room->m_steps / (long double) m_room->m_perf, rev_percent = 1 - steps_percent;
-            steps_color = {(Uint8)(200 * steps_percent), (Uint8)(200 * rev_percent), (Uint8)(200 * rev_percent)};
+            steps_color = {(Uint8) (200 * steps_percent), (Uint8) (200 * rev_percent), (Uint8) (200 * rev_percent)};
         }
         steps_text += "/" + to_string(m_room->m_perf);
     }

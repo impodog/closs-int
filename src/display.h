@@ -133,7 +133,7 @@ extern level_pic_map_t level_pic_map;
 
 class Display {
 public:
-    bool m_loop = true;
+    bool m_loop = true, m_debugger;
     int m_sensitivity;
     Uint32 m_delay;
     long double stretch_ratio, animation_speed, framerate_ratio;

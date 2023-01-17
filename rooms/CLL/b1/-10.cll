@@ -1,0 +1,28 @@
+!process-only
+!add ../C_InT.cll
+next 1
+
+title {
+    en="Asterisk" 
+    zh_cn="星"
+}
+
+help {
+    en={
+        "Stars"="The Box Stars shall reunite at this very point"
+    } 
+    zh_cn={
+        "星"="箱子星将在这特别的时刻重聚"
+    }
+}
+
+content 4d[
+    wa wa wa wa -- -- -- wa
+    -- 1x bx 1x bx 1x -- wa
+    -- bx cy bx 1x -- 1x wa
+    -- 1x bx -- bx 1x bx wa
+    wa bx 1x bx -- bx 1x --
+    wa 1x -- 1x bx -- bx --
+    wa -- 1x bx 1x bx 1x --
+    wa -- -- -- wa wa wa wa
+]

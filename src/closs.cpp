@@ -326,7 +326,6 @@ bool Room::can_parse_movements() const {
     return m_is_moving && m_animating.empty();
 }
 
-
 public_code_t get_public_code() {
     return public_code++;
 }

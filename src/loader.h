@@ -58,6 +58,8 @@ void shift_bonus_levels(bool down);
 
 void shift_animation(bool down);
 
+void debug_unlock_levels();
+
 bool can_shift_to_level(int level);
 
 bool is_second_play();

@@ -10,5 +10,6 @@
   "levels": 1,
   "bonus": [],
   "text_renderer": 0,
-  "bonus_levels": 0
+  "bonus_levels": 0,
+  "debugger": 0
 }
