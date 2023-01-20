@@ -181,10 +181,8 @@ void Room::parse_series() {
         m_pending_series.erase(tile);
     for (auto pair: m_pending_move)
         if (pair.first->get_type() == tile_cyan) m_can_move_flag = true;
-    if (++m_parsing_index == type_parsing_seq.size()) {
+    if (++m_parsing_index == type_parsing_seq.size())
         m_parsing_index = 0;
-        m_pending_series.clear();
-    }
 }
 
 void Room::do_pending_moves() {

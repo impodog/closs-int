@@ -1,0 +1,28 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 +255
+!gem-def G2 -255
+
+title {
+    en="Turning Tray"
+    zh_cn="转向托盘"
+}
+
+help {
+    en={
+        "Push"="Just push it in the way you can"
+    }
+    zh_cn={
+        "推"="以可以的方向推它"
+    }
+}
+
+perf 10
+
+content 4d[
+    wa wa -- wa wa
+    cy -- 2u 2r --
+    wa wa wa G2 wa
+    wa wa wa bx wa
+    wa wa 1x G1 wa
+]

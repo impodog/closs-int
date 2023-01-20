@@ -1,0 +1,28 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -1
+!gem-def G2 -1
+
+title {
+    en="Unfair Motion"
+    zh_cn="不公平移动"
+}
+
+help {
+    en={
+        "Conveyor's Rule"="Only the first conveyor on touch conveys you"
+    }
+    zh_cn={
+        "传送带的规则"="只有接触的第一个传送带会传输你"
+    }
+}
+
+perf 54
+
+content 4d[
+    wa wa -- wa 1x wa wa
+    cy -- -- -- 2r -- wa
+    bx wa 2d wa G2 wa wa
+    bx wa 2d -- 2u G1 wa
+    -- 2l -- -- -- -- --
+]

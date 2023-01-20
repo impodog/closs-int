@@ -215,10 +215,14 @@ void reload_pages() {
 
 
 void init_key_map() {
-    init_key_map({0, 8, 9, 13, 27});
+    init_key_map({0, 8, 9, 13, 27, 127, 1073741957, 1073741958});
     init_key_map(32, 64);
-    init_key_map(91, 127);
-    init_key_map(1073741881, 1073742106);
+    init_key_map(91, 122);
+    init_key_map(1073741901, 1073741923);
+    init_key_map(1073741925, 1073741953);
+    init_key_map(1073741977, 1073741988);
+    init_key_map(1073742000, 1073742045);
+    init_key_map(1073742048, 1073742055);
     key_click_map = key_down_map_t(key_down_map);
 }
 

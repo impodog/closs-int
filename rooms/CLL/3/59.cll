@@ -21,9 +21,9 @@ perf 59
 
 content 4d[
     wa wa wa 1x wa wa wa
-    wa cy -- -- bl G2 cy
+    wa cy -- -- bl cy wa
     -- -- -- -- wa bx wa
-    wa -- wa G1 wa -- wa
+    wa -- wa G1 wa G2 wa
     wa -- -- -- -- 1b --
     wa -- wa wa wa wa wa
 

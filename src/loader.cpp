@@ -77,7 +77,7 @@ RoomType create_room(const json &room_json) {
     room->m_title = room_json.at(ROOM_K_TITLE);
     room->m_help_map = room_json.at(ROOM_K_HELP);
     int next = room_json.at(ROOM_K_NEXT);
-    room->m_next = next == -1 ? (int) current_user.at(USER_K_ROOM) + 1 : next;
+    room->m_next = next == -1 ? sym(USER_ROOM) * (abs(USER_ROOM) + 1): next;
     room->m_perf = (size_t) room_json.at(ROOM_K_PERF);
     room->m_unlock_bonus = room_json.at(ROOM_K_UNLOCK_BONUS);
     room->m_is_second_play = is_second_play();

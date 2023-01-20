@@ -1,0 +1,26 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 +255
+!gem-def G2 -255
+
+title {
+    en="Long Term Support"
+    zh_cn="长期支持"
+}
+
+help {
+    en={
+        "Supporting"="Boxes support you from being conveyed"
+    }
+    zh_cn={
+        "支持"="箱子支持你不被传送"
+    }
+}
+
+perf 19
+
+content 4d[
+    wa wa wa wa wa wa wa
+    cy -- 2r G2 -- bx 2d
+    2u bl -- -- 2l 1b G1
+]
