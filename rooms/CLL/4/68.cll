@@ -1,0 +1,30 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -1
+!gem-def G2 -1
+!gem-def G3 -0
+!gem-def G4 -0
+
+title {
+    en="Free Jump"
+    zh_cn="自由跳"
+}
+
+help {
+    en={
+        "Edges"="Edges with conveyors can be tricky, but move the box to the left"
+    }
+    zh_cn={
+        "边缘"="边缘的传送带可能比较巧妙, 但是要把箱子移到左侧"
+    }
+}
+
+perf 26
+
+content 4d[
+    wa wa wa wa 2d 2u wa
+    wa wa 1x sp -- -- wa
+    wa G1 G2 2u wa -- --
+    wa G3 G4 2d -- -- --
+    wa cy bl bl -- bx wa
+]

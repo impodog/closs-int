@@ -1,0 +1,28 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -1
+!gem-def G2 +0
+
+title {
+    en="Updive"
+    zh_cn="上潜"
+}
+
+help {
+    en={
+        "Review"="Multi-Cyan allows you to push boxs away"
+    }
+    zh_cn={
+        "复习"="多玩家允许你把箱子移开"
+    }
+}
+
+perf 23
+
+content 4d[
+    wa -- wa wa wa -- wa
+    -- -- bx cy bl -- --
+    wa 2u wa wa wa 2u wa
+    wa 2u G1 cy G2 2u wa
+    wa 1b wa wa wa 1x wa
+]

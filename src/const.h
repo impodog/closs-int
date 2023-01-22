@@ -46,7 +46,7 @@ void get_scr_info(Screen_Info &info);
 #endif
 
 
-#define VERSION "v0.7.3"
+#define VERSION "v0.7.4"
 
 #define TITLE "Closs : Inside the Tapes " VERSION
 #define SCR_WIDTH 2000
@@ -95,7 +95,7 @@ void get_scr_info(Screen_Info &info);
 #define MAX_LEVEL_NUMBER 2
 #define MIN_LEVEL_NUMBER 1
 
-#define DEBUGGER_CODE -1189850482
+#define DEBUGGER_CODE (-1189850482)
 
 
 #define PATH_BEGIN "../"

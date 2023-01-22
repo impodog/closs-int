@@ -1,28 +1,26 @@
 !process-only
 !add ../C_InT.cll
-!gem-def G1 -1
-!gem-def G2 -1
+!gem-def G1 +255
+!gem-def G2 -255
 
 title {
-    en="Unfair Motion"
-    zh_cn="不公平移动"
+    en="Long Term Support"
+    zh_cn="长期支持"
 }
 
 help {
     en={
-        "Conveyor's Rule"="Only the first conveyor on touch conveys you"
+        "Supporting"="Use flexible supporting"
     }
     zh_cn={
-        "传送带的规则"="只有接触的第一个传送带会传输你"
+        "支持"="使用可变的支持"
     }
 }
 
-perf 54
+perf 19
 
 content 4d[
-    wa wa -- wa 1x wa wa
-    cy -- -- -- 2r -- wa
-    bx wa 2d wa G2 wa wa
-    bx wa 2d -- 2u G1 wa
-    -- 2l -- -- -- -- --
+    wa wa wa wa wa wa wa
+    cy -- 2r G2 -- bx 2d
+    2u bl -- -- 2l 1b G1
 ]

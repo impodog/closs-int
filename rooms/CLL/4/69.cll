@@ -1,0 +1,30 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -1
+!gem-def G2 -1
+!gem-def G3 -1
+!gem-def G4 -2
+
+title {
+    en="Such Empty!"
+    zh_cn="空!"
+}
+
+help {
+    en={
+        "Don't get trapped"="Break the restrictions"
+    }
+    zh_cn={
+        "别被困住"="打破规律"
+    }
+}
+
+perf 17
+
+content 4d[
+    2r G1 -- G2 2l
+    -- wa bx wa --
+    1x cy -- cy 1x
+    -- wa bx wa --
+    2r G3 -- G4 2l
+]
