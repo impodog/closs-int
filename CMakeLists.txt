@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.24)
 project(Closs_InT)
 
 set(CMAKE_CXX_STANDARD 14)
-
+set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic")
 # SDL path config
 set(SDL2_PATH C:/Include/SDL2-mingw/SDL2-2.26.2/x86_64-w64-mingw32)
 set(SDL2_INCLUDE ${SDL2_PATH}/include/SDL2)

@@ -13,3 +13,5 @@ tools/venv
 rooms/run_conv.py
 
 rooms/.vscode
+
+release

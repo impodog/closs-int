@@ -12,6 +12,8 @@ void get_scr_info(Screen_Info &info) {
     info.h = GetSystemMetrics(SM_CYSCREEN);
 }
 
+#pragma comment( linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"" )
+
 #elif defined __linux__
 
 void get_scr_info(Screen_Info &info){
