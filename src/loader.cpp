@@ -230,7 +230,7 @@ bool is_gem_play() {
 
 string get_room_path() {
     auto room = current_user.at(USER_K_ROOM);
-    return room.is_number() ? (CLOSS_ROOMS_PATH + to_string(current_user.at(USER_K_ROOM)) + ".json") : (ROOMS_PATH +
+    return room.is_number() ? (CLOSS_DIRECTORY_PATH + to_string(current_user.at(USER_K_ROOM)) + ".json") : (ROOMS_PATH +
                                                                                                         (string) room);
 }
 
