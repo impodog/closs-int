@@ -46,7 +46,7 @@ void get_scr_info(Screen_Info &info);
 #endif
 
 
-#define VERSION "v0.7.5"
+#define VERSION "v0.7.6"
 
 #define TITLE "Closs : Inside the Tapes " VERSION
 #define SCR_WIDTH 2000
@@ -101,7 +101,8 @@ void get_scr_info(Screen_Info &info);
 #define PATH_BEGIN "../"
 
 #define ROOMS_PATH PATH_BEGIN "rooms/"
-#define CLOSS_ROOMS_PATH ROOMS_PATH "Closs/"
+#define CLOSS_DIRECTORY_PATH "Closs/"
+#define CLOSS_ROOMS_PATH ROOMS_PATH CLOSS_DIRECTORY_PATH
 #define SETTINGS_PATH ROOMS_PATH "settings.json"
 #define LOBBY_PATH ROOMS_PATH "lobby.json"
 #define IN_GAME_PATH ROOMS_PATH "in_game.json"
