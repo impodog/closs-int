@@ -98,7 +98,7 @@ void get_scr_info(Screen_Info &info);
 #define DEBUGGER_CODE (-1189850482)
 
 
-#define PATH_BEGIN "../"
+#define PATH_BEGIN "./"
 
 #define ROOMS_PATH PATH_BEGIN "rooms/"
 #define CLOSS_DIRECTORY_PATH "Closs/"

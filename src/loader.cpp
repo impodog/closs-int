@@ -46,7 +46,7 @@ RoomType open_room(const string &room_path) {
     string rel_path = ROOMS_PATH + room_path;
     ifstream room_file(rel_path, ios::in);
     if (!room_file.is_open())
-        throw runtime_error("cannot open " + rel_path);
+        throw closs_room_error("cannot open " + rel_path);
     json room_json;
     room_file >> room_json;
     return json_to_room(room_json);
