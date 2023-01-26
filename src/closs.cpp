@@ -37,6 +37,10 @@ bool Tile::operator==(const Tile &tile) const {
     return m_pubCode == tile.m_pubCode;
 }
 
+string Tile::get_info() const {
+    return type_names.at(get_type()) + ":" + to_string(public_code);
+}
+
 bool Tile::is_independent() const { return false; }
 
 tile_types Tile::get_type() const { return tile_undefined; }
@@ -56,7 +60,7 @@ void Tile::add_to_parser(pending_series_t &pending_series) {}
 
 void Tile::begin_request(direction_t dir) {}
 
-void Tile::react_to_movement_result(direction_t dir) {}
+void Tile::react_to_movement_result(bool result) {}
 
 bool Tile::suppress_request(const Movement_Request &req) { return false; }
 
@@ -133,26 +137,26 @@ Dest_Info Room::get_dest_info(TileType tile, direction_t dir) const {
     return {dest, info};
 }
 
-bool Room::send_req_from(TileType tile, direction_t dir, uint8_t times) {
-    switch (times) {
-        case 0:
-            return true;
-        case 1:
-            tile->begin_request(dir);
-            break;
-        default:
-            break;
-    }
-    bool result = true;
+bool Room::send_req_from(TileType tile, direction_t dir, list<TileType> *infinite_prevention) {
+    bool is_first = false, result = true;
+    if (infinite_prevention == nullptr) {
+        infinite_prevention = new list<TileType>;
+        tile->begin_request(dir);
+        is_first = true;
+    } else if (find(infinite_prevention->begin(), infinite_prevention->end(), tile) == infinite_prevention->end())
+        infinite_prevention->push_back(tile);
+    else return false;
     auto space = at(get_dest(tile, dir));
     Movement_Request req = {tile, dir};
     for (auto dest_tile: *space) {
         direction_t dest_dir = dest_tile->acq_req(req);
-        if (dest_dir > 0) result &= send_req_from(dest_tile, dest_dir, times + 1);
+        if (dest_dir > 0) result &= send_req_from(dest_tile, dest_dir, infinite_prevention);
         else if (result && dest_dir < 0) result = false;
-        tile->react_to_movement_result(dest_dir);
     }
+    for (auto dest_tile: *space)
+        tile->react_to_movement_result(result);
     if (result) pending_move(tile, dir);
+    if (is_first) delete infinite_prevention;
     return result;
 }
 
@@ -584,8 +588,8 @@ void Robot::end_of_step() {
     m_is_moved = false;
 }
 
-void Robot::react_to_movement_result(direction_t dir) {
-    if (dir < 0) change_dir(invert(m_dir));
+void Robot::react_to_movement_result(bool result) {
+    if (!result) change_dir(invert(m_dir));
 }
 
 bool Robot::suppress_request(const Movement_Request &req) {

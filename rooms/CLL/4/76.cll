@@ -1,0 +1,26 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -3
+!gem-def G2 -4
+
+title {
+    en="Raid!"
+    zh_cn="突袭!"
+}
+
+help {
+    en={
+        "Control"="Don't just push to the left, push up as well"
+    }
+    zh_cn={
+        "控制"="不要只向左推, 也要向上推"
+    }
+}
+
+perf 17
+
+content 4d[
+    3r 1x G1 -- -- -- bx -- wa
+    3r 1x G2 -- -- -- bx cy wa
+    wa wa wa wa wa wa wa wa wa
+]

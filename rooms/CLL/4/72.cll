@@ -1,0 +1,27 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -3
+!gem-def G2 -3
+
+title {
+    en="Penrose Loop"
+    zh_cn="彭罗斯循环"
+}
+
+help {
+    en={
+        "Robots and Conveyors"="Conveyors can change the robots' directions"
+    }
+    zh_cn={
+        "机器人和传送带"="传送带可以改变机器人的方向"
+    }
+}
+
+perf 9
+
+content 4d[
+    2d bx 1x -- -- 2l
+    3d wa wa wa wa --
+    G1 wa cy wa wa G2
+    2r -- -- 1x bx 2u
+]

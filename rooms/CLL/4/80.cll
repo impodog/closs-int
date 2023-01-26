@@ -1,0 +1,26 @@
+!process-only
+!add ../C_InT.cll
+
+title {
+    en="Unreal Bridge"
+    zh_cn="虚幻桥"
+}
+
+help {
+    en={
+        "Cyan and robot"="They make good ways to get boxes out"
+    }
+    zh_cn={
+        "青色方块和机器人"="它们有把箱子取出的好方法"
+    }
+}
+
+perf 60
+
+content 4d[
+    wa -- wa -- wa wa cy
+    2l -- bx -- bx -- --
+    wa 2d -- -- 3l -- wa
+    wa -- -- bx sp 2u 1x
+    wa wa -- wa -- -- wa
+]

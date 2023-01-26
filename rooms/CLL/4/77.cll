@@ -1,0 +1,25 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -1
+
+title {
+    en="Flyout, Layout"
+    zh_cn="飞出, 布局"
+}
+
+help {
+    en={
+        "Go up"="Move the boxes up would help"
+    }
+    zh_cn={
+        "向上走"="把箱子向上推会有用的"
+    }
+}
+
+perf 29
+
+content 4d[
+    -- -- -- G1 -- -- --
+    1b 2r bx cy bl 2l 1x
+    -- wa wa 3u wa wa --
+]

@@ -56,6 +56,8 @@ public:
 
     bool operator==(const Tile &tile) const;
 
+    string get_info() const;
+
     virtual bool is_independent() const;
 
     virtual tile_types get_type() const;
@@ -74,7 +76,7 @@ public:
 
     virtual void begin_request(direction_t dir);
 
-    virtual void react_to_movement_result(direction_t dir);
+    virtual void react_to_movement_result(bool result);
 
     virtual bool suppress_request(const Movement_Request &req);
 };
@@ -146,7 +148,8 @@ public:
 
     Dest_Info get_dest_info(TileType tile, direction_t dir) const;
 
-    bool send_req_from(TileType tile, direction_t dir, uint8_t times = 1);
+    bool
+    send_req_from(TileType tile, direction_t dir, list<TileType> *infinite_prevention = nullptr);
 
     void pending_move(TileType tile, direction_t dir);
 
@@ -331,7 +334,7 @@ public:
 
     void end_of_step() override;
 
-    void react_to_movement_result(direction_t dir) override;
+    void react_to_movement_result(bool result) override;
 
     bool suppress_request(const Movement_Request &req) override;
 };

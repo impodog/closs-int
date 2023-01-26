@@ -1,0 +1,28 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -1
+
+title {
+    en="Long Journey 4"
+    zh_cn="漫长旅行 4"
+}
+
+help {
+    en={
+        "Press-Change"="Press to the wall and change the direction!"
+    } 
+    zh_cn={
+        "压-变"="向墙壁施压并改变方向!"
+        "(中注)"="Robot终点要求机器人"
+    }
+}
+
+perf 30
+
+content 4d[
+    wa wa wa wa 3r -- -- -- --
+    wa 1r -- G1 2u wa 2u wa --
+    wa -- -- 2u -- -- -- wa --
+    wa -- wa -- wa -- cy -- --
+    wa -- -- 2l wa 2u wa wa wa
+]

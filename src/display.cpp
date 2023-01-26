@@ -206,10 +206,11 @@ void reload_pages() {
     free_variable_pages();
     page_manual = new Text_Page{img_manual, txt_manual, false};
     level_pic_map = {
-            {20,  new Text_Page{img_chapter1, txt_in_game.at(IN_GAME_K_CHAPTER1), false}},
-            {40,  new Text_Page{img_chapter2, txt_in_game.at(IN_GAME_K_CHAPTER2), false}},
-            {60,  new Text_Page{img_chapter3, txt_in_game.at(IN_GAME_K_CHAPTER3), false}},
-            {-10, new Text_Page{img_bonus1, txt_in_game.at(IN_GAME_K_BONUS1), false}}
+            {20, new Text_Page{img_chapter1, txt_in_game.at(IN_GAME_K_CHAPTER1), false}},
+            {40, new Text_Page{img_chapter2, txt_in_game.at(IN_GAME_K_CHAPTER2), false}},
+            {60, new Text_Page{img_chapter3, txt_in_game.at(IN_GAME_K_CHAPTER3), false}},
+            {80, new Text_Page{img_chapter4, txt_in_game.at(IN_GAME_K_CHAPTER4), false}},
+            { -10, new Text_Page{img_bonus1, txt_in_game.at(IN_GAME_K_BONUS1), false}}
     };
 }
 

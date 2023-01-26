@@ -43,6 +43,14 @@
       "章节 3 完成!": "你完成了关卡 41~60!"
     }
   },
+  "chapter4": {
+    "en": {
+      "Chapter 4 Clear!": "You cleared level 61~80!"
+    },
+    "zh_cn": {
+      "章节 4 完成!": "你完成了关卡 61~80!"
+    }
+  },
   "bonus1": {
     "en": {
       "Bonus Level Set 1 Clear!": "Really confusing, huh?"

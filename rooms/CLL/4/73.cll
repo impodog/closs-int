@@ -1,0 +1,29 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -7
+!gem-def G2 -1
+
+title {
+    en="Auto Sorter"
+    zh_cn="自动整理器"
+}
+
+help {
+    en={
+        "Turning"="When robots is stopped, they turn around and begin walking in the next turn"
+        "Push"="When robots is pushed, they change their direction to the way pushed"
+    }
+    zh_cn={
+        "转身"="当机器人被停住时, 它们转身并在下一轮继续移动"
+        "推动"="当机器人被推动时, 它们改变方向到被推的方向"
+    }
+}
+
+perf 28
+
+content 4d[
+    -- G2 3r -- -- wa
+    wa -- wa 1x -- --
+    wa bx -- -- -- wa
+    wa cy G1 wa -- wa
+]

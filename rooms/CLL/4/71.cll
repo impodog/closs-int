@@ -1,0 +1,26 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -1
+
+title {
+    en="Little Helper"
+    zh_cn="小帮手"
+}
+
+help {
+    en={
+        "Robots"="Robots can go a step each movement"
+    }
+    zh_cn={
+        "机器人"="机器人在每次移动时可以走一步"
+    }
+}
+
+perf 8
+
+content 4d[
+    G1 -- 1x 3r --
+    wa wa wa wa --
+    wa cy -- -- bx
+    wa wa wa -- --
+]

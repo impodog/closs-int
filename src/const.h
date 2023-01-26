@@ -6,15 +6,16 @@
 #define CLOSS_INT_CONST_H
 
 #include <utility>
-#include "iostream"
-#include "vector"
-#include "map"
-#include "unordered_map"
-#include "cmath"
-#include "chrono"
-#include "ctime"
+#include <iostream>
+#include <vector>
+#include <list>
+#include <map>
+#include <unordered_map>
+#include <cmath>
+#include <chrono>
+#include <ctime>
+#include <fstream>
 #include "json.hpp"
-#include "fstream"
 #include "SDL.h"
 #include "SDL_image.h"
 #include "SDL_ttf.h"
@@ -46,7 +47,7 @@ void get_scr_info(Screen_Info &info);
 #endif
 
 
-#define VERSION "v0.7.6"
+#define VERSION "v0.8.0"
 
 #define TITLE "Closs : Inside the Tapes " VERSION
 #define SCR_WIDTH 2000
@@ -167,6 +168,7 @@ void get_scr_info(Screen_Info &info);
 #define IN_GAME_K_CHAPTER1 "chapter1"
 #define IN_GAME_K_CHAPTER2 "chapter2"
 #define IN_GAME_K_CHAPTER3 "chapter3"
+#define IN_GAME_K_CHAPTER4 "chapter4"
 #define IN_GAME_K_BONUS1 "bonus1"
 
 #define KEY_SHIFT_UP SDLK_w
