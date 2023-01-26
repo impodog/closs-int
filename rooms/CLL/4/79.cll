@@ -1,6 +1,6 @@
 !process-only
 !add ../C_InT.cll
-!gem-def G1 -1
+!gem-def G1 -3
 
 title {
     en="Long Journey 4"
@@ -17,7 +17,7 @@ help {
     }
 }
 
-perf 30
+perf 26
 
 content 4d[
     wa wa wa wa 3r -- -- -- --

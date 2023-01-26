@@ -148,8 +148,7 @@ public:
 
     Dest_Info get_dest_info(TileType tile, direction_t dir) const;
 
-    bool
-    send_req_from(TileType tile, direction_t dir, list<TileType> *infinite_prevention = nullptr);
+    bool send_req_from(TileType tile, direction_t dir, list<TileType> *infinite_prevention = nullptr);
 
     void pending_move(TileType tile, direction_t dir);
 

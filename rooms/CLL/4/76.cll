@@ -1,7 +1,10 @@
 !process-only
 !add ../C_InT.cll
-!gem-def G1 -3
-!gem-def G2 -4
+!gem-def G1 -127
+!gem-def G2 -128
+!gem-def G3 +255
+!gem-def G4 -255
+!gem-def G5 +255
 
 title {
     en="Raid!"
@@ -17,10 +20,10 @@ help {
     }
 }
 
-perf 17
+perf 18
 
 content 4d[
-    3r 1x G1 -- -- -- bx -- wa
-    3r 1x G2 -- -- -- bx cy wa
+    3r 1x G2 G3 G4 -- bx -- wa
+    3r 1x G1 -- G5 -- bx cy wa
     wa wa wa wa wa wa wa wa wa
 ]

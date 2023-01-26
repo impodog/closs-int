@@ -230,7 +230,7 @@ void Room::move_independents(key_predicate_t predicate) {
 }
 
 void Room::detect_gems() {
-    if (!IS_WINNING_GEM) {
+    if (ROOM_CONTAINS_GEMS) {
         Space pending_collection;
         for (auto gem_tile: m_gems) {
             auto space = at(gem_tile->m_pos);
@@ -431,18 +431,18 @@ TileType construct_robot(TilePos pos, SDL_Surface *img, int dir) {
 }
 
 tile_types_map_t tile_type_map = {
-        {tile_undefined,   construct_undefined},
-        {tile_cyan,        construct_cyan},
-        {tile_box,         construct_box},
-        {tile_wall,        construct_wall},
+        {tile_undefined, construct_undefined},
+        {tile_cyan, construct_cyan},
+        {tile_box, construct_box},
+        {tile_wall, construct_wall},
         {tile_destination, construct_dest},
-        {tile_gem,         construct_gem},
-        {tile_picture,     construct_picture},
-        {tile_go_to,       construct_go_to},
-        {tile_blue,        construct_blue},
-        {tile_spike,       construct_spike},
-        {tile_conveyor,    construct_conveyor},
-        {tile_robot,       construct_robot}
+        {tile_gem, construct_gem},
+        {tile_picture, construct_picture},
+        {tile_go_to, construct_go_to},
+        {tile_blue, construct_blue},
+        {tile_spike, construct_spike},
+        {tile_conveyor, construct_conveyor},
+        {tile_robot, construct_robot}
 };
 
 Cyan::Cyan(TilePos pos, SDL_Surface *img) : Tile(pos, img) {}
@@ -580,8 +580,8 @@ void Robot::begin_request(direction_t dir) {
 
 void Robot::change_dir(direction_t dir) {
     m_dir = dir;
-    m_img = direction_img_robot.at(m_dir);
     m_is_moved = true;
+    m_img = direction_img_robot.at(dir);
 }
 
 void Robot::end_of_step() {
@@ -589,7 +589,10 @@ void Robot::end_of_step() {
 }
 
 void Robot::react_to_movement_result(bool result) {
-    if (!result) change_dir(invert(m_dir));
+    if (!result) {
+        change_dir(invert(m_dir));
+        m_is_moved = false;
+    }
 }
 
 bool Robot::suppress_request(const Movement_Request &req) {
