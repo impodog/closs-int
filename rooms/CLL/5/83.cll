@@ -1,0 +1,26 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G0 +0
+
+title {
+    en="Uphill Cardio"
+    zh_cn="有氧上山"
+}
+
+help {
+    en={
+        "EdLs Matters"="Avoid Endless"
+    }
+    zh_cn={
+        "无尽有影响"="避免无尽"
+    }
+}
+
+perf 43
+
+content 4d[
+    1x wa bx bx 1x
+    1x wa G0 G0 1x
+    1x G0 G0 bx wa
+    cy G0 bx bx wa
+]

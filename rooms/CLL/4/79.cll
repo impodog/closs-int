@@ -1,6 +1,7 @@
 !process-only
 !add ../C_InT.cll
 !gem-def G1 -3
+!goto-def -4
 
 title {
     en="Long Journey 4"
@@ -24,5 +25,5 @@ content 4d[
     wa 1r -- G1 2u wa 2u wa --
     wa -- -- 2u -- -- -- wa --
     wa -- wa -- wa -- cy -- --
-    wa -- -- 2l wa 2u wa wa wa
+    wa -- -- 2l GT 2u wa wa wa
 ]

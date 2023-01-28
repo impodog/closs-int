@@ -1,0 +1,25 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G0 +0
+
+title {
+    en="Ending"
+    zh_cn="结尾"
+}
+
+help {
+    en={
+        "Time to put an end!"="Get ready for the final chapter"
+    }
+    zh_cn={
+        "是时候终止了!"="转备好迎接最终章"
+    }
+}
+
+perf 7
+
+content 4d[
+    cy G0 wa wa G0
+    bx G0 1x 1c bx
+    wa wa wa wa 1x
+]

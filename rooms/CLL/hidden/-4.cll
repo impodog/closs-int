@@ -1,0 +1,17 @@
+!process-only
+!add ../C_InT.cll
+!gem-def GM -100
+
+!unlock-b 4
+
+next 9
+
+perf 8
+
+content 4d[
+    -- GM sp sp GM sp sp sp sp
+    -- GM sp 3d 3d 3d 3d 3d 3d
+    cy wa 1c 2d 2d 2d 2d 2d 2d
+    -- GM sp 2u 2u 2u 2u 2u 2u
+    -- GM sp 3u 3u 3u 3u 3u 3u
+]
