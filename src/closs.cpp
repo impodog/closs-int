@@ -252,16 +252,14 @@ void Room::animate_tiles(long double animation_speed) {
     for (auto pair: m_animating) {
         bool end_cur_animation_flag = false;
         if (pair.second.is_edge) {
-            if ((fabs(pair.first->m_shift.w) > m_size.w || fabs(pair.first->m_shift.h) > m_size.h) &&
+            if ((fabs(pair.first->m_shift.w) > m_size.w * 2 || fabs(pair.first->m_shift.h) > m_size.h * 2) &&
                 !pair.first->can_end_animation) {
                 pair.first->m_shift.w = -pair.first->m_shift.w + pair.first->m_shift_sym.w;
                 pair.first->m_shift.h = -pair.first->m_shift.h + pair.first->m_shift_sym.h;
                 pair.first->can_end_animation = true;
             } else {
-                pair.first->m_shift.w =
-                        pair.first->m_shift.w + pair.first->m_shift_sym.w * animation_speed;
-                pair.first->m_shift.h =
-                        pair.first->m_shift.h + pair.first->m_shift_sym.h * animation_speed;
+                pair.first->m_shift.w += pair.first->m_shift_sym.w * animation_speed;
+                pair.first->m_shift.h += pair.first->m_shift_sym.h * animation_speed;
                 if (pair.first->can_end_animation) {
                     if (pair.first->m_shift_sym.w * pair.first->m_shift.w > 0) pair.first->m_shift.w = INFINITY;
                     if (pair.first->m_shift_sym.h * pair.first->m_shift.h > 0) pair.first->m_shift.h = INFINITY;
