@@ -8,6 +8,7 @@ elseif (CMAKE_SYSTEM_NAME MATCHES "Linux")
     set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++")
     message(STATUS "Linux is NOT well-tested")
 endif ()
+
 # SDL path config
 set(SDL2_PATH C:/Include/SDL2-mingw/SDL2-2.26.2/x86_64-w64-mingw32)
 set(SDL2_INCLUDE ${SDL2_PATH}/include/SDL2)
@@ -21,6 +22,7 @@ set(SDL2_TTF_PATH C:/Include/SDL2-mingw/SDL2_ttf-2.20.1/x86_64-w64-mingw32)
 set(SDL2_TTF_INCLUDE ${SDL2_TTF_PATH}/include/SDL2)
 set(SDL2_TTF_LIB ${SDL2_TTF_PATH}/lib)
 
+# json path config
 set(nlohmann_INCLUDE C:/Include/nlohmann)
 
 include_directories(
