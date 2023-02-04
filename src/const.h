@@ -47,7 +47,7 @@ void get_scr_info(Screen_Info &info);
 #endif
 
 
-#define VERSION "v0.8.4"
+#define VERSION "v0.8.5"
 
 #define TITLE "Closs : Inside the Tapes " VERSION
 #define SCR_WIDTH 2000

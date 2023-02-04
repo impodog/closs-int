@@ -4,6 +4,17 @@
 
 #include "closs.h"
 
+#define ROOM_UP (room_pos.w+m_display_size.w)
+#define ROOM_LEFT (room_pos.h+m_display_size.h)
+#define ROOM_DOWN (SCR_HEIGHT-room_pos.h)
+#define ROOM_RIGHT (SCR_WIDTH-room_pos.w)
+#define ROOM_DOWN_GAP (SCR_HEIGHT-room_pos.h-m_display_size.h)
+#define ROOM_RIGHT_GAP (SCR_WIDTH-room_pos.w-m_display_size.w)
+#define ROOM_EDGE_HORIZONTAL_FLIP (pair.first->m_shift_sym.w==0?0:(pair.first->m_shift_sym.w>0?-((long double)room_pos.w/m_each+1):(long double)ROOM_RIGHT_GAP/m_each+1))
+#define ROOM_EDGE_VERTICAL_FLIP (pair.first->m_shift_sym.h==0?0:(pair.first->m_shift_sym.h>0?-((long double)room_pos.h/m_each+1):(long double)ROOM_DOWN_GAP/m_each+1))
+#define ROOM_EDGE_VERTICAL (pair.first->m_shift_sym.w>0?pair.first->m_shift.w*m_each>ROOM_RIGHT:-pair.first->m_shift.w*m_each>ROOM_UP)
+#define ROOM_EDGE_HORIZONTAL (pair.first->m_shift_sym.h>0?pair.first->m_shift.h*m_each>ROOM_DOWN:-pair.first->m_shift.h*m_each>ROOM_LEFT)
+
 volatile public_code_t public_code = 0;
 
 RoomType public_room;
@@ -75,6 +86,7 @@ Room::Room(int each, TilePos size) {
     }
     m_each = each;
     m_size = size;
+    m_display_size = {(int) (m_each * m_size.w), (int) (m_each * m_size.h)};
 }
 
 Room::~Room() {
@@ -211,10 +223,6 @@ void Room::move_tile(TileType tile, direction_t dir) {
     move_tile(tile, dest_info.dest, dest_info.info);
 }
 
-DisplayPos Room::total_size() const {
-    return {(int) (m_each * m_size.w), (int) (m_each * m_size.h)};
-}
-
 void Room::move_independents(key_predicate_t predicate) {
     bool next_step_flag = true;
     m_is_moving = false;
@@ -247,16 +255,15 @@ void Room::detect_gems() {
     }
 }
 
-void Room::animate_tiles(long double animation_speed) {
+void Room::animate_tiles(long double animation_speed, const DisplayPos &room_pos) {
     Space pending_remove;
     for (auto pair: m_animating) {
         bool end_cur_animation_flag;
         if (pair.second.is_edge) {
-            animation_speed *= EDGE_CROSSING_ACC;
-            if ((fabs(pair.first->m_shift.w) > m_size.w * 2 || fabs(pair.first->m_shift.h) > m_size.h * 2) &&
+            if ((ROOM_EDGE_VERTICAL || ROOM_EDGE_HORIZONTAL) &&
                 !pair.first->can_end_animation) {
-                pair.first->m_shift.w = -pair.first->m_shift.w + pair.first->m_shift_sym.w;
-                pair.first->m_shift.h = -pair.first->m_shift.h + pair.first->m_shift_sym.h;
+                pair.first->m_shift.w = ROOM_EDGE_HORIZONTAL_FLIP;
+                pair.first->m_shift.h = ROOM_EDGE_VERTICAL_FLIP;
                 pair.first->can_end_animation = true;
             } else {
                 pair.first->m_shift.w += pair.first->m_shift_sym.w * animation_speed;
@@ -430,18 +437,18 @@ TileType construct_robot(TilePos pos, SDL_Surface *img, int dir) {
 }
 
 tile_types_map_t tile_type_map = {
-        {tile_undefined, construct_undefined},
-        {tile_cyan, construct_cyan},
-        {tile_box, construct_box},
-        {tile_wall, construct_wall},
+        {tile_undefined,   construct_undefined},
+        {tile_cyan,        construct_cyan},
+        {tile_box,         construct_box},
+        {tile_wall,        construct_wall},
         {tile_destination, construct_dest},
-        {tile_gem, construct_gem},
-        {tile_picture, construct_picture},
-        {tile_go_to, construct_go_to},
-        {tile_blue, construct_blue},
-        {tile_spike, construct_spike},
-        {tile_conveyor, construct_conveyor},
-        {tile_robot, construct_robot}
+        {tile_gem,         construct_gem},
+        {tile_picture,     construct_picture},
+        {tile_go_to,       construct_go_to},
+        {tile_blue,        construct_blue},
+        {tile_spike,       construct_spike},
+        {tile_conveyor,    construct_conveyor},
+        {tile_robot,       construct_robot}
 };
 
 Cyan::Cyan(TilePos pos, SDL_Surface *img) : Tile(pos, img) {}

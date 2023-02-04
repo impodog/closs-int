@@ -117,6 +117,7 @@ public:
     tile_distribute_t m_distribute;
     int m_each, m_pending_go_to = 0, m_unlock_bonus = 0;
     size_t m_steps = 0, m_perf, m_parsing_index = 0;
+    DisplayPos m_display_size;
     bool m_is_winning = false, m_is_moving = false, m_is_end_of_animation = false, m_is_second_play = false, m_is_perf_play = false, m_is_gem_play = false, m_end_animation_flag = false, m_can_move_flag = false;
 
     json m_title, m_help_map, m_next;
@@ -128,7 +129,7 @@ public:
     Space m_dest, m_gems;
     animations_t m_animating;
 
-    explicit Room(int each, TilePos size);
+    Room(int each, TilePos size);
 
     ~Room();
 
@@ -166,13 +167,11 @@ public:
 
     void detect_gems();
 
-    void animate_tiles(long double animation_speed);
+    void animate_tiles(long double animation_speed, const DisplayPos &room_pos);
 
     void end_of_step();
 
     void clear_move_status();
-
-    DisplayPos total_size() const;
 
     bool is_perf_play() const;
 

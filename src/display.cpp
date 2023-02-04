@@ -507,7 +507,7 @@ void Display::process_room() {
         if (!m_room->m_can_move_flag) m_room->clear_move_status(); // this is usable because cyan always comes first
         m_room->do_pending_moves();
     }
-    m_room->animate_tiles(animation_speed * framerate_ratio);
+    m_room->animate_tiles(animation_speed * framerate_ratio,m_room_pos);
     if (m_room->m_is_end_of_animation) {
         m_room->detect_gems();
         m_room->end_of_step();
@@ -555,8 +555,7 @@ void Display::present() const {
 void Display::change_room(RoomType room) {
     clear_room();
     public_room = m_room = room;
-    auto total_size = m_room->total_size();
-    DisplayPos m_room_edge = {SCR_WIDTH - total_size.w, RESERVED_HEIGHT - total_size.h};
+    DisplayPos m_room_edge = {SCR_WIDTH - m_room->m_display_size.w, RESERVED_HEIGHT - m_room->m_display_size.h};
     m_room_pos = {0, 0};
     m_room_min = {min(m_room_edge.w, 0), min(m_room_edge.h, 0)};
     m_room_max = {max(m_room_edge.w, 0), max(m_room_edge.h, 0)};
