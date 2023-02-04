@@ -47,7 +47,7 @@ void get_scr_info(Screen_Info &info);
 #endif
 
 
-#define VERSION "v0.8.3"
+#define VERSION "v0.8.4"
 
 #define TITLE "Closs : Inside the Tapes " VERSION
 #define SCR_WIDTH 2000
@@ -59,6 +59,7 @@ void get_scr_info(Screen_Info &info);
 #define MIN_EACH 128
 #define STRETCHED_EACH (STANDARD_EACH * stretch_ratio)
 #define STANDARD_FRAMERATE 30
+#define EDGE_CROSSING_ACC 1.5
 
 #define SELECTION_DEFAULT_EACH 50
 #define DESTINATION_SIZE 20

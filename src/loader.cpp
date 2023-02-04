@@ -33,6 +33,7 @@ void load_user() {
 }
 
 void save_user() {
+    current_user[USER_K_LEVELS] = current_user.at(USER_K_ROOM);
     ofstream user_file(USER_JSON_PATH, ios::out);
     user_file << current_user;
 }
@@ -77,7 +78,7 @@ RoomType create_room(const json &room_json) {
     room->m_title = room_json.at(ROOM_K_TITLE);
     room->m_help_map = room_json.at(ROOM_K_HELP);
     int next = room_json.at(ROOM_K_NEXT);
-    room->m_next = next == -1 ? sym(USER_ROOM) * (abs(USER_ROOM) + 1): next;
+    room->m_next = next == -1 ? sym(USER_ROOM) * (abs(USER_ROOM) + 1) : next;
     room->m_perf = (size_t) room_json.at(ROOM_K_PERF);
     room->m_unlock_bonus = room_json.at(ROOM_K_UNLOCK_BONUS);
     room->m_is_second_play = is_second_play();
@@ -231,7 +232,7 @@ bool is_gem_play() {
 string get_room_path() {
     auto room = current_user.at(USER_K_ROOM);
     return room.is_number() ? (CLOSS_DIRECTORY_PATH + to_string(current_user.at(USER_K_ROOM)) + ".json") : (ROOMS_PATH +
-                                                                                                        (string) room);
+                                                                                                            (string) room);
 }
 
 SDL_Surface *create_text(const json &txt, int size, const SDL_Color &color, const string &addition) {
@@ -249,9 +250,7 @@ SDL_Surface *create_text(const string &str, int size, const SDL_Color &color) {
 }
 
 bool contains_literal(const json &array, const json &value) {
-    for (const auto &cmp: array)
-        if (cmp == value) return true;
-    return false;
+    return std::any_of(array.begin(), array.end(), [value](const json &cmp) { return cmp == value; });
 }
 
 

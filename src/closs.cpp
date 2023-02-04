@@ -250,8 +250,9 @@ void Room::detect_gems() {
 void Room::animate_tiles(long double animation_speed) {
     Space pending_remove;
     for (auto pair: m_animating) {
-        bool end_cur_animation_flag = false;
+        bool end_cur_animation_flag;
         if (pair.second.is_edge) {
+            animation_speed *= EDGE_CROSSING_ACC;
             if ((fabs(pair.first->m_shift.w) > m_size.w * 2 || fabs(pair.first->m_shift.h) > m_size.h * 2) &&
                 !pair.first->can_end_animation) {
                 pair.first->m_shift.w = -pair.first->m_shift.w + pair.first->m_shift_sym.w;
