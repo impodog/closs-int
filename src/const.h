@@ -47,7 +47,7 @@ void get_scr_info(Screen_Info &info);
 #endif
 
 
-#define VERSION "v0.8.5"
+#define VERSION "v0.8.6"
 
 #define TITLE "Closs : Inside the Tapes " VERSION
 #define SCR_WIDTH 2000
@@ -114,8 +114,10 @@ void get_scr_info(Screen_Info &info);
 #define USER_PATH PATH_BEGIN "user/"
 #define DEFAULT_JSON_NAME "default.json"
 #define USER_JSON_NAME "user.json"
-#define DEFAULT_JSON_PATH PATH_BEGIN "user/" DEFAULT_JSON_NAME
-#define USER_JSON_PATH PATH_BEGIN "user/" USER_JSON_NAME
+#define DEFAULT_JSON_PATH USER_PATH DEFAULT_JSON_NAME
+#define USER_JSON_PATH USER_PATH USER_JSON_NAME
+#define PLAY_FILE_NAME "play.ini"
+#define PLAY_FILE_PATH USER_PATH PLAY_FILE_NAME
 
 #define TTF_PATH PATH_BEGIN "ttf/"
 #define ARIAL_PATH TTF_PATH "arial.ttf"

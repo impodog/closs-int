@@ -7,6 +7,7 @@
 json default_user, current_user;
 json txt_settings, txt_lobby, txt_in_game, txt_manual;
 json &public_user = current_user;
+string play_name;
 
 void init_default_user() {
     ifstream default_file(DEFAULT_JSON_PATH, ios::in);
@@ -25,15 +26,18 @@ void init_txt() {
 }
 
 void load_user() {
-    ifstream user_file(USER_JSON_PATH, ios::in);
+    ifstream user_file(USER_JSON_PATH, ios::in), play_file(PLAY_FILE_PATH, ios::in);
     if (user_file.is_open())
         user_file >> current_user;
     else
         set_user_to_default();
+    if (play_file.is_open())
+        play_file >> play_name;
 }
 
 void save_user() {
-    current_user[USER_K_LEVELS] = current_user.at(USER_K_ROOM);
+    if (ROOM_IS_NUMBER)
+        current_user[USER_K_LEVELS] = current_user.at(USER_K_ROOM);
     ofstream user_file(USER_JSON_PATH, ios::out);
     user_file << current_user;
 }
@@ -78,7 +82,10 @@ RoomType create_room(const json &room_json) {
     room->m_title = room_json.at(ROOM_K_TITLE);
     room->m_help_map = room_json.at(ROOM_K_HELP);
     int next = room_json.at(ROOM_K_NEXT);
-    room->m_next = next == -1 ? sym(USER_ROOM) * (abs(USER_ROOM) + 1) : next;
+    if (ROOM_IS_NUMBER)
+        room->m_next = next == -1 ? sym(USER_ROOM) * (abs(USER_ROOM) + 1) : next;
+    else
+        room->m_next = current_user.at(USER_K_ROOM);
     room->m_perf = (size_t) room_json.at(ROOM_K_PERF);
     room->m_unlock_bonus = room_json.at(ROOM_K_UNLOCK_BONUS);
     room->m_is_second_play = is_second_play();

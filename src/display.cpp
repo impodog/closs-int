@@ -113,7 +113,14 @@ void init_pages() {
                                     },
                                     {
                                             [] {
-                                                if (key_c(KEY_CONFIRM)) display->m_page = page_levels;
+                                                if (key_c(KEY_CONFIRM)) {
+                                                    if (play_name.empty())
+                                                        display->m_page = page_levels;
+                                                    else {
+                                                        current_user[USER_K_ROOM] = play_name;
+                                                        start_game();
+                                                    }
+                                                }
                                             },
                                             [] {
                                                 if (key_c(KEY_CONFIRM)) display->m_page = page_settings;
@@ -447,9 +454,8 @@ void Display::process_room_winning() {
         current_user[USER_K_ROOM] = m_room->m_pending_go_to;
         refresh_user_game();
     } else if (m_room->m_is_winning && (confirm || key_c(KEY_SAVE_AND_REPLAY))) {
-        try {
+        if (ROOM_IS_NUMBER && level_pic_map.find(current_user.at(USER_K_ROOM)) != level_pic_map.end())
             chapter_end = level_pic_map.at(current_user[USER_K_ROOM]);
-        } catch (const out_of_range &err) {}
         if (m_room->can_get_perf_play())
             current_user[USER_K_PERF].push_back(current_user.at(USER_K_ROOM));
         if (m_room->can_get_gem_play()) {
@@ -457,7 +463,7 @@ void Display::process_room_winning() {
             if (m_room->m_unlock_bonus != 0 && !contains_literal(USER_BONUS, m_room->m_unlock_bonus))
                 current_user[USER_K_BONUS].push_back(m_room->m_unlock_bonus);
         }
-        if (m_room->m_next.is_number_integer()) {
+        if (m_room->m_next.is_number_integer() && m_room->m_next != -1) {
             int next = (int) m_room->m_next;
             if (confirm) current_user[USER_K_ROOM] = next;
             current_user[USER_K_UNLOCKED] = max(next, (int) current_user[USER_K_UNLOCKED]);
@@ -507,7 +513,7 @@ void Display::process_room() {
         if (!m_room->m_can_move_flag) m_room->clear_move_status(); // this is usable because cyan always comes first
         m_room->do_pending_moves();
     }
-    m_room->animate_tiles(animation_speed * framerate_ratio,m_room_pos);
+    m_room->animate_tiles(animation_speed * framerate_ratio, m_room_pos);
     if (m_room->m_is_end_of_animation) {
         m_room->detect_gems();
         m_room->end_of_step();

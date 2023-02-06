@@ -1,7 +1,7 @@
 !process-only
 !add ../C_InT.cll
-!gem-def G1 +0
-!gem-def G2 +0
+!gem-def G1 -0
+!gem-def G2 -0
 
 title {
     en="Living Apart"

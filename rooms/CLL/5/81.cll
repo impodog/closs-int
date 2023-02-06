@@ -1,6 +1,6 @@
 !process-only
 !add ../C_InT.cll
-!gem-def G0 +0
+!gem-def G0 -0
 
 title {
     en="Ending"

@@ -15,10 +15,13 @@
 #define USER_ANIMATION_SPEED (long double)current_user.at(USER_K_ANIMATION_SPEED)
 #define USER_BONUS current_user.at(USER_K_BONUS)
 
+#define ROOM_IS_NUMBER (current_user.at(USER_K_ROOM).is_number_integer())
+
 #include "closs.h"
 
 extern json default_user, current_user;
 extern json txt_settings, txt_lobby, txt_in_game, txt_manual;
+extern string play_name;
 
 void init_default_user();
 
