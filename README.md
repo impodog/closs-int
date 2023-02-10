@@ -65,7 +65,7 @@ BUT there's more! Explore new objects such as blue boxes, and special game featu
 
 ### Converting Levels
 
-1. To convert closs level file(.cll) to standard json, you'll need to install [Python 3.11.1](https://www.python.org/downloads/release/python-3111/) and use the convertor from repo https://gitee.com/impodog/cl-ml.git
+1. To convert closs level file(.cll) to standard json, you'll need to install [Python 3.11 or later](https://www.python.org/downloads/) and use the convertor from repo https://gitee.com/impodog/cl-ml.git
 
 2. Then, test the convertor with command(under this source directory) **"python [your cl-ml path]/main.py ./rooms/CLL --no-traceback --recursive"**, *it's normal to see some fails(extra files)*
 3. If the conversion succeeded, you should see some newly created json file under /rooms/Closs, which will be directly used later by the executable
@@ -75,7 +75,7 @@ BUT there's more! Explore new objects such as blue boxes, and special game featu
 You don't need to know a lot of CLL to create a level, just follow the steps:
 
 1. Create a new folder (**use your username**) under **/rooms/CLL**, Copy&Paste **/rooms/CLL/template.cll** into it then rename the file to whatever you want (don't change the file extension though!)
-2. Check the file's relative path to **/rooms/CLL/C_InT.cll**, and change line 2, which should be "!add ../C_InT.cll", to **"!add [C_InT.cll path]"**
+2. Check the file's relative path to **/rooms/CLL/C_InT.cll**. It should be  **../C_InT.cll**
 3. Now, locate "content 4d[ ... ]", that's where your precious level design should be
 4. See other examples, then design the level yourself, the format should be easy, but you'll need to know a few CLL Names:
 
@@ -127,4 +127,4 @@ Also, delete **"/user/play.ini"** later to return to normal gameplay
 
 ### Where to Submit My Level
 
-It's simple, remember you created a new folder right? You can simply upload like that by either a pull request or push **to a new branch**
+It's simple, remember you created a new folder right? You can simply upload like that by either a **pull request** or push **to a new branch**
