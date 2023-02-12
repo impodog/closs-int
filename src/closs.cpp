@@ -15,7 +15,7 @@
 #define ROOM_EDGE_VERTICAL (pair.first->m_shift_sym.w>0?pair.first->m_shift.w*m_each>ROOM_RIGHT:-pair.first->m_shift.w*m_each>ROOM_UP)
 #define ROOM_EDGE_HORIZONTAL (pair.first->m_shift_sym.h>0?pair.first->m_shift.h*m_each>ROOM_DOWN:-pair.first->m_shift.h*m_each>ROOM_LEFT)
 
-volatile public_code_t public_code = 0;
+public_code_t public_code = 0;
 
 RoomType public_room;
 
@@ -61,7 +61,7 @@ direction_t Tile::acq_req(Movement_Request req) { return 0; }
 direction_t Tile::respond_keys(key_predicate_t predicate) const { return 0; }
 
 void Tile::show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
-                           long double stretch_ratio) const {}
+                           long double stretch_ratio) {}
 
 void Tile::process() {}
 
@@ -358,6 +358,20 @@ direction_vec_t find_keys(bool (*predicate)(direction_t), const direction_vec_t 
     return result;
 }
 
+dest_img_info *get_dest_surf(SDL_Renderer *renderer, tile_types type) {
+    if (dest_img.find(type) == dest_img.end()) {
+        auto surface = types_img_map.at(type);
+        auto dark_texture = SDL_CreateTextureFromSurface(renderer, surface);
+        auto bright_texture = SDL_CreateTextureFromSurface(renderer, surface);
+        SDL_SetTextureBlendMode(dark_texture, SDL_BLENDMODE_BLEND);
+        SDL_SetTextureAlphaMod(dark_texture, DEST_ALPHA_DARK);
+        SDL_SetTextureBlendMode(bright_texture, SDL_BLENDMODE_BLEND);
+        SDL_SetTextureAlphaMod(bright_texture, DEST_ALPHA_BRIGHT);
+        dest_img[type] = {dark_texture, bright_texture, get_srcrect(surface)};
+    }
+    return &dest_img.at(type);
+}
+
 Destination::Destination(TilePos pos, SDL_Surface *img, int type) : Tile(pos, img) {
     m_req = (tile_types) type;
 }
@@ -376,16 +390,13 @@ bool Destination::detect_requirement(SpaceConst space) const {
 }
 
 void Destination::show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
-                                  long double stretch_ratio) const {
-    auto surface = RENDER_TEXT(consolas->sized(FONT_SIZE(DESTINATION_SIZE)),
-                               type_names.at(m_req).c_str(),
-                               WHITE);
-    DisplayPos show_pos = {center.w - surface->w / 2, center.h - surface->h / 2};
-    auto texture = SDL_CreateTextureFromSurface(renderer, surface);
-    auto srcrect = get_srcrect(surface), dstrect = get_dstrect(show_pos, surface);
-    SDL_RenderCopy(renderer, texture, &srcrect, &dstrect);
-    SDL_DestroyTexture(texture);
-    SDL_FreeSurface(surface);
+                                  long double stretch_ratio) {
+    if (m_info == nullptr) m_info = get_dest_surf(renderer, m_req);;
+    auto is_bright = ((m_counter += 1) %= DEST_COUNTER_MAX) <= DEST_COUNTER_LIM;
+    DisplayPos show_pos = {(int) (center.w - m_info->srcrect.w * stretch_ratio / 2),
+                           (int) (center.h - m_info->srcrect.h * stretch_ratio / 2)};
+    auto dstrect = get_dstrect(show_pos, m_info->srcrect, stretch_ratio);
+    SDL_RenderCopy(renderer, is_bright ? m_info->bright : m_info->dark, nullptr, &dstrect);
 }
 
 TileType construct_undefined(TilePos pos, SDL_Surface *img, int) {
@@ -490,14 +501,14 @@ tile_types Gem::get_type() const {
 }
 
 void Gem::show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
-                          long double stretch_ratio) const {
+                          long double stretch_ratio) {
     auto surface = RENDER_TEXT(consolas->sized(FONT_SIZE(DESTINATION_SIZE)),
                                to_string(m_addition).c_str(),
                                m_addition <= 0 ? GREEN : RED);
     DisplayPos show_pos = {center.w - surface->w / 2, center.h - surface->h / 2};
     auto texture = SDL_CreateTextureFromSurface(renderer, surface);
-    auto srcrect = get_srcrect(surface), dstrect = get_dstrect(show_pos, surface);
-    SDL_RenderCopy(renderer, texture, &srcrect, &dstrect);
+    auto dstrect = get_dstrect(show_pos, surface);
+    SDL_RenderCopy(renderer, texture, nullptr, &dstrect);
     SDL_DestroyTexture(texture);
     SDL_FreeSurface(surface);
 }

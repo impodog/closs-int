@@ -10,11 +10,11 @@ elseif (CMAKE_SYSTEM_NAME MATCHES "Linux")
 endif ()
 
 # SDL path config
-set(SDL2_PATH C:/Include/SDL2-mingw/SDL2-2.26.2/x86_64-w64-mingw32)
+set(SDL2_PATH C:/Include/SDL2-mingw/SDL2-2.26.3/x86_64-w64-mingw32)
 set(SDL2_INCLUDE ${SDL2_PATH}/include/SDL2)
 set(SDL2_LIB ${SDL2_PATH}/lib)
 
-set(SDL2_IMAGE_PATH C:/Include/SDL2-mingw/SDL2_image-2.6.2/x86_64-w64-mingw32)
+set(SDL2_IMAGE_PATH C:/Include/SDL2-mingw/SDL2_image-2.6.3/x86_64-w64-mingw32)
 set(SDL2_IMAGE_INCLUDE ${SDL2_IMAGE_PATH}/include/SDL2)
 set(SDL2_IMAGE_LIB ${SDL2_IMAGE_PATH}/lib)
 

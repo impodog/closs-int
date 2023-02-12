@@ -47,7 +47,7 @@ void get_scr_info(Screen_Info &info);
 #endif
 
 
-#define VERSION "v0.8.6"
+#define VERSION "v0.9.0"
 
 #define TITLE "Closs : Inside the Tapes " VERSION
 #define SCR_WIDTH 2000
@@ -81,6 +81,11 @@ void get_scr_info(Screen_Info &info);
 #define LEAVE_BLANK_WIDTH 50
 
 #define ROOM_TITLE_SIZE 50
+
+#define DEST_ALPHA_DARK 50
+#define DEST_ALPHA_BRIGHT 100
+#define DEST_COUNTER_MAX 50
+#define DEST_COUNTER_LIM 30
 
 #define MAX_SENSITIVITY 300
 #define MIN_SENSITIVITY 1
@@ -189,8 +194,10 @@ void get_scr_info(Screen_Info &info);
 #define KEY_NEXT SDLK_n
 #define KEY_BACK SDLK_b
 
-#define KEY_SETTINGS {SDLK_q, SDLK_ESCAPE}
-#define KEY_CONFIRM {SDLK_c, SDLK_RETURN}
+#define KEY_SETTINGS_UNBRACED SDLK_q, SDLK_ESCAPE
+#define KEY_SETTINGS {KEY_SETTINGS_UNBRACED}
+#define KEY_CONFIRM_UNBRACED SDLK_c, SDLK_RETURN
+#define KEY_CONFIRM {KEY_CONFIRM_UNBRACED}
 #define KEY_HELP SDLK_h
 #define KEY_RESTART SDLK_r
 #define KEY_ESCAPE SDLK_ESCAPE
@@ -198,12 +205,19 @@ void get_scr_info(Screen_Info &info);
 
 #define KEY_DEBUG_PERFECT SDLK_1
 
+#define KEY_NEEDED {KEY_MOVE_UP,KEY_MOVE_LEFT,KEY_MOVE_DOWN,KEY_MOVE_RIGHT, \
+KEY_SHIFT_UP,KEY_SHIFT_LEFT,KEY_SHIFT_DOWN,KEY_SHIFT_RIGHT,                 \
+KEY_NEXT,KEY_BACK,KEY_SETTINGS_UNBRACED,KEY_CONFIRM_UNBRACED,KEY_HELP,KEY_RESTART,KEY_ESCAPE,KEY_SAVE_AND_REPLAY, \
+KEY_DEBUG_PERFECT}
+
 #define RENDER_TEXT text_renderer
 
 #define WH_ANY_IS_INF(wh) (isinf(wh.w) || isinf(wh.h))
 #define WH_IS0(wh) (is0(wh.w) && is0(wh.h))
 
-#define TIME_LOG(s) cout << s << " : " << system_clock::to_time_t(system_clock::now()) << endl
+#define LOG_TIME(s) cout << s << " : " << system_clock::to_time_t(system_clock::now()) << endl
+#define LOG_RECT(rect, end) cout << rect.x << "," << rect.y << ":" << rect.w << "," << rect.h << end
+#define LOG_POS(pos, end) cout << pos.w << "," << pos.h << end
 
 using namespace std;
 using namespace chrono;
@@ -237,9 +251,13 @@ struct Pos2D {
     }
 
     template<typename T2>
-    void operator+=(const Pos2D<T2> pos) {
+    void operator+=(const Pos2D<T2> &pos) {
         w += pos.w;
         h += pos.h;
+    }
+
+    bool operator==(const Pos2D<T1> &pos) {
+        return w == pos.w && h == pos.h;
     }
 
     template<typename T2>
@@ -294,6 +312,10 @@ extern json empty_json;
 SDL_Rect get_srcrect(const SDL_Surface *surface);
 
 SDL_Rect get_dstrect(const DisplayPos &pos, const SDL_Surface *surface);
+
+SDL_Rect get_dstrect(const DisplayPos &pos, const SDL_Surface *surface, long double stretch_ratio);
+
+SDL_Rect get_dstrect(const DisplayPos &pos, const SDL_Rect &srcrect, long double stretch_ratio = 1);
 
 bool is0(long double ld);
 

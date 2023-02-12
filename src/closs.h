@@ -16,7 +16,7 @@ using key_down_map_t = unordered_map<direction_t, bool>;
 using direction_vec_t = vector<direction_t>;
 using key_predicate_t = bool (*)(direction_t key);
 
-extern volatile public_code_t public_code;
+extern public_code_t public_code;
 
 class closs_room_error : public runtime_error {
 public:
@@ -67,7 +67,7 @@ public:
     virtual direction_t respond_keys(key_predicate_t predicate) const;
 
     virtual void show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
-                                 long double stretch_ratio) const;
+                                 long double stretch_ratio);
 
     virtual void end_of_step();
 
@@ -198,6 +198,8 @@ Space::iterator find_tile(SpaceConst space, TileConst tile);
 
 direction_vec_t find_keys(key_predicate_t predicate, const direction_vec_t &wanted_keys);
 
+dest_img_info *get_dest_surf(SDL_Renderer *renderer, tile_types type);
+
 extern RoomType public_room;
 
 // defined in loader.cpp
@@ -205,16 +207,18 @@ extern json &public_user;
 
 class Destination : public Tile {
 public:
+    size_t m_counter = 0;
     tile_types m_req;
+    dest_img_info *m_info = nullptr;
 
-    explicit Destination(TilePos pos, SDL_Surface *img, int type);
+    Destination(TilePos pos, SDL_Surface *img, int type);
 
     tile_types get_type() const override;
 
     bool detect_requirement(SpaceConst space) const;
 
     void show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
-                         long double stretch_ratio) const override;
+                         long double stretch_ratio) override;
 };
 
 class Cyan : public Tile {
@@ -257,7 +261,7 @@ public:
     tile_types get_type() const override;
 
     void show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
-                         long double stretch_ratio) const override;
+                         long double stretch_ratio) override;
 };
 
 class Picture : public Tile {

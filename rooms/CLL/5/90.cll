@@ -1,0 +1,28 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G0 -0
+
+title {
+    en="Alignment"
+    zh_cn="对齐"
+}
+
+help {
+    en={
+        "Paths"="Find the paths the two boxes should go"
+        "Aligning"="Align the two players to do slotting"
+    }
+    zh_cn={
+        "对齐"="对齐两个玩家来入槽"
+    }
+}
+
+perf 70
+
+content 4d[
+    wa wa wa wa wa wa wa wa -- wa
+    cy -- -- wa -- -- 1b G0 G0 --
+    bx wa bl wa wa -- wa G0 G0 --
+    -- -- -- -- -- -- wa -- -- wa
+    wa -- wa wa wa cy -- 1x wa wa
+]

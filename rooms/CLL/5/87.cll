@@ -1,0 +1,27 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -0
+
+title {
+    en="Halloween"
+    zh_cn="万圣节"
+}
+
+help {
+    en={
+        "Use all boxes"="Recycle the boxes"
+    }
+    zh_cn={
+        "使用所有箱子"="循环使用箱子"
+    }
+}
+
+perf 56
+
+content 4d[
+    wa wa -- wa G1 -- 1x
+    cy bl -- -- 1b sp --
+    wa wa -- wa wa -- wa
+    -- wa -- wa wa -- bx
+    -- wa -- -- -- -- --
+]

@@ -1,28 +1,26 @@
 !process-only
 !add ../C_InT.cll
 !gem-def G1 -0
-!note "put this further between 88~89"
 
 title {
-    en="Halloween"
-    zh_cn="万圣节"
+    en="Nowhere to Escape"
+    zh_cn="无处可逃"
 }
 
 help {
     en={
-        "Use all boxes"="Recycle the boxes"
+        "Pushing without endless"="Push them separately"
     }
     zh_cn={
-        "使用所有箱子"="循环使用箱子"
+        "避免无尽推动"="分开推动他们"
     }
 }
 
-perf 56
+perf 88
 
 content 4d[
-    wa wa -- wa G1 -- 1x
-    cy bl -- -- 1b sp --
-    wa wa -- wa wa -- wa
-    -- wa -- wa wa -- bx
-    -- wa -- -- -- -- --
+    1b -- -- -- bx bx --
+    wa -- wa sp wa wa wa
+    cy -- bl -- -- -- 1x
+    G1 wa wa -- wa wa wa
 ]

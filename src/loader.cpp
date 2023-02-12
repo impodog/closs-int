@@ -36,7 +36,7 @@ void load_user() {
 }
 
 void save_user() {
-    if (ROOM_IS_NUMBER)
+    if (ROOM_IS_NUMBER && current_user.at(USER_K_ROOM) > 0)
         current_user[USER_K_LEVELS] = current_user.at(USER_K_ROOM);
     ofstream user_file(USER_JSON_PATH, ios::out);
     user_file << current_user;

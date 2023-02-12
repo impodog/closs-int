@@ -28,7 +28,7 @@ FontType Font_Family::sized(int size) {
     }
 }
 
-Font_Family_Type arial, consolas, simhei;
+Font_Family_Type arial, consolas, simhei, candara;
 
 SDL_Surface_ptr img_arrow, img_settings, img_Closs_InT, img_help, img_manual, img_levels;
 SDL_Surface_ptr img_none, img_icon;
@@ -49,6 +49,7 @@ direction_img_vec_t direction_img_vec = {
         &direction_img_conveyor,
         &direction_img_robot
 };
+dest_img_t dest_img;
 
 void init_img() {
     IMG_Init(IMG_INIT_PNG);
@@ -144,7 +145,7 @@ void init_img() {
     types_img_map[tile_blue] = img_blue;
     types_img_map[tile_spike] = img_spike;
     types_img_map[tile_conveyor] = img_none;
-    types_img_map[tile_robot] = img_none;
+    types_img_map[tile_robot] = img_robot_dw;
     // direction_img map
     direction_img_conveyor = {
             {KEY_MOVE_UP,    img_conveyor_up},
@@ -166,6 +167,10 @@ void init_img() {
 
 void free_img() {
     vector<SDL_Surface *> freed_surface;
+    for (auto dest_info: dest_img) {
+        SDL_DestroyTexture(dest_info.second.dark);
+        SDL_DestroyTexture(dest_info.second.bright);
+    }
     for (auto pair: types_img_map)
         if (find(freed_surface.begin(), freed_surface.end(), pair.second) == freed_surface.end()) {
             SDL_FreeSurface(pair.second);
@@ -209,6 +214,7 @@ void free_font() {
     delete arial;
     delete consolas;
     delete simhei;
+    delete candara;
 }
 
 void set_white_as_colorkey(initializer_list<SDL_Surface *> surfaces) {

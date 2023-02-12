@@ -30,7 +30,7 @@ public:
 extern types_img_map_t types_img_map;
 
 using Font_Family_Type = Font_Family *;
-extern Font_Family_Type arial, consolas, simhei;
+extern Font_Family_Type arial, consolas, simhei, candara;
 
 using SDL_Surface_ptr = SDL_Surface *;
 extern SDL_Surface_ptr img_arrow, img_settings, img_Closs_InT, img_help, img_manual, img_levels;
@@ -51,6 +51,19 @@ extern direction_img_t direction_img_conveyor, direction_img_robot;
 
 using direction_img_vec_t = vector<direction_img_t *>;
 extern direction_img_vec_t direction_img_vec;
+
+struct img_info {
+    SDL_Texture *texture;
+    SDL_Rect srcrect;
+};
+using img_map_t = unordered_map<SDL_Surface *, img_info>;
+
+struct dest_img_info {
+    SDL_Texture *dark, *bright;
+    SDL_Rect srcrect;
+};
+using dest_img_t = unordered_map<tile_types, dest_img_info>;
+extern dest_img_t dest_img;
 
 void init_img();
 

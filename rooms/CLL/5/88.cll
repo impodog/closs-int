@@ -1,0 +1,26 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G0 -0
+
+title {
+    en="Art of Asymmetry"
+    zh_cn="不对称的艺术"
+}
+
+help {
+    en={
+        "No binding"="Don't bind the top 3 needed boxes"
+    }
+    zh_cn={
+        "不组合"="不要组合上面所需的三个箱子"
+    }
+}
+
+perf 25 
+
+content 4d[
+    wa wa wa wa wa wa wa
+    1x G0 bx 1x bx G0 1x
+    wa cy bx bx bx cy wa
+    wa 1x wa G0 wa 1x wa
+]
