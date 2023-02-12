@@ -16,7 +16,7 @@ using key_down_map_t = unordered_map<direction_t, bool>;
 using direction_vec_t = vector<direction_t>;
 using key_predicate_t = bool (*)(direction_t key);
 
-extern volatile public_code_t public_code;
+extern public_code_t public_code;
 
 class closs_room_error : public runtime_error {
 public:
@@ -56,6 +56,8 @@ public:
 
     bool operator==(const Tile &tile) const;
 
+    string get_info() const;
+
     virtual bool is_independent() const;
 
     virtual tile_types get_type() const;
@@ -65,7 +67,7 @@ public:
     virtual direction_t respond_keys(key_predicate_t predicate) const;
 
     virtual void show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
-                                 long double stretch_ratio) const;
+                                 long double stretch_ratio);
 
     virtual void end_of_step();
 
@@ -74,7 +76,7 @@ public:
 
     virtual void begin_request(direction_t dir);
 
-    virtual void react_to_movement_result(direction_t dir);
+    virtual void react_to_movement_result(bool result);
 
     virtual bool suppress_request(const Movement_Request &req);
 };
@@ -115,6 +117,7 @@ public:
     tile_distribute_t m_distribute;
     int m_each, m_pending_go_to = 0, m_unlock_bonus = 0;
     size_t m_steps = 0, m_perf, m_parsing_index = 0;
+    DisplayPos m_display_size;
     bool m_is_winning = false, m_is_moving = false, m_is_end_of_animation = false, m_is_second_play = false, m_is_perf_play = false, m_is_gem_play = false, m_end_animation_flag = false, m_can_move_flag = false;
 
     json m_title, m_help_map, m_next;
@@ -126,7 +129,7 @@ public:
     Space m_dest, m_gems;
     animations_t m_animating;
 
-    explicit Room(int each, TilePos size);
+    Room(int each, TilePos size);
 
     ~Room();
 
@@ -146,7 +149,7 @@ public:
 
     Dest_Info get_dest_info(TileType tile, direction_t dir) const;
 
-    bool send_req_from(TileType tile, direction_t dir, uint8_t times = 1);
+    bool send_req_from(TileType tile, direction_t dir, list<TileType> *infinite_prevention = nullptr);
 
     void pending_move(TileType tile, direction_t dir);
 
@@ -164,13 +167,11 @@ public:
 
     void detect_gems();
 
-    void animate_tiles(long double animation_speed);
+    void animate_tiles(long double animation_speed, const DisplayPos &room_pos);
 
     void end_of_step();
 
     void clear_move_status();
-
-    DisplayPos total_size() const;
 
     bool is_perf_play() const;
 
@@ -197,6 +198,8 @@ Space::iterator find_tile(SpaceConst space, TileConst tile);
 
 direction_vec_t find_keys(key_predicate_t predicate, const direction_vec_t &wanted_keys);
 
+dest_img_info *get_dest_surf(SDL_Renderer *renderer, tile_types type);
+
 extern RoomType public_room;
 
 // defined in loader.cpp
@@ -204,16 +207,18 @@ extern json &public_user;
 
 class Destination : public Tile {
 public:
+    size_t m_counter = 0;
     tile_types m_req;
+    dest_img_info *m_info = nullptr;
 
-    explicit Destination(TilePos pos, SDL_Surface *img, int type);
+    Destination(TilePos pos, SDL_Surface *img, int type);
 
     tile_types get_type() const override;
 
     bool detect_requirement(SpaceConst space) const;
 
     void show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
-                         long double stretch_ratio) const override;
+                         long double stretch_ratio) override;
 };
 
 class Cyan : public Tile {
@@ -256,7 +261,7 @@ public:
     tile_types get_type() const override;
 
     void show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
-                         long double stretch_ratio) const override;
+                         long double stretch_ratio) override;
 };
 
 class Picture : public Tile {
@@ -331,7 +336,7 @@ public:
 
     void end_of_step() override;
 
-    void react_to_movement_result(direction_t dir) override;
+    void react_to_movement_result(bool result) override;
 
     bool suppress_request(const Movement_Request &req) override;
 };

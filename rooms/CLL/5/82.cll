@@ -1,0 +1,27 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -2
+
+title {
+    en="∞"
+    zh_cn="∞"
+}
+
+help {
+    en={
+        "Endless"="Endless prevents you from moving"
+        "EdLs-Edges"="Pushing a line of object towards the edge causes this"
+    }
+    zh_cn={
+        "无尽"="无尽阻止你移动"
+        "无尽-边缘"="向着边缘推一列物体造成无尽"
+    }
+}
+
+perf 8
+
+content 4d[
+    cy 1x bx -- wa
+    wa bx 1x bx 1x
+    1x -- bx G1 wa
+]

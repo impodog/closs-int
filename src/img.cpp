@@ -28,11 +28,11 @@ FontType Font_Family::sized(int size) {
     }
 }
 
-Font_Family_Type arial, consolas, simhei;
+Font_Family_Type arial, consolas, simhei, candara;
 
 SDL_Surface_ptr img_arrow, img_settings, img_Closs_InT, img_help, img_manual, img_levels;
 SDL_Surface_ptr img_none, img_icon;
-SDL_Surface_ptr img_chapter1, img_chapter2, img_chapter3;
+SDL_Surface_ptr img_chapter1, img_chapter2, img_chapter3, img_chapter4;
 SDL_Surface_ptr img_bonus1;
 
 language_fonts_t language_fonts;
@@ -49,6 +49,7 @@ direction_img_vec_t direction_img_vec = {
         &direction_img_conveyor,
         &direction_img_robot
 };
+dest_img_t dest_img;
 
 void init_img() {
     IMG_Init(IMG_INIT_PNG);
@@ -86,6 +87,7 @@ void init_img() {
     img_chapter1 = IMG_Load(IMG_PATH "chapter1.png");
     img_chapter2 = IMG_Load(IMG_PATH "chapter2.png");
     img_chapter3 = IMG_Load(IMG_PATH "chapter3.png");
+    img_chapter4 = IMG_Load(IMG_PATH "chapter4.png");
     img_bonus1 = IMG_Load(IMG_PATH "bonus1.png");
 
     img_none = SDL_CreateRGBSurface(0, 1, 1, 32, 0, 0, 0, 0);
@@ -143,7 +145,7 @@ void init_img() {
     types_img_map[tile_blue] = img_blue;
     types_img_map[tile_spike] = img_spike;
     types_img_map[tile_conveyor] = img_none;
-    types_img_map[tile_robot] = img_none;
+    types_img_map[tile_robot] = img_robot_dw;
     // direction_img map
     direction_img_conveyor = {
             {KEY_MOVE_UP,    img_conveyor_up},
@@ -165,6 +167,10 @@ void init_img() {
 
 void free_img() {
     vector<SDL_Surface *> freed_surface;
+    for (auto dest_info: dest_img) {
+        SDL_DestroyTexture(dest_info.second.dark);
+        SDL_DestroyTexture(dest_info.second.bright);
+    }
     for (auto pair: types_img_map)
         if (find(freed_surface.begin(), freed_surface.end(), pair.second) == freed_surface.end()) {
             SDL_FreeSurface(pair.second);
@@ -190,6 +196,7 @@ void free_img() {
     SDL_FreeSurface(img_chapter1);
     SDL_FreeSurface(img_chapter2);
     SDL_FreeSurface(img_chapter3);
+    SDL_FreeSurface(img_chapter4);
     SDL_FreeSurface(img_bonus1);
 }
 
@@ -207,6 +214,7 @@ void free_font() {
     delete arial;
     delete consolas;
     delete simhei;
+    delete candara;
 }
 
 void set_white_as_colorkey(initializer_list<SDL_Surface *> surfaces) {

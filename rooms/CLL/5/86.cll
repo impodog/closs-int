@@ -1,0 +1,26 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -0
+
+title {
+    en="Nowhere to Escape"
+    zh_cn="无处可逃"
+}
+
+help {
+    en={
+        "Pushing without endless"="Push them separately"
+    }
+    zh_cn={
+        "避免无尽推动"="分开推动他们"
+    }
+}
+
+perf 88
+
+content 4d[
+    1b -- -- -- bx bx --
+    wa -- wa sp wa wa wa
+    cy -- bl -- -- -- 1x
+    G1 wa wa -- wa wa wa
+]

@@ -66,6 +66,14 @@ SDL_Rect get_dstrect(const DisplayPos &pos, const SDL_Surface *surface) {
     return {pos.w, pos.h, surface->w, surface->h};
 }
 
+SDL_Rect get_dstrect(const DisplayPos &pos, const SDL_Surface *surface, long double stretch_ratio) {
+    return {pos.w, pos.h, (int)(surface->w * stretch_ratio), (int)(surface->h * stretch_ratio)};
+}
+
+SDL_Rect get_dstrect(const DisplayPos &pos, const SDL_Rect &srcrect, long double stretch_ratio) {
+    return {pos.w, pos.h, (int)(srcrect.w * stretch_ratio), (int)(srcrect.h * stretch_ratio)};
+}
+
 bool is0(long double ld) {
     return fabs(ld) < std::numeric_limits<long double>::epsilon();
 }
@@ -93,5 +101,6 @@ direction_t invert(direction_t dir) {
             throw runtime_error("Direction not a keycode");
     }
 }
+
 
 json empty_json;

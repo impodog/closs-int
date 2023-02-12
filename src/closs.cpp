@@ -4,7 +4,18 @@
 
 #include "closs.h"
 
-volatile public_code_t public_code = 0;
+#define ROOM_UP (room_pos.w+m_display_size.w)
+#define ROOM_LEFT (room_pos.h+m_display_size.h)
+#define ROOM_DOWN (SCR_HEIGHT-room_pos.h)
+#define ROOM_RIGHT (SCR_WIDTH-room_pos.w)
+#define ROOM_DOWN_GAP (SCR_HEIGHT-room_pos.h-m_display_size.h)
+#define ROOM_RIGHT_GAP (SCR_WIDTH-room_pos.w-m_display_size.w)
+#define ROOM_EDGE_HORIZONTAL_FLIP (pair.first->m_shift_sym.w==0?0:(pair.first->m_shift_sym.w>0?-((long double)room_pos.w/m_each+1):(long double)ROOM_RIGHT_GAP/m_each+1))
+#define ROOM_EDGE_VERTICAL_FLIP (pair.first->m_shift_sym.h==0?0:(pair.first->m_shift_sym.h>0?-((long double)room_pos.h/m_each+1):(long double)ROOM_DOWN_GAP/m_each+1))
+#define ROOM_EDGE_VERTICAL (pair.first->m_shift_sym.w>0?pair.first->m_shift.w*m_each>ROOM_RIGHT:-pair.first->m_shift.w*m_each>ROOM_UP)
+#define ROOM_EDGE_HORIZONTAL (pair.first->m_shift_sym.h>0?pair.first->m_shift.h*m_each>ROOM_DOWN:-pair.first->m_shift.h*m_each>ROOM_LEFT)
+
+public_code_t public_code = 0;
 
 RoomType public_room;
 
@@ -37,6 +48,10 @@ bool Tile::operator==(const Tile &tile) const {
     return m_pubCode == tile.m_pubCode;
 }
 
+string Tile::get_info() const {
+    return type_names.at(get_type()) + ":" + to_string(public_code);
+}
+
 bool Tile::is_independent() const { return false; }
 
 tile_types Tile::get_type() const { return tile_undefined; }
@@ -46,7 +61,7 @@ direction_t Tile::acq_req(Movement_Request req) { return 0; }
 direction_t Tile::respond_keys(key_predicate_t predicate) const { return 0; }
 
 void Tile::show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
-                           long double stretch_ratio) const {}
+                           long double stretch_ratio) {}
 
 void Tile::process() {}
 
@@ -56,7 +71,7 @@ void Tile::add_to_parser(pending_series_t &pending_series) {}
 
 void Tile::begin_request(direction_t dir) {}
 
-void Tile::react_to_movement_result(direction_t dir) {}
+void Tile::react_to_movement_result(bool result) {}
 
 bool Tile::suppress_request(const Movement_Request &req) { return false; }
 
@@ -71,6 +86,7 @@ Room::Room(int each, TilePos size) {
     }
     m_each = each;
     m_size = size;
+    m_display_size = {(int) (m_each * m_size.w), (int) (m_each * m_size.h)};
 }
 
 Room::~Room() {
@@ -133,26 +149,26 @@ Dest_Info Room::get_dest_info(TileType tile, direction_t dir) const {
     return {dest, info};
 }
 
-bool Room::send_req_from(TileType tile, direction_t dir, uint8_t times) {
-    switch (times) {
-        case 0:
-            return true;
-        case 1:
-            tile->begin_request(dir);
-            break;
-        default:
-            break;
-    }
-    bool result = true;
+bool Room::send_req_from(TileType tile, direction_t dir, list<TileType> *infinite_prevention) {
+    bool is_first = false, result = true;
+    if (infinite_prevention == nullptr) {
+        infinite_prevention = new list<TileType>;
+        tile->begin_request(dir);
+        is_first = true;
+    } else if (find(infinite_prevention->begin(), infinite_prevention->end(), tile) == infinite_prevention->end())
+        infinite_prevention->push_back(tile);
+    else return false;
     auto space = at(get_dest(tile, dir));
     Movement_Request req = {tile, dir};
     for (auto dest_tile: *space) {
         direction_t dest_dir = dest_tile->acq_req(req);
-        if (dest_dir > 0) result &= send_req_from(dest_tile, dest_dir, times + 1);
+        if (dest_dir > 0) result &= send_req_from(dest_tile, dest_dir, infinite_prevention);
         else if (result && dest_dir < 0) result = false;
-        tile->react_to_movement_result(dest_dir);
     }
+    for (auto dest_tile: *space)
+        tile->react_to_movement_result(result);
     if (result) pending_move(tile, dir);
+    if (is_first) delete infinite_prevention;
     return result;
 }
 
@@ -207,10 +223,6 @@ void Room::move_tile(TileType tile, direction_t dir) {
     move_tile(tile, dest_info.dest, dest_info.info);
 }
 
-DisplayPos Room::total_size() const {
-    return {(int) (m_each * m_size.w), (int) (m_each * m_size.h)};
-}
-
 void Room::move_independents(key_predicate_t predicate) {
     bool next_step_flag = true;
     m_is_moving = false;
@@ -226,7 +238,7 @@ void Room::move_independents(key_predicate_t predicate) {
 }
 
 void Room::detect_gems() {
-    if (!IS_WINNING_GEM) {
+    if (ROOM_CONTAINS_GEMS) {
         Space pending_collection;
         for (auto gem_tile: m_gems) {
             auto space = at(gem_tile->m_pos);
@@ -243,21 +255,19 @@ void Room::detect_gems() {
     }
 }
 
-void Room::animate_tiles(long double animation_speed) {
+void Room::animate_tiles(long double animation_speed, const DisplayPos &room_pos) {
     Space pending_remove;
     for (auto pair: m_animating) {
-        bool end_cur_animation_flag = false;
+        bool end_cur_animation_flag;
         if (pair.second.is_edge) {
-            if ((fabs(pair.first->m_shift.w) > m_size.w || fabs(pair.first->m_shift.h) > m_size.h) &&
+            if ((ROOM_EDGE_VERTICAL || ROOM_EDGE_HORIZONTAL) &&
                 !pair.first->can_end_animation) {
-                pair.first->m_shift.w = -pair.first->m_shift.w + pair.first->m_shift_sym.w;
-                pair.first->m_shift.h = -pair.first->m_shift.h + pair.first->m_shift_sym.h;
+                pair.first->m_shift.w = ROOM_EDGE_HORIZONTAL_FLIP;
+                pair.first->m_shift.h = ROOM_EDGE_VERTICAL_FLIP;
                 pair.first->can_end_animation = true;
             } else {
-                pair.first->m_shift.w =
-                        pair.first->m_shift.w + pair.first->m_shift_sym.w * animation_speed;
-                pair.first->m_shift.h =
-                        pair.first->m_shift.h + pair.first->m_shift_sym.h * animation_speed;
+                pair.first->m_shift.w += pair.first->m_shift_sym.w * animation_speed;
+                pair.first->m_shift.h += pair.first->m_shift_sym.h * animation_speed;
                 if (pair.first->can_end_animation) {
                     if (pair.first->m_shift_sym.w * pair.first->m_shift.w > 0) pair.first->m_shift.w = INFINITY;
                     if (pair.first->m_shift_sym.h * pair.first->m_shift.h > 0) pair.first->m_shift.h = INFINITY;
@@ -348,6 +358,20 @@ direction_vec_t find_keys(bool (*predicate)(direction_t), const direction_vec_t 
     return result;
 }
 
+dest_img_info *get_dest_surf(SDL_Renderer *renderer, tile_types type) {
+    if (dest_img.find(type) == dest_img.end()) {
+        auto surface = types_img_map.at(type);
+        auto dark_texture = SDL_CreateTextureFromSurface(renderer, surface);
+        auto bright_texture = SDL_CreateTextureFromSurface(renderer, surface);
+        SDL_SetTextureBlendMode(dark_texture, SDL_BLENDMODE_BLEND);
+        SDL_SetTextureAlphaMod(dark_texture, DEST_ALPHA_DARK);
+        SDL_SetTextureBlendMode(bright_texture, SDL_BLENDMODE_BLEND);
+        SDL_SetTextureAlphaMod(bright_texture, DEST_ALPHA_BRIGHT);
+        dest_img[type] = {dark_texture, bright_texture, get_srcrect(surface)};
+    }
+    return &dest_img.at(type);
+}
+
 Destination::Destination(TilePos pos, SDL_Surface *img, int type) : Tile(pos, img) {
     m_req = (tile_types) type;
 }
@@ -366,16 +390,13 @@ bool Destination::detect_requirement(SpaceConst space) const {
 }
 
 void Destination::show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
-                                  long double stretch_ratio) const {
-    auto surface = RENDER_TEXT(consolas->sized(FONT_SIZE(DESTINATION_SIZE)),
-                               type_names.at(m_req).c_str(),
-                               WHITE);
-    DisplayPos show_pos = {center.w - surface->w / 2, center.h - surface->h / 2};
-    auto texture = SDL_CreateTextureFromSurface(renderer, surface);
-    auto srcrect = get_srcrect(surface), dstrect = get_dstrect(show_pos, surface);
-    SDL_RenderCopy(renderer, texture, &srcrect, &dstrect);
-    SDL_DestroyTexture(texture);
-    SDL_FreeSurface(surface);
+                                  long double stretch_ratio) {
+    if (m_info == nullptr) m_info = get_dest_surf(renderer, m_req);;
+    auto is_bright = ((m_counter += 1) %= DEST_COUNTER_MAX) <= DEST_COUNTER_LIM;
+    DisplayPos show_pos = {(int) (center.w - m_info->srcrect.w * stretch_ratio / 2),
+                           (int) (center.h - m_info->srcrect.h * stretch_ratio / 2)};
+    auto dstrect = get_dstrect(show_pos, m_info->srcrect, stretch_ratio);
+    SDL_RenderCopy(renderer, is_bright ? m_info->bright : m_info->dark, nullptr, &dstrect);
 }
 
 TileType construct_undefined(TilePos pos, SDL_Surface *img, int) {
@@ -480,14 +501,14 @@ tile_types Gem::get_type() const {
 }
 
 void Gem::show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
-                          long double stretch_ratio) const {
+                          long double stretch_ratio) {
     auto surface = RENDER_TEXT(consolas->sized(FONT_SIZE(DESTINATION_SIZE)),
                                to_string(m_addition).c_str(),
                                m_addition <= 0 ? GREEN : RED);
     DisplayPos show_pos = {center.w - surface->w / 2, center.h - surface->h / 2};
     auto texture = SDL_CreateTextureFromSurface(renderer, surface);
-    auto srcrect = get_srcrect(surface), dstrect = get_dstrect(show_pos, surface);
-    SDL_RenderCopy(renderer, texture, &srcrect, &dstrect);
+    auto dstrect = get_dstrect(show_pos, surface);
+    SDL_RenderCopy(renderer, texture, nullptr, &dstrect);
     SDL_DestroyTexture(texture);
     SDL_FreeSurface(surface);
 }
@@ -576,16 +597,19 @@ void Robot::begin_request(direction_t dir) {
 
 void Robot::change_dir(direction_t dir) {
     m_dir = dir;
-    m_img = direction_img_robot.at(m_dir);
     m_is_moved = true;
+    m_img = direction_img_robot.at(dir);
 }
 
 void Robot::end_of_step() {
     m_is_moved = false;
 }
 
-void Robot::react_to_movement_result(direction_t dir) {
-    if (dir < 0) change_dir(invert(m_dir));
+void Robot::react_to_movement_result(bool result) {
+    if (!result) {
+        change_dir(invert(m_dir));
+        m_is_moved = false;
+    }
 }
 
 bool Robot::suppress_request(const Movement_Request &req) {

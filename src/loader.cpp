@@ -7,6 +7,7 @@
 json default_user, current_user;
 json txt_settings, txt_lobby, txt_in_game, txt_manual;
 json &public_user = current_user;
+string play_name;
 
 void init_default_user() {
     ifstream default_file(DEFAULT_JSON_PATH, ios::in);
@@ -25,14 +26,18 @@ void init_txt() {
 }
 
 void load_user() {
-    ifstream user_file(USER_JSON_PATH, ios::in);
+    ifstream user_file(USER_JSON_PATH, ios::in), play_file(PLAY_FILE_PATH, ios::in);
     if (user_file.is_open())
         user_file >> current_user;
     else
         set_user_to_default();
+    if (play_file.is_open())
+        play_file >> play_name;
 }
 
 void save_user() {
+    if (ROOM_IS_NUMBER && current_user.at(USER_K_ROOM) > 0)
+        current_user[USER_K_LEVELS] = current_user.at(USER_K_ROOM);
     ofstream user_file(USER_JSON_PATH, ios::out);
     user_file << current_user;
 }
@@ -77,7 +82,10 @@ RoomType create_room(const json &room_json) {
     room->m_title = room_json.at(ROOM_K_TITLE);
     room->m_help_map = room_json.at(ROOM_K_HELP);
     int next = room_json.at(ROOM_K_NEXT);
-    room->m_next = next == -1 ? sym(USER_ROOM) * (abs(USER_ROOM) + 1): next;
+    if (ROOM_IS_NUMBER)
+        room->m_next = next == -1 ? sym(USER_ROOM) * (abs(USER_ROOM) + 1) : next;
+    else
+        room->m_next = current_user.at(USER_K_ROOM);
     room->m_perf = (size_t) room_json.at(ROOM_K_PERF);
     room->m_unlock_bonus = room_json.at(ROOM_K_UNLOCK_BONUS);
     room->m_is_second_play = is_second_play();
@@ -231,7 +239,7 @@ bool is_gem_play() {
 string get_room_path() {
     auto room = current_user.at(USER_K_ROOM);
     return room.is_number() ? (CLOSS_DIRECTORY_PATH + to_string(current_user.at(USER_K_ROOM)) + ".json") : (ROOMS_PATH +
-                                                                                                        (string) room);
+                                                                                                            (string) room);
 }
 
 SDL_Surface *create_text(const json &txt, int size, const SDL_Color &color, const string &addition) {
@@ -249,9 +257,7 @@ SDL_Surface *create_text(const string &str, int size, const SDL_Color &color) {
 }
 
 bool contains_literal(const json &array, const json &value) {
-    for (const auto &cmp: array)
-        if (cmp == value) return true;
-    return false;
+    return std::any_of(array.begin(), array.end(), [value](const json &cmp) { return cmp == value; });
 }
 
 

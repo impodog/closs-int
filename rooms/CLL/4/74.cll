@@ -1,0 +1,27 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -2
+
+title {
+    en="No Crossing"
+    zh_cn="禁止穿行"
+}
+
+help {
+    en={
+        "Press-Change"="When robots is pushed to the wall, steps remain, but direction changes"
+        "Make them a mess!"="Push to change the direction"
+    }
+    zh_cn={
+        "压-变"="当机器人被推向墙, 步数不变, 但方向改变"
+        "搅乱它们!"="通过推来改变方向"
+    }
+}
+
+perf 19
+
+content 4d[
+    wa wa wa wa wa wa wa wa
+    -- -- sp G1 sp -- 1c wa
+    cy -- -- -- -- 3l 3l wa
+]

@@ -2,13 +2,19 @@ cmake_minimum_required(VERSION 3.24)
 project(Closs_InT)
 
 set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic")
+if (CMAKE_SYSTEM_NAME MATCHES "Windows")
+    set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic")
+elseif (CMAKE_SYSTEM_NAME MATCHES "Linux")
+    set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++")
+    message(STATUS "Linux is NOT well-tested")
+endif ()
+
 # SDL path config
-set(SDL2_PATH C:/Include/SDL2-mingw/SDL2-2.26.2/x86_64-w64-mingw32)
+set(SDL2_PATH C:/Include/SDL2-mingw/SDL2-2.26.3/x86_64-w64-mingw32)
 set(SDL2_INCLUDE ${SDL2_PATH}/include/SDL2)
 set(SDL2_LIB ${SDL2_PATH}/lib)
 
-set(SDL2_IMAGE_PATH C:/Include/SDL2-mingw/SDL2_image-2.6.2/x86_64-w64-mingw32)
+set(SDL2_IMAGE_PATH C:/Include/SDL2-mingw/SDL2_image-2.6.3/x86_64-w64-mingw32)
 set(SDL2_IMAGE_INCLUDE ${SDL2_IMAGE_PATH}/include/SDL2)
 set(SDL2_IMAGE_LIB ${SDL2_IMAGE_PATH}/lib)
 
@@ -16,6 +22,7 @@ set(SDL2_TTF_PATH C:/Include/SDL2-mingw/SDL2_ttf-2.20.1/x86_64-w64-mingw32)
 set(SDL2_TTF_INCLUDE ${SDL2_TTF_PATH}/include/SDL2)
 set(SDL2_TTF_LIB ${SDL2_TTF_PATH}/lib)
 
+# json path config
 set(nlohmann_INCLUDE C:/Include/nlohmann)
 
 include_directories(

@@ -1,0 +1,27 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 +255
+!gem-def G2 -255
+
+title {
+    en="Crossing Tension"
+    zh_cn="过路张力"
+}
+
+help {
+    en={
+        "Order"="The movement process goes: Cyan->Robot->Conveyor"
+    }
+    zh_cn={
+        "顺序"="移动过程顺序: 青色方块->机器人->传送带"
+    }
+}
+
+perf 7
+
+content 4d[
+    wa wa 1b wa
+    2l 1x cy bl
+    G2 wa bx wa
+    -- -- G1 3l
+]

@@ -113,7 +113,14 @@ void init_pages() {
                                     },
                                     {
                                             [] {
-                                                if (key_c(KEY_CONFIRM)) display->m_page = page_levels;
+                                                if (key_c(KEY_CONFIRM)) {
+                                                    if (play_name.empty())
+                                                        display->m_page = page_levels;
+                                                    else {
+                                                        current_user[USER_K_ROOM] = play_name;
+                                                        start_game();
+                                                    }
+                                                }
                                             },
                                             [] {
                                                 if (key_c(KEY_CONFIRM)) display->m_page = page_settings;
@@ -209,12 +216,14 @@ void reload_pages() {
             {20,  new Text_Page{img_chapter1, txt_in_game.at(IN_GAME_K_CHAPTER1), false}},
             {40,  new Text_Page{img_chapter2, txt_in_game.at(IN_GAME_K_CHAPTER2), false}},
             {60,  new Text_Page{img_chapter3, txt_in_game.at(IN_GAME_K_CHAPTER3), false}},
+            {80,  new Text_Page{img_chapter4, txt_in_game.at(IN_GAME_K_CHAPTER4), false}},
             {-10, new Text_Page{img_bonus1, txt_in_game.at(IN_GAME_K_BONUS1), false}}
     };
 }
 
 
 void init_key_map() {
+    /* INIT ALL KEYS
     init_key_map({0, 8, 9, 13, 27, 127, 1073741957, 1073741958});
     init_key_map(32, 64);
     init_key_map(91, 122);
@@ -223,6 +232,8 @@ void init_key_map() {
     init_key_map(1073741977, 1073741988);
     init_key_map(1073742000, 1073742045);
     init_key_map(1073742048, 1073742055);
+    */
+    init_key_map(KEY_NEEDED);
     key_click_map = key_down_map_t(key_down_map);
 }
 
@@ -349,12 +360,10 @@ Text_Page::Text_Page(SDL_Surface *title, json &text_map, bool release) {
 
         auto title_surf = create_text((string) pair.first, TEXT_PAGE_SIZE, WHITE);
         auto descr_surf = create_text((string) pair.second, TEXT_PAGE_SIZE, GREY);
-        SDL_Rect title_srcrect = get_srcrect(title_surf),
-                descr_srcrect = get_srcrect(descr_surf),
-                title_dstrect = get_dstrect({LEAVE_BLANK_WIDTH, content_height}, title_surf),
+        SDL_Rect title_dstrect = get_dstrect({LEAVE_BLANK_WIDTH, content_height}, title_surf),
                 descr_dstrect = get_dstrect({LEAVE_BLANK_WIDTH * 2 + title_surf->w, content_height}, descr_surf);
-        SDL_BlitSurface(title_surf, &title_srcrect, surface, &title_dstrect);
-        SDL_BlitSurface(descr_surf, &descr_srcrect, surface, &descr_dstrect);
+        SDL_BlitSurface(title_surf, nullptr, surface, &title_dstrect);
+        SDL_BlitSurface(descr_surf, nullptr, surface, &descr_dstrect);
 
         height += TEXT_PAGE_EACH;
         SDL_FreeSurface(title_surf);
@@ -408,7 +417,7 @@ Display::~Display() {
 
 void Display::apply_settings() {
     framerate_ratio = (long double) STANDARD_FRAMERATE / USER_FRAMERATE;
-    m_sensitivity = min(USER_SENSITIVITY * framerate_ratio, 1.0l);
+    m_sensitivity = (int) max(USER_SENSITIVITY * framerate_ratio, 1.0l);
     m_delay = 1000 / USER_FRAMERATE;
     animation_speed = USER_ANIMATION_SPEED / MAX_ANIMATION;
     m_debugger = current_user.at(USER_K_DEBUGGER) == DEBUGGER_CODE;
@@ -446,9 +455,8 @@ void Display::process_room_winning() {
         current_user[USER_K_ROOM] = m_room->m_pending_go_to;
         refresh_user_game();
     } else if (m_room->m_is_winning && (confirm || key_c(KEY_SAVE_AND_REPLAY))) {
-        try {
+        if (ROOM_IS_NUMBER && level_pic_map.find(current_user.at(USER_K_ROOM)) != level_pic_map.end())
             chapter_end = level_pic_map.at(current_user[USER_K_ROOM]);
-        } catch (const out_of_range &err) {}
         if (m_room->can_get_perf_play())
             current_user[USER_K_PERF].push_back(current_user.at(USER_K_ROOM));
         if (m_room->can_get_gem_play()) {
@@ -456,7 +464,7 @@ void Display::process_room_winning() {
             if (m_room->m_unlock_bonus != 0 && !contains_literal(USER_BONUS, m_room->m_unlock_bonus))
                 current_user[USER_K_BONUS].push_back(m_room->m_unlock_bonus);
         }
-        if (m_room->m_next.is_number_integer()) {
+        if (m_room->m_next.is_number_integer() && m_room->m_next != -1) {
             int next = (int) m_room->m_next;
             if (confirm) current_user[USER_K_ROOM] = next;
             current_user[USER_K_UNLOCKED] = max(next, (int) current_user[USER_K_UNLOCKED]);
@@ -506,7 +514,7 @@ void Display::process_room() {
         if (!m_room->m_can_move_flag) m_room->clear_move_status(); // this is usable because cyan always comes first
         m_room->do_pending_moves();
     }
-    m_room->animate_tiles(animation_speed * framerate_ratio);
+    m_room->animate_tiles(animation_speed * framerate_ratio, m_room_pos);
     if (m_room->m_is_end_of_animation) {
         m_room->detect_gems();
         m_room->end_of_step();
@@ -554,12 +562,13 @@ void Display::present() const {
 void Display::change_room(RoomType room) {
     clear_room();
     public_room = m_room = room;
-    auto total_size = m_room->total_size();
-    DisplayPos m_room_edge = {SCR_WIDTH - total_size.w, RESERVED_HEIGHT - total_size.h};
-    m_room_pos = {0, 0};
+    DisplayPos m_room_edge = {SCR_WIDTH - m_room->m_display_size.w, RESERVED_HEIGHT - m_room->m_display_size.h};
     m_room_min = {min(m_room_edge.w, 0), min(m_room_edge.h, 0)};
     m_room_max = {max(m_room_edge.w, 0), max(m_room_edge.h, 0)};
     stretch_ratio = (long double) (m_room->m_each) / STANDARD_EACH / 1.5;
+    m_room_pos = {0, 0};
+    if (m_room_min.w == 0) m_room_pos.w = m_room_edge.w / 2;
+    if (m_room_min.h == 0) m_room_pos.h = m_room_edge.h / 2;
     clear_img_vec();
 }
 
@@ -580,7 +589,7 @@ DisplayPos Display::get_center(const TilePos &pos) const {
             (int) (ROOM_EACH * ((int) pos.h + 0.5)) + m_room_pos.h};
 }
 
-void Display::show_tile(const Tile &tile) {
+void Display::show_tile(Tile &tile) {
     auto pos = show_img(tile.m_img, tile.m_pos, DisplayPos(tile.m_shift * ROOM_EACH));
     tile.show_additional(renderer, pos, get_center(tile.m_pos), stretch_ratio);
 }

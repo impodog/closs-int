@@ -1,6 +1,6 @@
 !process-only
 !add ../C_InT.cll
-!gem-def G1 +0
+!gem-def G1 -2
 !gem-def G2 -13
 
 title {

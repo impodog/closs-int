@@ -1,0 +1,26 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -2
+
+title {
+    en="Injection"
+    zh_cn="注射"
+}
+
+help {
+    en={
+        "Don't fill too quick"="Use every space to get out boxes"
+    }
+    zh_cn={
+        "别太快填充"="利用每个空间来取出箱子"
+    }
+}
+
+perf 42
+
+content 4d[
+    wa wa wa 1x 1b wa wa
+    cy -- bx -- bl wa wa
+    wa -- bx -- bl 1x G1
+    1b -- bx -- -- 1x wa
+]

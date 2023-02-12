@@ -1,0 +1,26 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 -1
+
+title {
+    en="Awkward Dest"
+    zh_cn="奇怪的终点"
+}
+
+help {
+    en={
+        "Stacking"="Stacking is really useful when you need to deal with conveyors"
+    }
+    zh_cn={
+        "堆叠"="堆叠在对付传送带时很有用"
+    }
+}
+
+perf 29
+
+content 4d[
+    wa wa wa 3d wa wa wa
+    wa 1c wa -- -- -- wa
+    -- 2r -- -- wa 2u bx
+    wa -- cy -- -- G1 wa
+]

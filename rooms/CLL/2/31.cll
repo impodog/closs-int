@@ -10,10 +10,10 @@ title {
 
 help {
     en={
-        "Blue(boxes)"="The dest marked Blue requires blue boxes"
+        "Blue(boxes)"="Now some destinations requires blue boxes"
     }
     zh_cn={
-        "蓝(箱)"="写有Blue的终点要求蓝色箱子"
+        "蓝(箱)"="现在有些终点要求蓝色箱子"
     }
 }
 

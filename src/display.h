@@ -14,12 +14,6 @@
 #define KEY_DOWN(code) key_down(code)
 #define IS_GAMING (m_page == nullptr)
 
-struct img_info {
-    SDL_Texture *texture;
-    SDL_Rect srcrect;
-};
-using img_map_t = unordered_map<SDL_Surface *, img_info>;
-
 extern key_down_map_t key_down_map;
 extern key_down_map_t key_clicking_map;
 extern key_down_map_t key_click_map;
@@ -178,7 +172,7 @@ public:
 
     DisplayPos get_center(const TilePos &pos) const;
 
-    void show_tile(const Tile &tile);
+    void show_tile(Tile &tile);
 
     DisplayPos show_img(SDL_Surface *img, const TilePos &pos, const DisplayPos &addition = {0, 0});
 

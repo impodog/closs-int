@@ -1,0 +1,27 @@
+!process-only
+!add ../C_InT.cll
+!gem-def G1 +255
+!gem-def G2 -255
+
+title {
+    en="Total Shuffle"
+    zh_cn="完全打乱"
+}
+
+help {
+    en={
+        "Planning Ahead"="Use a slot to wait, do more planning"
+    }
+    zh_cn={
+        "提前计划"="用槽来等待, 多计划"
+    }
+}
+
+perf 76
+
+content 4d[
+    -- 1x -- 1b wa -- --
+    wa -- -- bx cy bl --
+    wa 1x wa 1b -- -- wa
+    wa G1 G2 bx -- bl wa
+]

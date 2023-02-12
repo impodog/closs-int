@@ -5,12 +5,12 @@
     "Confirm(C/Return)[3]": "Continue from winning levels",
     "Settings(Q/Esc)[1]": "In game, open settings page",
     "Settings(Q/Esc)[2]": "In any page, quit to the previous game/lobby",
-    "Help(E)": "Open the current room's help page",
+    "Help(H)": "Open the current room's help page",
     "Direction:Up/Down/Left/Right[1]": "Perform a move in the game",
     "Direction:Up/Down/Left/Right[2]": "Move on to the previous/next text page",
     "Direction:Up/Down": "Move selection cursor",
     "Direction:Left/Right": "Adjust settings",
-    "W/A/S/D": "Move the game room itself up/left/down/right. Sensitivity adjustable in settings",
+    "W/A/S/D": "Move the game room itself up/left/down/right. Sensitivity adjustable",
     "Save&Replay(X)": "When winning, save your level progress and replay the current one",
     "Next(N)/Back(B)[1]": "In game, jump to the next/last level from the current one",
     "Next(N)/Back(B)[2]": "In level selection page, Jump 10 levels at a time"
@@ -26,7 +26,7 @@
     "方向:上/下/左/右[2]": "前进到上/下一文本页",
     "方向:上/下": "移动选择光标",
     "方向:左/右": "调整设置",
-    "W/A/S/D": "把游戏房间本身向上/下/左/右移动. 设置中敏感度可调",
+    "W/A/S/D": "把游戏房间本身向上/下/左/右移动. 敏感度可调",
     "保存并重玩(X)": "赢时, 保存关卡进度并重玩当前关卡",
     "下一个(N)/上一个(B)[1]": "在游戏中, 从当前关卡跳转到下一个/上一个关卡",
     "下一个(N)/上一个(B)[2]": "在关卡选择界面, 一次跳转10个关卡"

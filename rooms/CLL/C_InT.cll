@@ -2,85 +2,84 @@
 // This also include common shortcuts
 
 !cl-ml ver 1
-!cl-ml auto4d True  sep4d '<'  fill4d [0]
+!cl-ml auto4d true  sep4d '<'  fill4d [0]
 
 !add-only
 !forced-template
 
-!def background -2
-!def ud -1
-!def -- 0
-!def cy 1
-!def bx 2
-!def wa 3
-!def ds 4
-!def gm 5
-!def pic 6
-!def goto 7
-!def bl 8
-!def bb bl
-!def sp 9
-!def cv 10
-!def rb 11
+!templ-cmd !defud !def (%arg1) (%arg2:);!%undef (%arg1)
 
-!%undef background
-!%undef ud
-!%undef --
-!%undef cy
-!%undef bx
-!%undef wa
-!%undef ds
-!%undef gm
-!%undef pic
-!%undef goto
-!%undef bl
-!%undef bb
-!%undef sp
-!%undef cv
+!defud background -2
+!defud ud -1
+!defud empty 0
+!defud -- empty
+!defud cy 1
+!defud bx 2
+!defud wa 3
+!defud ds 4
+!defud gem 5
+!defud pic 6
+!defud goto 7
+!defud bl 8
+!defud bb bl
+!defud sp 9
+!defud cv 10
+!defud rb 11
 
-!def dir_up 1073741906
-!def dir_lt 1073741904
-!def dir_dw 1073741905
-!def dir_rt 1073741903
+!defud dir_up 1073741906
+!defud dir_lt 1073741904
+!defud dir_dw 1073741905
+!defud dir_rt 1073741903
 
-!def 1c [ds cy]
-!def 1x [ds bx]
-!def 1b [ds bl]
-!def 2u [cv dir_up]
-!def 2l [cv dir_lt]
-!def 2d [cv dir_dw]
-!def 2r [cv dir_rt]
-!def 3u [rb dir_up]
-!def 3l [rb dir_lt]
-!def 3d [rb dir_dw]
-!def 3r [rb dir_rt]
+!defud 1c [ds cy]
+!defud 1x [ds bx]
+!defud 1r [ds rb]
+!defud 1b [ds bl]
+!defud 2u [cv dir_up]
+!defud 2l [cv dir_lt]
+!defud 2d [cv dir_dw]
+!defud 2r [cv dir_rt]
+!defud 3u [rb dir_up]
+!defud 3l [rb dir_lt]
+!defud 3d [rb dir_dw]
+!defud 3r [rb dir_rt]
 
-!%undef 1c
-!%undef 1x
-!%undef 1b
-!%undef 2u
-!%undef 2l
-!%undef 2d
-!%undef 2r
-!%undef 3u
-!%undef 3l
-!%undef 3d
-!%undef 3r
+!vanish ds
+!vanish cv
+!vanish rb
+!vanish dir_up
+!vanish dir_lt
+!vanish dir_dw
+!vanish dir_rt
 
 !templ-repl !to ..\..\Closs\(%filename).json
 
+!templ-cmd !raise-arg-num-fault !templ-repl !this-is-todo (%DQUOTE)(%find.(%arg1))(%find." got ")(%arg2)(%find." args(expected ")(%find.(%arg3))(%find." args)")(%DQUOTE)
+
 !templ-cmd !pic-def !def (%arg1) [pic (%arg2)]
-!templ-cmd !goto-def !def GT [goto (%arg1)]
-!templ-cmd !gem-def !def (%arg1) [gm (%arg2)]
+
+!templ-cmd !goto-def-1arg !def GT [goto (%arg1)];!undef goto_1arg_flag
+!templ-cmd !goto-def-2args !def (%arg1) [goto (%arg2)];!undef goto_2args_flag
+!templ-cmd !goto-def !def goto_1arg_flag (%eq.(%arg_num),1);!ifj goto_1arg_flag !goto-def-1arg (%args);!def goto_2args_flag (%eq.(%arg_num),2);!ifj goto_2args_flag !goto-def-2args (%args);!raise-arg-num-fault "!goto-def" (%arg_num) "1 or 2"
+
+!templ-cmd !gem-def-1arg !def (%arg1) [gem +0];!undef gem_1arg_flag
+!templ-cmd !gem-def-2args !def (%arg1) [gem (%arg2)];!undef gem_2args_flag
+!templ-cmd !gem-def !def gem_1arg_flag (%eq.(%arg_num),1);!ifj gem_1arg_flag !gem-def-1arg (%args);!def gem_2args_flag (%eq.(%arg_num),2);!ifj gem_2args_flag !gem-def-2args (%args);!raise-arg-num-fault "!gem-def" (%arg_num) "1 or 2"
+
+!templ-cmd !gem-defs-err !raise-arg-num-fault "!gem-defs" odd "even";!undef gems_err_flag
+!templ-cmd !gem-defs !def (%arg1) [gem (%arg2)];!def gems_end_flag (%eq.(%arg_num),2);!ifj gems_end_flag !undef gems_end_flag;!def gems_err_flag (%eq.(%arg_num),3);!ifj gems_err_flag !gem-defs-err;!gem-defs (%arg3:)
+
 !templ-cmd !unlock-b !set unlock_bonus (%arg1)
 !templ-cmd !unlock-bonus !unlock-b (%arg1)
 
-!templ-repl !def_c filestring (%DQUOTE)(%filename)(%DQUOTE)
+!templ-repl !def-c filestring (%DQUOTE)(%filename)(%DQUOTE)
 
 !templ-cmd !x-is-todo !templ-cmd !(%arg1)-is-todo !templ-repl !this-is-todo (%DQUOTE)(%find.(%arg2))(%find." is todo in level ")(%find.filestring)(%DQUOTE)
 !x-is-todo descr "Description"
 !x-is-todo perf "Perfection Steps"
 !x-is-todo gem "Gem Layout"
+!uncmd !x-is-todo
+
 !templ-cmd !note !templ-repl !this-is-todo (%DQUOTE)(%find."Editing Note : \"")(%find.(%arg1))(%find."\" in level ")(%find.filestring)(%DQUOTE)
 
 !%templ-repl !set width len((%json.content)[0])

@@ -1,0 +1,25 @@
+!process-only
+!add ../C_InT.cll
+
+title {
+    en="Match the Needs"
+    zh_cn="符合需求"
+}
+
+help {
+    en={
+        "Know what to do"="The upper ones seems more important"
+    }
+    zh_cn={
+        "知道要做的事"="-"
+    }
+}
+
+perf 34
+
+content 4d[
+    1b -- wa -- wa 1x
+    1x wa -- -- bx cy
+    -- -- bx -- bl cy
+    wa wa wa -- wa wa
+]
