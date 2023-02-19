@@ -1,21 +1,21 @@
 {
-  "en": {
-    "Confirm(C/Return)[1]": "Confirm selection",
-    "Confirm(C/Return)[2]": "Exit from text pages",
-    "Confirm(C/Return)[3]": "Continue from winning levels",
-    "Settings(Q/Esc)[1]": "In game, open settings page",
-    "Settings(Q/Esc)[2]": "In any page, quit to the previous game/lobby",
-    "Help(H)": "Open the current room's help page",
-    "Direction:Up/Down/Left/Right[1]": "Perform a move in the game",
-    "Direction:Up/Down/Left/Right[2]": "Move on to the previous/next text page",
-    "Direction:Up/Down": "Move selection cursor",
-    "Direction:Left/Right": "Adjust settings",
-    "W/A/S/D": "Move the game room itself up/left/down/right. Sensitivity adjustable",
-    "Save&Replay(X)": "When winning, save your level progress and replay the current one",
-    "Next(N)/Back(B)[1]": "In game, jump to the next/last level from the current one",
-    "Next(N)/Back(B)[2]": "In level selection page, Jump 10 levels at a time"
-  },
-  "zh_cn": {
+  "en": [
+    ["Confirm(C/Return)", "Confirm selection"],
+    ["OK(C/Return)", "Exit from text pages"],
+    ["Continue(C/Return)", "Continue from winning levels"],
+    ["Settings(Q/Esc)[1]", "In game, open settings page"],
+    ["Quit(Q/Esc)[2]", "In any page, quit to the previous game/lobby"],
+    ["Help(H)", "Open the current room's help page"],
+    ["Direction(Up/Down/Left/Right)", "Perform a move in the game"],
+    ["Switch Page(Up/Down/Left/Right)", "Move on to the previous/next text page"],
+    ["Switch Cursor(Up/Down)", "Move selection cursor"],
+    ["Adjust(Left/Right)", "Adjust settings"],
+    ["Move(W/A/S/D)", "Move the game room itself up/left/down/right. Sensitivity adjustable"],
+    ["Save&Replay(X)", "When winning, save your level progress and replay the current one"],
+    ["Next(N)/Back(B)", "In game, jump to the next/last level from the current one"],
+    ["+10(N)/-10(B)[2]", "In level selection page, Jump 10 levels at a time"]
+  ],
+  "zh_cn_": {
     "确认(C/Return)[1]": "确认选项",
     "确认(C/Return)[2]": "离开文本页(如本页)",
     "确认(C/Return)[3]": "从赢得的关卡中继续",
@@ -30,5 +30,21 @@
     "保存并重玩(X)": "赢时, 保存关卡进度并重玩当前关卡",
     "下一个(N)/上一个(B)[1]": "在游戏中, 从当前关卡跳转到下一个/上一个关卡",
     "下一个(N)/上一个(B)[2]": "在关卡选择界面, 一次跳转10个关卡"
-  }
+  },
+  "zh_cn": [
+    ["确认(C/Return)", "确认选项"],
+    ["OK(C/Return)", "离开文本页(如本页)"],
+    ["继续(C/Return)", "从赢得的关卡中继续"],
+    ["设置(Q/Esc)[1]", "在游戏中, 打开设置页"],
+    ["退出(Q/Esc)[2]", "在任意页, 退出到最近打开的游戏/大厅"],
+    ["帮助(H)", "打开当前房间的帮助页"],
+    ["方向(上/下/左/右)", "在游戏中行进一步"],
+    ["换页(上/下/左/右)", "前进到上/下一文本页"],
+    ["换项(上/下)", "移动选择光标"],
+    ["调整(左/右)", "调整设置"],
+    ["移动(W/A/S/D)", "把游戏房间本身向上/下/左/右移动. 敏感度可调"],
+    ["保存并重玩(X)", "赢时, 保存关卡进度并重玩当前关卡"],
+    ["下一个(N)/上一个(B)", "在游戏中, 从当前关卡跳转到下一个/上一个关卡"],
+    ["+10(N)/-10(B)[2]", "在关卡选择界面, 一次跳转10个关卡"]
+  ]
 }

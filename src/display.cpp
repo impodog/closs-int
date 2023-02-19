@@ -345,7 +345,9 @@ Text_Page::Text_Page(SDL_Surface *title, json &text_map, bool release) {
     SDL_Surface *surface = nullptr;
     int height = SCR_HEIGHT;
     bool goto_flag = true;
-    for (const auto &pair: text_map.at(USER_LANG).get<help_map_t>()) {
+    auto &text_json = text_map.at(USER_LANG);
+    bool is_array = text_json.is_array();
+    for (const auto &element: text_json.items()) {
         content_height_refresh:
         int content_height = height + (TEXT_PAGE_EACH - TEXT_PAGE_SIZE) / 2;
         if (content_height > SCR_HEIGHT - TEXT_PAGE_EACH - m_title->h && goto_flag) {
@@ -357,9 +359,14 @@ Text_Page::Text_Page(SDL_Surface *title, json &text_map, bool release) {
         } else
             goto_flag = true;
 
-
-        auto title_surf = create_text((string) pair.first, TEXT_PAGE_SIZE, WHITE);
-        auto descr_surf = create_text((string) pair.second, TEXT_PAGE_SIZE, GREY);
+        SDL_Surface_ptr title_surf, descr_surf;
+        if (is_array) {
+            title_surf = create_text((string) element.value().at(0), TEXT_PAGE_SIZE, WHITE);
+            descr_surf = create_text((string) element.value().at(1), TEXT_PAGE_SIZE, GREY);
+        } else {
+            title_surf = create_text((string) element.key(), TEXT_PAGE_SIZE, WHITE);
+            descr_surf = create_text((string) element.value(), TEXT_PAGE_SIZE, GREY);
+        }
         SDL_Rect title_dstrect = get_dstrect({LEAVE_BLANK_WIDTH, content_height}, title_surf),
                 descr_dstrect = get_dstrect({LEAVE_BLANK_WIDTH * 2 + title_surf->w, content_height}, descr_surf);
         SDL_BlitSurface(title_surf, nullptr, surface, &title_dstrect);

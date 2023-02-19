@@ -12,32 +12,38 @@ Release Version : Win64
 
 Source Version : Well-tested on Win11 64-bit. Should work on other windows versions. NOT tested on other platforms(that SDL2 supports).
 
-### External Packages Used
+### External Dependencies
 
 SDL2, SDL2_image, SDL2_ttf : [See SDL website](www.libsdl.org)
 
 json.hpp : [nlohmann/json: JSON for Modern C++ (github.com)](https://github.com/nlohmann/json)
 
+C&C++ compiler such as [MinGW-w64](https://www.mingw-w64.org/)
+
+[CMake](https://cmake.org/download/)
+
 ### Link the Packages (MinGW)
 
 1. Download SDL2, SDL2_image, SDL2_ttf (latest mingw version), json.hpp(which is in the releases)
-2. Extract all SDL2 archive
+2. Extract all SDL2 archive to your path (e.g. C:/Include/)
 3. For each SDL2 directory, copy the path of **/[32bit=i686,64bit=x86_64]-w64-mingw32**
 4. Now open this project and modify **/cmakelists.txt**, replace **"SDL2_PATH"**, **"SDL2_IMAGE_PATH"**, **"SDL2_TTF_PATH"** values with the path you copied
 5. Also, copy json.hpp path, and replace **"nlohmann_INCLUDE"** value in /cmakelists.txt
-6. To make the game function, you'll also need to copy the DLL files in each SDL2 directory, which are under **/[system]/bin/[SDL2|SDL2_image|SDL2_ttf].dll**, and move it to **C:/Windows/System32**, or optionally under the executable parent folder
+6. To make the game function, you'll also need to copy the DLL files in each SDL2 directory, which are under **[SDL root]/bin/[SDL2|SDL2_image|SDL2_ttf].dll**, and move it to **C:/Windows/System32**, or optionally under the executable parent folder
 
 ### Build with CMake
 
-[Download CMake](https://cmake.org/download/) in case you haven't done it.
+[Download CMake](https://cmake.org/download/) in case you haven't done it. Then go to the game directory
 
-Run command under project directory : **"cmake --build cmake-build --target Closs_InT"**, you should see an executable created under /cmake-build
+Configure the project with **"cmake ."**
+
+Run command : **"cmake --build cmake-build --target Closs_InT"**, you should see an executable created under /cmake-build
 
 One last thing, if you are on release branch, copy the executable under **/cmake-build**, and paste it to the project directory
 
 ### All Done!
 
-Open the executable and play!
+Open the executable under the **executable directory** and play!
 
 ## How to Play
 
@@ -113,6 +119,16 @@ You don't need to know a lot of CLL to create a level, just follow the steps:
 6. Now, modify your **title** and **help**, just type some words in the double quotes! It's fine if you only know one language, I can help to translate!
 7. To make the level actually function, add **"//"** before line 3 "!note \"CHANGE THIS BEFORE USE\""
 8. Convert you level to see if you made any mistakes! If you didn't, you shall see a new .json file under /rooms/Closs named just after your CLL file!
+
+### Rules of CLL
+
+There are some rules to improve your CLL levels:
+
+1. Do NOT put two tiles in one space in the level design(although it is supported)
+2. Do NOT write unnecessary commas, colons, or assign symbols
+3. Do NOT use the json values
+4. DO define your own shortcuts in a pattern (e.g. G1(Gem + ...), Xs(Box, Spike), Cr(Conveyor, Robot))
+5. DO use **!note \"...\" ** to take todo messages when you publish
 
 ### Playing My New Level
 

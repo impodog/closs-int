@@ -20,43 +20,43 @@
     "zh_cn": "奖励关组 (找隐藏关和宝石!) : "
   },
   "chapter1": {
-    "en": {
-      "Chapter 1 Clear!": "You cleared level 1~20!"
-    },
-    "zh_cn": {
-      "章节 1 完成!": "你完成了关卡 1~20!"
-    }
+    "en": [
+      ["Chapter 1 Clear!", "You cleared level 1~20!"]
+    ],
+    "zh_cn": [
+      ["章节 1 完成!", "你完成了关卡 1~20!"]
+    ]
   },
   "chapter2": {
-    "en": {
-      "Chapter 2 Clear!": "You cleared level 21~40!"
-    },
-    "zh_cn": {
-      "章节 2 完成!": "你完成了关卡 21~40!"
-    }
+    "en": [
+      ["Chapter 2 Clear!", "You cleared level 21~40!"]
+    ],
+    "zh_cn": [
+      ["章节 2 完成!", "你完成了关卡 21~40!"]
+    ]
   },
   "chapter3": {
-    "en": {
-      "Chapter 3 Clear!": "You cleared level 41~60!"
-    },
-    "zh_cn": {
-      "章节 3 完成!": "你完成了关卡 41~60!"
-    }
+    "en": [
+      ["Chapter 3 Clear!", "You cleared level 41~60!"]
+    ],
+    "zh_cn": [
+      ["章节 3 完成!", "你完成了关卡 41~60!"]
+    ]
   },
   "chapter4": {
-    "en": {
-      "Chapter 4 Clear!": "You cleared level 61~80!"
-    },
-    "zh_cn": {
-      "章节 4 完成!": "你完成了关卡 61~80!"
-    }
+    "en": [
+      ["Chapter 4 Clear!", "You cleared level 61~80!"]
+    ],
+    "zh_cn": [
+      ["章节 4 完成!", "你完成了关卡 61~80!"]
+    ]
   },
   "bonus1": {
-    "en": {
-      "Bonus Level Set 1 Clear!": "Really confusing, huh?"
-    },
-    "zh_cn": {
-      "奖励关卡组 1 完成!": "挺令人迷惑的吧?"
-    }
+    "en": [
+      ["Bonus Level Set 1 Clear!", "Really confusing, huh?"]
+    ],
+    "zh_cn": [
+      ["奖励关卡组 1 完成!", "挺令人迷惑的吧?"]
+    ]
   }
 }
