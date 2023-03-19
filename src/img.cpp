@@ -148,8 +148,8 @@ void init_img() {
     types_img_map[tile_go_to] = img_go_to;
     types_img_map[tile_blue] = img_blue;
     types_img_map[tile_spike] = img_spike;
-    types_img_map[tile_conveyor] = img_none;
-    types_img_map[tile_robot] = img_robot_dw;
+    types_img_map[tile_conveyor] = nullptr;
+    types_img_map[tile_robot] = nullptr;
     types_img_map[tile_imitate] = img_none;
     // direction_img map
     direction_img_conveyor = {

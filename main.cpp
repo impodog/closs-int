@@ -26,9 +26,12 @@ void do_all_free() {
 }
 
 void try_output_debugger_code() {
-    auto f = fopen(I_AM_DEBUGGER, "r");
-    if (f != nullptr) {
-        fclose(f);
+    bool is_opened;
+    {
+        ifstream f_in_test(I_AM_DEBUGGER, ios::in);
+        is_opened = f_in_test.is_open();
+    }
+    if (is_opened) {
         ofstream f_out(I_AM_DEBUGGER, ios::out);
         f_out << debugger_code << endl;
     }

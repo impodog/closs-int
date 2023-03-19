@@ -15,21 +15,36 @@ if len(path_input) == 0:
 dst_path = os.path.abspath(os.path.join(absdir,path_input))
 print("The copy will be pasted into : \"%s\".\n" % dst_path)
 
+src_const = os.path.join(src_path,"src/const.h")
 try:
-    os.chdir(src_path)
-except:
-    raise RuntimeError("Cannot find the directory to copy from. Abort.")
-
-with open("src/const.h","r") as file:
-    content = file.read()
-    result = re.search(r"#define\s+VERSION\s+\"(v[\d\.]+)\"",content)
-    if result is None:
-        raise RuntimeError("Cannot find the version info specified. Abort.")
-    else:
-        version = result.group(1)
-        print("Version Found : " + version)
-os.chdir(dst_path)
-print("Source file check is done.\n")
+    print("Looking for src version in \"%s\"..." % src_const)
+    with open(src_const,"r") as file:
+        content = file.read()
+        result = re.search(r"#define\s+VERSION\s+\"(v[\d\.]+)\"",content)
+        if result is None:
+            raise RuntimeError("Cannot find the source version info specified. Abort.")
+        else:
+            src_version = result.group(1)
+            print("Source version found : " + src_version)
+except FileNotFoundError:
+    raise RuntimeError("Cannot find \"const.h\" as the source path inputed. Abort.")
+dst_const = os.path.join(dst_path,"src/const.h")
+try:
+    print("Looking for dest version in \"%s\"..." % dst_const)
+    with open(dst_const,"r") as file:
+        content = file.read()
+        result = re.search(r"#define\s+VERSION\s+\"(v[\d\.]+)\"",content)
+        if result is None:
+            raise RuntimeError("Cannot find the dest version info specified. Abort.")
+        else:
+            dst_version = result.group(1)
+            print("Dest version found : " + dst_version)
+except FileNotFoundError:
+    raise RuntimeError("Cannot find \"const.h\" as the dest path inputed. Abort.")
+if src_version == dst_version:
+    print("Source and dest versions are the same. No need to sync.")
+    exit(0)
+print("File check is done.\n")
     
 print("Input your commit message (hit ENTER to use default) : ")
 message = ""
@@ -40,7 +55,7 @@ while True:
         break
     message += i + "\n"
 if len(message) == 0:
-    message = "Syncing version " + version + " from gitee repo"
+    message = "Syncing version " + src_version + " from gitee repo"
 print("The commit message will be : \"%s\".\n" % message)
 
 

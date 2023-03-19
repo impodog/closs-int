@@ -22,6 +22,8 @@ void init_pages();
 
 void free_pages();
 
+void reload_pages();
+
 void init_display();
 
 void free_display();
@@ -63,70 +65,13 @@ public:
 using PageType = Page *;
 using PageConst = const Page *;
 
-using selection_surface_generator_t = SDL_Surface *(*)(bool);
-using selection_generators_t = vector<selection_surface_generator_t>;
-using selection_generators_const_t = const vector<selection_surface_generator_t> &;
+extern PageType page_settings, page_lobby, page_levels, page_manual;
 
-using selection_click_processor_t = void (*)();
-using selection_processors_t = vector<selection_click_processor_t>;
-using selection_processors_const_t = const vector<selection_click_processor_t> &;
-using text_sides_t = vector<SDL_Surface *>;
-
-
-class Selection_Page : public Page {
-public:
-    SDL_Surface *m_title;
-    DisplayPos m_title_pos;
-
-    selection_generators_t m_generators;
-    selection_processors_t m_processors;
-
-    size_t m_index = 0, m_size;
-
-    int m_each;
-
-    Selection_Page(SDL_Surface *title, selection_generators_const_t selections, selection_processors_const_t processors,
-                   int each = SELECTION_DEFAULT_EACH);
-
-    void show() override;
-
-    void process() override;
-};
-
-using Selection_Page_Type = Selection_Page *;
-using Selection_Page_Const = const Selection_Page *;
-
-extern Selection_Page_Type page_settings, page_lobby, page_levels;
-
-
-class Text_Page : public Page {
-public:
-    bool m_release;
-
-    SDL_Surface *m_title;
-    DisplayPos m_title_pos;
-
-    text_sides_t m_sides;
-    size_t m_index = 0, m_size;
-
-    string m_language = current_user.at(USER_K_LANGUAGE);
-
-    Text_Page(SDL_Surface *title, json &text_map, bool release);
-
-    ~Text_Page();
-
-    void show() override;
-
-    void process() override;
-};
-
-using Text_Page_Type = Text_Page *;
-using Text_Page_Const = const Text_Page *;
-extern Text_Page_Type page_manual;
-
-using level_pic_map_t = map<int, Text_Page_Type>;
+using level_pic_map_t = map<int, PageType>;
 extern level_pic_map_t level_pic_map;
 extern SDL_Keycode cur_key;
+
+PageType create_text_page(SDL_Surface *, json &, bool);
 
 class Display {
 public:
