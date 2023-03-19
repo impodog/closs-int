@@ -1,0 +1,26 @@
+!process-only
+!add ../C_InT.cll
+
+title {
+    en="The Box Capping"
+    zh_cn="箱子顶盖"
+}
+
+help {
+    en={
+        "Endless pt.2"="Two facing conveyors also cause infinity"
+    }
+    zh_cn={
+        "无尽之二"="两个面对着的传送带也会造成无尽"
+    }
+}
+
+perf 54
+
+content 4d[
+    wa wa wa wa wa wa wa
+    wa 1x -- 2d -- -- --
+    wa 1x -- bx -- bx --
+    wa -- -- bx wa bx 1x
+    wa cy -- 2u -- -- 1x
+]

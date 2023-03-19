@@ -8,6 +8,7 @@
 #define ROOM_CONTAINS_GEMS (m_is_perf_play && !m_is_gem_play)
 #define IS_WINNING_GEM (m_is_winning && ROOM_CONTAINS_GEMS)
 #define FOREACH_TILE for (auto lane: m_distribute) for (auto space: *lane) for (auto tile: *space)
+#define NEW_TILE(pos, code, type_arg) tile_type_map.at(code)(pos, types_img_map.at(code), type_arg)
 
 #include "img.h"
 
@@ -15,6 +16,9 @@ using public_code_t = unsigned long long;
 using key_down_map_t = unordered_map<direction_t, bool>;
 using direction_vec_t = vector<direction_t>;
 using key_predicate_t = bool (*)(direction_t key);
+
+using type_arg_t = vector<int>;
+using type_arg_ref = const type_arg_t &;
 
 extern public_code_t public_code;
 
@@ -41,6 +45,8 @@ public:
     using pending_movements_t = unordered_map<Tile *, direction_t>;
     using pending_series_t = unordered_map<Tile *, Movement_Request>;
     public_code_t m_pubCode;
+    type_arg_t m_type_arg;
+    int &m_primary;
     TilePos m_pos;
     SDL_Surface *m_img;
 
@@ -48,7 +54,7 @@ public:
     DisplayPos m_shift_sym = {0, 0};
     bool can_end_animation = false;
 
-    Tile(TilePos pos, SDL_Surface *img);
+    Tile(TilePos pos, SDL_Surface *img, type_arg_ref type_arg = {tile_undefined});
 
     SDL_Rect srcrect() const;
 
@@ -57,6 +63,8 @@ public:
     bool operator==(const Tile &tile) const;
 
     string get_info() const;
+
+    int &arg(size_t i);
 
     virtual bool is_independent() const;
 
@@ -113,12 +121,15 @@ struct Dest_Info {
 using animations_t = unordered_map<TileType, Animation_Info>;
 
 class Room {
+protected:
+    Room(const Room &room) = default;
+
 public:
     tile_distribute_t m_distribute;
     int m_each, m_pending_go_to = 0, m_unlock_bonus = 0;
-    size_t m_steps = 0, m_perf, m_parsing_index = 0;
+    size_t m_steps = 0, m_perf = 0, m_parsing_index = 0;
     DisplayPos m_display_size;
-    bool m_is_winning = false, m_is_moving = false, m_is_end_of_animation = false, m_is_second_play = false, m_is_perf_play = false, m_is_gem_play = false, m_end_animation_flag = false, m_can_move_flag = false;
+    bool m_is_winning = false, m_is_moving = false, m_is_end_of_animation = false, m_is_second_play = false, m_is_perf_play = false, m_is_gem_play = false, m_end_animation_flag = false, m_can_move_flag = false, m_box_no_serial = false, m_skip_able = false;
 
     json m_title, m_help_map, m_next;
 
@@ -131,7 +142,13 @@ public:
 
     Room(int each, TilePos size);
 
+    Room(const Room *room); // NOLINT(google-explicit-constructor)
+
     ~Room();
+
+    void delete_distribute();
+
+    void copy_distribute(const Room *room);
 
     void refresh_dest();
 
@@ -186,7 +203,7 @@ public:
 
 using RoomType = Room *;
 
-using tile_constructor_t = TileType (*)(TilePos, SDL_Surface *, int);
+using tile_constructor_t = TileType (*)(TilePos, SDL_Surface *, type_arg_ref);
 using tile_types_map_t = const map<tile_types, tile_constructor_t>;
 
 extern tile_types_map_t tile_type_map;
@@ -200,6 +217,8 @@ direction_vec_t find_keys(key_predicate_t predicate, const direction_vec_t &want
 
 dest_img_info *get_dest_surf(SDL_Renderer *renderer, tile_types type);
 
+TileType copy_tile(const Tile *src);
+
 extern RoomType public_room;
 
 // defined in loader.cpp
@@ -208,10 +227,9 @@ extern json &public_user;
 class Destination : public Tile {
 public:
     size_t m_counter = 0;
-    tile_types m_req;
     dest_img_info *m_info = nullptr;
 
-    Destination(TilePos pos, SDL_Surface *img, int type);
+    Destination(TilePos pos, SDL_Surface *img, type_arg_ref args);
 
     tile_types get_type() const override;
 
@@ -254,9 +272,7 @@ public:
 
 class Gem : public Tile {
 public:
-    int m_addition;
-
-    Gem(TilePos pos, SDL_Surface *img, int addition);
+    Gem(TilePos pos, SDL_Surface *img, type_arg_ref args);
 
     tile_types get_type() const override;
 
@@ -273,9 +289,7 @@ public:
 
 class Go_To : public Tile {
 public:
-    int m_level;
-
-    Go_To(TilePos pos, SDL_Surface *img, int level);
+    Go_To(TilePos pos, SDL_Surface *img, type_arg_ref args);
 
     tile_types get_type() const override;
 
@@ -304,9 +318,9 @@ public:
 
 class Conveyor : public Tile {
 public:
-    direction_t m_dir;
+    bool m_is_free;
 
-    Conveyor(TilePos pos, SDL_Surface *, direction_t dir);
+    Conveyor(TilePos pos, SDL_Surface *, type_arg_ref args);
 
     tile_types get_type() const override;
 
@@ -317,10 +331,9 @@ public:
 
 class Robot : public Tile {
 public:
-    direction_t m_dir;
-    bool m_is_moved = false;
+    bool m_is_free = false, m_is_moved = false;
 
-    Robot(TilePos pos, SDL_Surface *, direction_t dir);
+    Robot(TilePos pos, SDL_Surface *, type_arg_ref args);
 
     bool is_independent() const override;
 
@@ -340,5 +353,7 @@ public:
 
     bool suppress_request(const Movement_Request &req) override;
 };
+
+// class Imitate
 
 #endif //CLOSS_INT_CLOSS_H

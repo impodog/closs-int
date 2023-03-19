@@ -1,0 +1,28 @@
+!process-only
+!add ../C_InT.cll
+!no-serial
+
+title {
+    en="Lock Intensity" 
+    zh_cn="锁定"
+}
+
+help {
+    en={
+        "Classic Game"="Here you'll find yourself stuck when you push multiple boxes!"
+    } 
+    zh_cn={
+        "经典游戏"="在这里你会在推多个箱子时卡住!"
+    }
+}
+
+content 4d[
+    -- wa wa wa wa --
+    wa wa -- -- wa --
+    wa cy bx -- wa --
+    wa wa bx -- wa wa
+    wa wa -- bx -- wa
+    wa 1x bx -- -- wa
+    1x 1x 1x bx 1x wa
+    wa wa wa wa wa wa
+]

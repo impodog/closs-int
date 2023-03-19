@@ -12,6 +12,8 @@ key_down_map_t key_click_map;
 Selection_Page_Type page_settings, page_lobby, page_levels;
 Text_Page_Type page_manual = nullptr;
 
+SDL_Keycode cur_key;
+
 void init_pages() {
     page_settings = new Selection_Page{img_settings,
                                        {
@@ -185,7 +187,8 @@ void init_pages() {
                                                      shift_bonus_levels(true);
                                                  } else if (key_c(KEY_MOVE_LEFT)) {
                                                      shift_bonus_levels(false);
-                                                 } else if (key_c(KEY_CONFIRM)) {
+                                                 } else if (key_c(KEY_CONFIRM) &&
+                                                            current_user.at(USER_K_BONUS_LEVELS) != 0) {
                                                      current_user[USER_K_ROOM] =
                                                              (-(int) current_user.at(USER_K_BONUS_LEVELS)) * 5 - 1;
                                                      refresh_user_game();
@@ -217,6 +220,7 @@ void reload_pages() {
             {40,  new Text_Page{img_chapter2, txt_in_game.at(IN_GAME_K_CHAPTER2), false}},
             {60,  new Text_Page{img_chapter3, txt_in_game.at(IN_GAME_K_CHAPTER3), false}},
             {80,  new Text_Page{img_chapter4, txt_in_game.at(IN_GAME_K_CHAPTER4), false}},
+            {100, new Text_Page{img_chapter5, txt_in_game.at(IN_GAME_K_CHAPTER5), false}},
             {-10, new Text_Page{img_bonus1, txt_in_game.at(IN_GAME_K_BONUS1), false}}
     };
 }
@@ -237,45 +241,46 @@ void init_key_map() {
     key_click_map = key_down_map_t(key_down_map);
 }
 
-void init_key_map(direction_t code) {
+void init_key_map(SDL_Keycode code) {
     key_down_map[code] = key_clicking_map[code] = false;
 }
 
-void init_key_map(const initializer_list<direction_t> &codes) {
+void init_key_map(const initializer_list<SDL_Keycode> &codes) {
     for (auto code: codes)
         init_key_map(code);
 }
 
-void init_key_map(direction_t begin, direction_t end) {
-    for (direction_t i = begin; i != end; i++) {
+void init_key_map(SDL_Keycode begin, SDL_Keycode end) {
+    for (SDL_Keycode i = begin; i != end; i++) {
         key_down_map[i] = key_clicking_map[i] = false;
     }
 }
 
-void key_down(direction_t code) {
+void key_down(SDL_Keycode code) {
     key_clicking_map[code] = key_down_map[code];
     key_down_map[code] = true;
 }
 
-bool key_d(direction_t code) {
+bool key_d(SDL_Keycode code) {
     return key_down_map[code];
 }
 
-bool key_d(initializer_list<direction_t> codes) {
-    return any_of(codes.begin(), codes.end(), [](direction_t code) { return key_d(code); });
+bool key_d(initializer_list<SDL_Keycode> codes) {
+    return any_of(codes.begin(), codes.end(), [](SDL_Keycode code) { return key_d(code); });
 }
 
-bool key_clicking(direction_t code) {
+bool key_clicking(SDL_Keycode code) {
     auto click = key_clicking_map[code];
-    return (key_clicking_map[code] = key_down_map[code]) != click;
+    bool result = (key_clicking_map[code] = key_down_map[code]) != click;
+    return result;
 }
 
-bool key_c(direction_t code) {
+bool key_c(SDL_Keycode code) {
     return key_click_map.at(code);
 }
 
-bool key_c(initializer_list<direction_t> codes) {
-    return any_of(codes.begin(), codes.end(), [](direction_t code) { return key_c(code); });
+bool key_c(initializer_list<SDL_Keycode> codes) {
+    return any_of(codes.begin(), codes.end(), [](SDL_Keycode code) { return key_c(code); });
 }
 
 SDL_Surface *create_settings_text(const string &setting, const string &from_user, bool b) {
@@ -300,7 +305,9 @@ void start_game() {
         auto room = open_room(get_room_path());
         display->change_room(room);
         display->m_page = nullptr;
-    } catch (const std::runtime_error &) {}
+    } catch (const std::runtime_error &) {
+        current_user.at(USER_K_ROOM) = (int) current_user.at(USER_K_ROOM) - 1;
+    }
 }
 
 void refresh_user_game() {
@@ -381,7 +388,6 @@ Text_Page::Text_Page(SDL_Surface *title, json &text_map, bool release) {
 
 Text_Page::~Text_Page() {
     for (auto surface: m_sides) SDL_FreeSurface(surface);
-    Page::~Page();
 }
 
 void Text_Page::show() {
@@ -413,6 +419,8 @@ Display::Display() {
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     SDL_RenderSetLogicalSize(renderer, SCR_WIDTH, SCR_HEIGHT);
     m_page = page_lobby;
+    for (auto &debug_room: m_debug_room)
+        debug_room = nullptr;
     apply_settings();
     collect_loop_info();
 }
@@ -427,8 +435,11 @@ void Display::apply_settings() {
     m_sensitivity = (int) max(USER_SENSITIVITY * framerate_ratio, 1.0l);
     m_delay = 1000 / USER_FRAMERATE;
     animation_speed = USER_ANIMATION_SPEED / MAX_ANIMATION;
-    m_debugger = current_user.at(USER_K_DEBUGGER) == DEBUGGER_CODE;
-    if (m_debugger) debug_unlock_levels();
+    m_debugger = current_user.at(USER_K_DEBUGGER) == debugger_code;
+    if (m_debugger) {
+        debug_unlock_levels();
+        prompt("DEBUGGER mode is turned on with code " + to_string(debugger_code));
+    }
     text_renderer = text_renderer_map.at(current_user.at(USER_K_TEXT_RENDERER));
     reload_pages();
 }
@@ -436,7 +447,18 @@ void Display::apply_settings() {
 void Display::collect_loop_info() {
     auto now = high_resolution_clock::now();
     auto duration = duration_cast<milliseconds>(now - m_last).count();
+    if (m_debugger && !debug_prompt.empty()) {
+        list<const string *> to_delete;
+        for (auto &prompt_info: debug_prompt)
+            if ((prompt_info.second -= duration) <= 0) {
+                prompt_info.second = 0;
+                to_delete.push_back(&prompt_info.first);
+            }
+        for (auto key_to_delete: to_delete)
+            debug_prompt.erase(*key_to_delete);
+    }
     m_last = now;
+
 
     SDL_PollEvent(&event);
     if (m_delay > duration) SDL_Delay(m_delay - duration);
@@ -462,7 +484,8 @@ void Display::process_room_winning() {
         current_user[USER_K_ROOM] = m_room->m_pending_go_to;
         refresh_user_game();
     } else if (m_room->m_is_winning && (confirm || key_c(KEY_SAVE_AND_REPLAY))) {
-        if (ROOM_IS_NUMBER && level_pic_map.find(current_user.at(USER_K_ROOM)) != level_pic_map.end())
+        if (!m_room->m_is_second_play && ROOM_IS_NUMBER &&
+            level_pic_map.find(current_user.at(USER_K_ROOM)) != level_pic_map.end())
             chapter_end = level_pic_map.at(current_user[USER_K_ROOM]);
         if (m_room->can_get_perf_play())
             current_user[USER_K_PERF].push_back(current_user.at(USER_K_ROOM));
@@ -498,18 +521,10 @@ void Display::process_room() {
     if (key_d(KEY_SHIFT_LEFT)) m_room_pos.w -= m_sensitivity;
     if (key_d(KEY_SHIFT_DOWN)) m_room_pos.h += m_sensitivity;
     if (key_d(KEY_SHIFT_RIGHT)) m_room_pos.w += m_sensitivity;
-    if (key_c(KEY_RESTART)) refresh_user_game();
-    if (m_debugger) {
-        if (key_c(KEY_DEBUG_PERFECT)) {
-            auto old_steps = m_room->m_steps;
-            m_room->m_steps = m_room->m_perf;
-            if (m_room->can_get_perf_play()) {
-                current_user[USER_K_PERF].push_back(USER_ROOM);
-                refresh_user_game();
-            }
-            m_room->m_steps = old_steps;
-        }
-    }
+    if (key_c(KEY_RESTART))
+        refresh_user_game();
+
+    if (m_debugger) debug_room();
 
     move_room_to_visible();
 
@@ -563,6 +578,7 @@ void Display::switch_color_fill(const SDL_Color &color, const SDL_Rect &dstrect)
 }
 
 void Display::present() const {
+    show_prompt();
     SDL_RenderPresent(renderer);
 }
 
@@ -625,7 +641,8 @@ void Display::show_room_info() const {
                 else steps_color = WHITE;
             } else steps_color = GREEN;
         } else {
-            long double steps_percent = m_room->m_steps / (long double) m_room->m_perf, rev_percent = 1 - steps_percent;
+            long double steps_percent = m_room->m_steps / (long double) m_room->m_perf, rev_percent =
+                    1 - steps_percent;
             steps_color = {(Uint8) (200 * steps_percent), (Uint8) (200 * rev_percent), (Uint8) (200 * rev_percent)};
         }
         steps_text += "/" + to_string(m_room->m_perf);
@@ -702,8 +719,79 @@ void Display::move_room_to_visible() {
 }
 
 void Display::refresh_key_m() {
-    for (auto pair: key_click_map) {
+    for (const auto &pair: key_click_map) {
         key_click_map[pair.first] = key_clicking(pair.first);
+        if (key_click_map[pair.first])
+            cur_key = pair.first;
+        else if (cur_key == pair.first)
+            cur_key = 0;
+    }
+}
+
+void Display::prompt(const string &s) {
+    debug_prompt.insert({s + '\n', DEBUGGER_PROMPT_TIME});
+}
+
+void Display::show_prompt() const {
+    int height = 0;
+    for (auto &prompt_info: debug_prompt) {
+        auto prompt = TTF_RenderText_Solid_Wrapped(verdana->sized(DEBUGGER_FONT_SIZE), prompt_info.first.c_str(),
+                                                   WHITE,
+                                                   0);
+        show_surface(renderer, prompt, {(SCR_WIDTH - prompt->w) / 2, height});
+        height += prompt->h;
+        SDL_FreeSurface(prompt);
+    }
+}
+
+void Display::debug_room() {
+    if (key_c(KEY_DEBUG_PERFECT)) {
+        auto old_steps = m_room->m_steps;
+        m_room->m_steps = m_room->m_perf;
+        if (m_room->can_get_perf_play()) {
+            current_user[USER_K_PERF].push_back(USER_ROOM);
+            refresh_user_game();
+        }
+        m_room->m_steps = old_steps;
+        prompt("Room is set to perfection.");
+    } else if (SDLK_1 <= cur_key && cur_key <= SDLK_9) {
+        if (m_room->m_is_moving)
+            prompt("Please wait until the animation is done!");
+        else {
+            auto index = cur_key - SDLK_1;
+            auto key_str = to_string(index + 1);
+            bool is_null = m_debug_room[index] == nullptr;
+            if (key_d(KEY_CTRL)) {
+                if (!is_null)
+                    close_room(m_debug_room[index]);
+                if (key_d(KEY_SHIFT)) {
+                    m_debug_room[index] = nullptr;
+                    if (is_null)
+                        prompt("Room status #" + key_str + " is empty. No need to delete.");
+                    else
+                        prompt("Room status #" + key_str + " deleted.");
+                } else {
+                    m_debug_room[index] = new Room(m_room);
+                    if (is_null)
+                        prompt("Room status #" + key_str + " saved.");
+                    else
+                        prompt("Room status #" + key_str + " overwritten.");
+                }
+            } else {
+                if (is_null)
+                    prompt("Room status #" + key_str + " is empty. Abort reverting.");
+                else {
+                    change_room(new Room(m_debug_room[index]));
+                    prompt("Room reverted to status #" + key_str);
+                }
+            }
+        }
+    } else if (key_c(KEY_DEBUG_WIN)) {
+        m_room->m_is_winning = true;
+        prompt("Room is now at winning status.");
+    } else if (key_c(KEY_DEBUG_SET_TO_FIRST_PLAY)) {
+        m_room->m_is_second_play = m_room->m_is_perf_play = m_room->m_is_gem_play = false;
+        prompt("Room status is temporarily set to first play.");
     }
 }
 

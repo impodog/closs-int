@@ -1,0 +1,26 @@
+!process-only
+!add ../C_InT.cll
+
+title {
+    en="The Cords"
+    zh_cn="绳索"
+}
+
+help {
+    en={
+        "How do you jump?"="Think about an interesting things you did"
+    }
+    zh_cn={
+        "怎么跳的?"="想想你之前做的有趣的事"
+    }
+}
+
+perf 67
+
+content 4d[
+    wa wa 2d wa -- -- -- wa
+    wa 1b -- -- 2l -- -- --
+    wa 1b bx bx wa -- cy --
+    wa 1x bl bl -- wa -- wa
+    wa 1x -- -- 2r -- -- 2l
+]

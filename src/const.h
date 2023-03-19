@@ -6,6 +6,7 @@
 #define CLOSS_INT_CONST_H
 
 #include <utility>
+#include <random>
 #include <iostream>
 #include <vector>
 #include <list>
@@ -47,7 +48,7 @@ void get_scr_info(Screen_Info &info);
 #endif
 
 
-#define VERSION "v0.9.1"
+#define VERSION "v0.10.2"
 
 #define TITLE "Closs : Inside the Tapes " VERSION
 #define SCR_WIDTH 2000
@@ -82,8 +83,8 @@ void get_scr_info(Screen_Info &info);
 
 #define ROOM_TITLE_SIZE 50
 
-#define DEST_ALPHA_DARK 50
-#define DEST_ALPHA_BRIGHT 100
+#define DEST_ALPHA_DARK 30
+#define DEST_ALPHA_BRIGHT 70
 #define DEST_COUNTER_MAX 50
 #define DEST_COUNTER_LIM 30
 
@@ -102,10 +103,11 @@ void get_scr_info(Screen_Info &info);
 #define MAX_LEVEL_NUMBER 2
 #define MIN_LEVEL_NUMBER 1
 
-#define DEBUGGER_CODE (-1189850482)
+#define DEBUGGER_FONT_SIZE 40
+#define DEBUGGER_PROMPT_TIME 1.5e3
 
 
-#define PATH_BEGIN "../"
+#define PATH_BEGIN "./"
 
 #define ROOMS_PATH PATH_BEGIN "rooms/"
 #define CLOSS_DIRECTORY_PATH "Closs/"
@@ -128,7 +130,9 @@ void get_scr_info(Screen_Info &info);
 #define ARIAL_PATH TTF_PATH "arial.ttf"
 #define CONSOLAS_PATH TTF_PATH "consolas.ttf"
 #define SIMHEI_PATH TTF_PATH "simhei.ttf"
+#define VERDANA_PATH TTF_PATH "verdana.ttf"
 
+#define I_AM_DEBUGGER USER_PATH "IAmDebugger"
 
 #define ROOM_K_EACH "each"
 #define ROOM_K_WIDTH "width"
@@ -139,6 +143,7 @@ void get_scr_info(Screen_Info &info);
 #define ROOM_K_NEXT "next"
 #define ROOM_K_PERF "perf"
 #define ROOM_K_UNLOCK_BONUS "unlock_bonus"
+#define ROOM_K_BOX_NO_SERIAL "box_no_serial"
 
 #define USER_K_LANGUAGE "language"
 #define USER_K_FRAMERATE "framerate"
@@ -177,7 +182,13 @@ void get_scr_info(Screen_Info &info);
 #define IN_GAME_K_CHAPTER2 "chapter2"
 #define IN_GAME_K_CHAPTER3 "chapter3"
 #define IN_GAME_K_CHAPTER4 "chapter4"
+#define IN_GAME_K_CHAPTER5 "chapter5"
 #define IN_GAME_K_BONUS1 "bonus1"
+
+#define KEY_CTRL_UNBRACED SDLK_LCTRL,SDLK_RCTRL
+#define KEY_CTRL {KEY_CTRL_UNBRACED}
+#define KEY_SHIFT_UNBRACED SDLK_LSHIFT,SDLK_RSHIFT
+#define KEY_SHIFT {KEY_SHIFT_UNBRACED}
 
 #define KEY_SHIFT_UP SDLK_w
 #define KEY_SHIFT_LEFT SDLK_a
@@ -203,12 +214,17 @@ void get_scr_info(Screen_Info &info);
 #define KEY_ESCAPE SDLK_ESCAPE
 #define KEY_SAVE_AND_REPLAY SDLK_x
 
-#define KEY_DEBUG_PERFECT SDLK_1
+#define KEY_DEBUG_PERFECT SDLK_F1
+#define KEY_DEBUG_ROLLBACK SDLK_z
+#define KEY_DEBUG_WIN SDLK_F2
+#define KEY_DEBUG_SET_TO_FIRST_PLAY SDLK_F3
 
-#define KEY_NEEDED {KEY_MOVE_UP,KEY_MOVE_LEFT,KEY_MOVE_DOWN,KEY_MOVE_RIGHT, \
-KEY_SHIFT_UP,KEY_SHIFT_LEFT,KEY_SHIFT_DOWN,KEY_SHIFT_RIGHT,                 \
-KEY_NEXT,KEY_BACK,KEY_SETTINGS_UNBRACED,KEY_CONFIRM_UNBRACED,KEY_HELP,KEY_RESTART,KEY_ESCAPE,KEY_SAVE_AND_REPLAY, \
-KEY_DEBUG_PERFECT}
+// !!! ADD KEY NEEDED !!!
+#define KEY_NEEDED {KEY_CTRL_UNBRACED,KEY_SHIFT_UNBRACED,SDLK_1,SDLK_2,SDLK_3,SDLK_4,SDLK_5,SDLK_6,SDLK_7,SDLK_8,SDLK_9,SDLK_0,\
+KEY_MOVE_UP,KEY_MOVE_LEFT,KEY_MOVE_DOWN,KEY_MOVE_RIGHT,\
+KEY_SHIFT_UP,KEY_SHIFT_LEFT,KEY_SHIFT_DOWN,KEY_SHIFT_RIGHT,\
+KEY_NEXT,KEY_BACK,KEY_SETTINGS_UNBRACED,KEY_CONFIRM_UNBRACED,KEY_HELP,KEY_RESTART,KEY_ESCAPE,KEY_SAVE_AND_REPLAY,\
+KEY_DEBUG_PERFECT, KEY_DEBUG_ROLLBACK, KEY_DEBUG_WIN, KEY_DEBUG_SET_TO_FIRST_PLAY}
 
 #define RENDER_TEXT text_renderer
 
@@ -284,7 +300,8 @@ enum tile_types {
     tile_blue,
     tile_spike,
     tile_conveyor = 10,
-    tile_robot
+    tile_robot,
+    tile_imitate
 };
 
 enum text_renderer_types {
@@ -308,6 +325,9 @@ extern type_names_t type_names;
 
 extern json empty_json;
 
+extern unsigned long long debugger_code;
+
+unsigned long long get_debugger_code();
 
 SDL_Rect get_srcrect(const SDL_Surface *surface);
 

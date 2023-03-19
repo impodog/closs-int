@@ -25,24 +25,25 @@
 !defud sp 9
 !defud cv 10
 !defud rb 11
+!defud imi 12
 
 !defud dir_up 1073741906
 !defud dir_lt 1073741904
 !defud dir_dw 1073741905
 !defud dir_rt 1073741903
 
-!defud 1c [ds cy]
-!defud 1x [ds bx]
-!defud 1r [ds rb]
-!defud 1b [ds bl]
-!defud 2u [cv dir_up]
-!defud 2l [cv dir_lt]
-!defud 2d [cv dir_dw]
-!defud 2r [cv dir_rt]
-!defud 3u [rb dir_up]
-!defud 3l [rb dir_lt]
-!defud 3d [rb dir_dw]
-!defud 3r [rb dir_rt]
+!defud 1c [ds [cy]]
+!defud 1x [ds [bx]]
+!defud 1r [ds [rb]]
+!defud 1b [ds [bl]]
+!defud 2u [cv [dir_up]]
+!defud 2l [cv [dir_lt]]
+!defud 2d [cv [dir_dw]]
+!defud 2r [cv [dir_rt]]
+!defud 3u [rb [dir_up]]
+!defud 3l [rb [dir_lt]]
+!defud 3d [rb [dir_dw]]
+!defud 3r [rb [dir_rt]]
 
 !vanish ds
 !vanish cv
@@ -53,24 +54,31 @@
 !vanish dir_rt
 
 !templ-repl !to ..\..\Closs\(%filename).json
+!templ-repl !def this (%filename)
 
 !templ-cmd !raise-arg-num-fault !templ-repl !this-is-todo (%DQUOTE)(%find.(%arg1))(%find." got ")(%arg2)(%find." args(expected ")(%find.(%arg3))(%find." args)")(%DQUOTE)
 
-!templ-cmd !pic-def !def (%arg1) [pic (%arg2)]
+!templ-cmd !pic-def !def (%arg1) [pic [(%arg2)]]
 
-!templ-cmd !goto-def-1arg !def GT [goto (%arg1)];!undef goto_1arg_flag
-!templ-cmd !goto-def-2args !def (%arg1) [goto (%arg2)];!undef goto_2args_flag
+!templ-cmd !goto-def-1arg !def GT [goto [(%arg1)]];!undef goto_1arg_flag
+!templ-cmd !goto-def-2args !def (%arg1) [goto [(%arg2)]];!undef goto_2args_flag
 !templ-cmd !goto-def !def goto_1arg_flag (%eq.(%arg_num),1);!ifj goto_1arg_flag !goto-def-1arg (%args);!def goto_2args_flag (%eq.(%arg_num),2);!ifj goto_2args_flag !goto-def-2args (%args);!raise-arg-num-fault "!goto-def" (%arg_num) "1 or 2"
 
-!templ-cmd !gem-def-1arg !def (%arg1) [gem +0];!undef gem_1arg_flag
-!templ-cmd !gem-def-2args !def (%arg1) [gem (%arg2)];!undef gem_2args_flag
+!templ-cmd !gem-def-1arg !def (%arg1) [gem [+0]];!undef gem_1arg_flag
+!templ-cmd !gem-def-2args !def (%arg1) [gem [(%arg2)]];!undef gem_2args_flag
 !templ-cmd !gem-def !def gem_1arg_flag (%eq.(%arg_num),1);!ifj gem_1arg_flag !gem-def-1arg (%args);!def gem_2args_flag (%eq.(%arg_num),2);!ifj gem_2args_flag !gem-def-2args (%args);!raise-arg-num-fault "!gem-def" (%arg_num) "1 or 2"
 
 !templ-cmd !gem-defs-err !raise-arg-num-fault "!gem-defs" odd "even";!undef gems_err_flag
-!templ-cmd !gem-defs !def (%arg1) [gem (%arg2)];!def gems_end_flag (%eq.(%arg_num),2);!ifj gems_end_flag !undef gems_end_flag;!def gems_err_flag (%eq.(%arg_num),3);!ifj gems_err_flag !gem-defs-err;!gem-defs (%arg3:)
+!templ-cmd !gem-defs !def (%arg1) [gem [(%arg2)]];!def gems_end_flag (%eq.(%arg_num),2);!ifj gems_end_flag !undef gems_end_flag;!def gems_err_flag (%eq.(%arg_num),3);!ifj gems_err_flag !gem-defs-err;!gem-defs (%arg3:)
+
+!templ-cmd !imi-def-2args !def (%arg1) [imi [(%arg2) --]];!undef imi_2args_flag
+!templ-cmd !imi-def-m-args !def (%arg1) [imi [(%arg2:)]]
+!templ-cmd !imi-def !def imi_2args_flag (%eq.(%arg_num),2);!ifj imi_2args_flag !imi-def-2args (%args);!imi-def-m-args (%args)
 
 !templ-cmd !unlock-b !set unlock_bonus (%arg1)
 !templ-cmd !unlock-bonus !unlock-b (%arg1)
+
+!templ-cmd !no-serial !set box_no_serial true
 
 !templ-repl !def-c filestring (%DQUOTE)(%filename)(%DQUOTE)
 
@@ -108,3 +116,4 @@
   --
 ]
 !templ-val unlock_bonus int 0
+!templ-val box_no_serial bool false

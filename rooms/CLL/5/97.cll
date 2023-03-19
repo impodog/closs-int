@@ -1,0 +1,25 @@
+!process-only
+!add ../C_InT.cll
+
+title {
+    en="Manipulation"
+    zh_cn="操纵"
+}
+
+help {
+    en={
+        "Remove the robot!"="Try to change its direction"
+    }
+    zh_cn={
+        "移除机器人!"="试着改变它的方向"
+    }
+}
+
+perf 34
+
+content 4d[
+    wa 3r -- sp 1b 1x
+    wa wa wa wa wa wa
+    -- -- bx bl 2d wa
+    cy -- -- 2u -- --
+]

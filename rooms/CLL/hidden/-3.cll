@@ -2,7 +2,7 @@
 !add ../C_InT.cll
 !gem-def G1 -0
 !pic-def Ps sp
-!def SG [Ps G1]
+!repl SG Ps,G1
 
 !unlock-b 3
 

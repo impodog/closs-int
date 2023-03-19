@@ -1,0 +1,25 @@
+!process-only
+!add ../C_InT.cll
+
+title {
+    en="Stopped Leap"
+    zh_cn="阻止跳跃"
+}
+
+help {
+    en={
+        "Stacking"="Stacking boxes to reach some spots"
+    }
+    zh_cn={
+        "堆叠"="堆叠箱子来到达一些地方"
+    }
+}
+
+perf 28
+
+content 4d[
+    wa wa cy wa -- sp
+    2l -- -- wa -- --
+    -- bx -- bx -- wa
+    1x wa -- bx -- 2d
+]

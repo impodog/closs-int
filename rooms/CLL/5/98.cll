@@ -1,0 +1,26 @@
+!process-only
+!add ../C_InT.cll
+
+title {
+    en="Settling"
+    zh_cn="沉降"
+}
+
+help {
+    en={
+        "Robotic Stack"="Use robots well to make a stack"
+    }
+    zh_cn={
+        "机械化堆叠"="好好利用机器人来堆叠"
+    }
+}
+
+perf 45
+
+content 4d[
+    wa wa wa wa wa wa wa
+    1c wa wa wa wa -- --
+    cy -- bl bx sp 2d 1x
+    3r -- -- bx sp -- 2u
+    wa wa -- wa wa wa 1b
+]

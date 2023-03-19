@@ -1,0 +1,48 @@
+[@CLL2]
+
+@C_InT :: @CLL2@C_InT
+@Level <= @C_InT@C_InT
+@Level => @C_InT
+@Level :: @C_InT@Level
+
+
+[@Level] {
+
+    $G1 = [($gem), -6]
+
+    [@title] {
+        &en = "Step One"
+        &zh_cn = "步骤一"
+    }
+ 
+    .set_help_en {
+        [
+            ["To move", "Press direction keys to move the cyan blocks around"],
+            ["To win", "Fill all green symbols with the block shown"],
+            ["What to do now", "Just move along the walls to the destination"]
+        ]
+    }
+    .set_help_zh_cn {
+        [
+            ["移动", "按方向键来把青色方块四处移动"],
+            ["赢", "把所有绿色符号填上它显示的方块"],
+            ["现在要做的", "只要沿着墙移动  到达终点"]
+        ]
+    }
+
+    &perf = 13
+
+    .set_content {
+        wa wa wa wa __ __ __ wa
+        wa wa wa wa __ wa __ wa
+        wa cy __ wa __ wa 1c wa
+        wa wa __ wa __ wa wa wa
+        wa wa __ __ __ __ __ G1
+        wa wa wa wa wa wa wa wa
+    }
+
+    <<
+}
+
+@Level.get_path
+@Level >> @Level&_RET

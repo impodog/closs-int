@@ -1,0 +1,16 @@
+// Closs : Inside the Tapes CLL2 modification
+
+[@C_InT]
+
+[@C_InT@C_InT] {
+    [.get_path] {
+        @UTIL.conj_p s1:$Filedir s2:".."
+        @UTIL.conj_p s1:@UTIL&_RET s2:"Closs"
+        &dir = @UTIL&_RET
+        @UTIL.conj s1:$Filename s2:".json"
+        @UTIL.conj_p s1:&dir s2:@UTIL&_RET
+        &_RET = @UTIL&_RET
+        .println "Ready to output: " &_RET
+        ~dir
+    }
+}

@@ -51,6 +51,14 @@
       ["章节 4 完成!", "你完成了关卡 61~80!"]
     ]
   },
+  "chapter5": {
+    "en": [
+      ["Chapter 5 Passed!", "You cleared level 81~100!"]
+    ],
+    "zh_cn": [
+      ["章节 5 通过!", "你完成了关卡 81~100!"]
+    ]
+  },
   "bonus1": {
     "en": [
       ["Bonus Level Set 1 Clear!", "Really confusing, huh?"]

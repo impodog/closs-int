@@ -1,6 +1,7 @@
-#include "src/display.h"
+#include "src/page.h"
 
 void do_all_init() {
+    debugger_code = get_debugger_code();
     SDL_Init(SDL_INIT_EVERYTHING);
     TTF_Init();
     init_default_user();
@@ -24,14 +25,23 @@ void do_all_free() {
     SDL_Quit();
 }
 
+void try_output_debugger_code() {
+    auto f = fopen(I_AM_DEBUGGER, "r");
+    if (f != nullptr) {
+        fclose(f);
+        ofstream f_out(I_AM_DEBUGGER, ios::out);
+        f_out << debugger_code << endl;
+    }
+}
+
 int main() {
     do_all_init();
+    try_output_debugger_code();
     do {
         display->switch_color_fill(BLACK);
         display->collect_loop_info();
         display->process_content();
         display->present();
-
     } while (display->m_loop);
     do_all_free();
     return 0;

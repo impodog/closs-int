@@ -1,0 +1,30 @@
+!process-only
+!add ../C_InT.cll
+!pic-def PW wa
+!goto-def -5
+!repl Pg PW,GT
+
+title {
+    en="Acceleration"
+    zh_cn="加速度"
+}
+
+help {
+    en={
+        "Robots"="Use robots to push boxes through the spike, but plan better"
+    }
+    zh_cn={
+        "机器人"="用机器人把箱子推过刺, 但是要好好计划"
+    }
+}
+
+perf 117
+
+content 4d[
+    wa 1b wa wa wa wa wa wa wa 1x --
+    wa -- -- -- -- -- -- -- sp -- --
+    wa -- wa bx wa wa bl wa wa bl --
+    wa cy 3r -- -- -- -- -- -- bl --
+    wa wa wa 2r -- 2r -- 2r -- 2u wa
+    wa Pg wa wa wa wa wa wa wa wa wa
+]

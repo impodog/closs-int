@@ -37,13 +37,11 @@ C&C++ compiler such as [MinGW-w64](https://www.mingw-w64.org/)
 
 Configure the project with **"cmake ."**
 
-Run command : **"cmake --build cmake-build --target Closs_InT"**, you should see an executable created under /cmake-build
-
-One last thing, if you are on release branch, copy the executable under **/cmake-build**, and paste it to the project directory
+Run command : **"cmake --build . --target Closs_InT"**, you should see an executable created under the game root
 
 ### All Done!
 
-Open the executable under the **executable directory** and play!
+Open the executable and play!
 
 ## How to Play
 

@@ -28,23 +28,23 @@ void free_display();
 
 void init_key_map();
 
-void init_key_map(direction_t code);
+void init_key_map(SDL_Keycode code);
 
-void init_key_map(const initializer_list<direction_t> &code);
+void init_key_map(const initializer_list<SDL_Keycode> &code);
 
-void init_key_map(direction_t begin, direction_t end);
+void init_key_map(SDL_Keycode begin, SDL_Keycode end);
 
-void key_down(direction_t code);
+void key_down(SDL_Keycode code);
 
-bool key_d(direction_t code);
+bool key_d(SDL_Keycode code);
 
-bool key_d(initializer_list<direction_t> codes);
+bool key_d(initializer_list<SDL_Keycode> codes);
 
-bool key_clicking(direction_t code);
+bool key_clicking(SDL_Keycode code);
 
-bool key_c(direction_t code);
+bool key_c(SDL_Keycode code);
 
-bool key_c(initializer_list<direction_t> codes);
+bool key_c(initializer_list<SDL_Keycode> codes);
 
 SDL_Surface *create_settings_text(const string &setting, const string &from_user, bool b);
 
@@ -126,6 +126,7 @@ extern Text_Page_Type page_manual;
 
 using level_pic_map_t = map<int, Text_Page_Type>;
 extern level_pic_map_t level_pic_map;
+extern SDL_Keycode cur_key;
 
 class Display {
 public:
@@ -142,7 +143,10 @@ public:
     img_map_t img_map;
     DisplayPos m_room_pos, m_room_min, m_room_max;
     RoomType m_room = nullptr;
+    RoomType m_debug_room[9];
     PageType m_page = nullptr;
+
+    map<string, long long> debug_prompt;
 
     Display();
 
@@ -198,6 +202,11 @@ public:
 
     img_info &find_info(SDL_Surface *surface);
 
+    void prompt(const string &s);
+
+    void show_prompt() const;
+
+    void debug_room();
 };
 
 using DisplayType = Display *;

@@ -1,0 +1,26 @@
+!process-only
+!add ../C_InT.cll
+
+title {
+    en="Robot Dart"
+    zh_cn="机器飞镖"
+}
+
+help {
+    en={
+        "Robotic Slotting"="Use robots to do slotting"
+    }
+    zh_cn={
+        "机械化入槽"="使用机器人来入槽"
+    }
+}
+
+perf 13
+
+content 4d[
+    wa wa wa -- wa
+    cy bx -- -- wa
+    wa 1x wa -- wa
+    wa 3r -- 3u --
+    wa -- wa wa wa
+]

@@ -1,0 +1,25 @@
+!process-only
+!add ../C_InT.cll
+
+title {
+    en="Jump Strategy"
+    zh_cn="跳跃策略"
+}
+
+help {
+    en={
+        "Jumping from Conveyors"="Player always goes first, so push the objects away from conveyors!"
+    }
+    zh_cn={
+        "跳离传送带"="玩家总是先走, 所以可以把物体推离传送带!"
+    }
+}
+
+perf 49
+
+content 4d[
+    wa wa wa 1x wa -- wa
+    cy -- bx 2d wa -- --
+    wa 2u bx -- -- -- --
+    wa 1x 1x wa wa bx wa
+]

@@ -1,0 +1,23 @@
+!process-only
+!add ../C_InT.cll
+
+title {
+    en="The Finale"
+    zh_cn="结局"
+}
+
+help {
+    en={
+        "It's hard to believe you got here"="Thanks for having such determination"
+    }
+    zh_cn={
+        "很难相信你到了这里"="感谢你的决心"
+    }
+}
+
+perf 1
+
+content 4d[
+    cy -- -- -- -- -- -- -- -- -- -- -- 1c
+    -- -- -- -- -- -- -- -- -- -- -- -- --
+]

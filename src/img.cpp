@@ -28,11 +28,11 @@ FontType Font_Family::sized(int size) {
     }
 }
 
-Font_Family_Type arial, consolas, simhei, candara;
+Font_Family_Type arial, consolas, simhei, verdana;
 
 SDL_Surface_ptr img_arrow, img_settings, img_Closs_InT, img_help, img_manual, img_levels;
 SDL_Surface_ptr img_none, img_icon;
-SDL_Surface_ptr img_chapter1, img_chapter2, img_chapter3, img_chapter4;
+SDL_Surface_ptr img_chapter1, img_chapter2, img_chapter3, img_chapter4, img_chapter5;
 SDL_Surface_ptr img_bonus1;
 
 language_fonts_t language_fonts;
@@ -88,6 +88,7 @@ void init_img() {
     img_chapter2 = IMG_Load(IMG_PATH "chapter2.png");
     img_chapter3 = IMG_Load(IMG_PATH "chapter3.png");
     img_chapter4 = IMG_Load(IMG_PATH "chapter4.png");
+    img_chapter5 = IMG_Load(IMG_PATH "chapter5.png");
     img_bonus1 = IMG_Load(IMG_PATH "bonus1.png");
 
     img_none = SDL_CreateRGBSurface(0, 1, 1, 32, 0, 0, 0, 0);
@@ -128,6 +129,8 @@ void init_img() {
                                   img_chapter1,
                                   img_chapter2,
                                   img_chapter3,
+                                  img_chapter4,
+                                  img_chapter5,
 
                                   img_bonus1
                           });
@@ -135,6 +138,7 @@ void init_img() {
     // put into image map
     types_img_map[tile_background] = img_tile_background;
     types_img_map[tile_undefined] = img_undefined;
+    types_img_map[tile_empty] = img_none;
     types_img_map[tile_cyan] = img_cyan;
     types_img_map[tile_box] = img_box3;
     types_img_map[tile_wall] = img_wall;
@@ -146,6 +150,7 @@ void init_img() {
     types_img_map[tile_spike] = img_spike;
     types_img_map[tile_conveyor] = img_none;
     types_img_map[tile_robot] = img_robot_dw;
+    types_img_map[tile_imitate] = img_none;
     // direction_img map
     direction_img_conveyor = {
             {KEY_MOVE_UP,    img_conveyor_up},
@@ -197,6 +202,7 @@ void free_img() {
     SDL_FreeSurface(img_chapter2);
     SDL_FreeSurface(img_chapter3);
     SDL_FreeSurface(img_chapter4);
+    SDL_FreeSurface(img_chapter5);
     SDL_FreeSurface(img_bonus1);
 }
 
@@ -204,6 +210,7 @@ void init_font() {
     arial = new Font_Family(ARIAL_PATH);
     consolas = new Font_Family(CONSOLAS_PATH);
     simhei = new Font_Family(SIMHEI_PATH);
+    verdana = new Font_Family(VERDANA_PATH);
     language_fonts = {
             {"en",    arial},
             {"zh_cn", simhei}
@@ -214,7 +221,7 @@ void free_font() {
     delete arial;
     delete consolas;
     delete simhei;
-    delete candara;
+    delete verdana;
 }
 
 void set_white_as_colorkey(initializer_list<SDL_Surface *> surfaces) {

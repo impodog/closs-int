@@ -1,0 +1,31 @@
+!process-only
+!add ../C_InT.cll
+
+next this
+
+title {
+    en="The Reality-Unstoppable"
+    zh_cn="现实-不可阻挡"
+}
+
+help {
+    en={
+        "100th"="Excited about the 100th level? Take this:"
+        "Mix"="The second left path cannot be got out of without the help of the robot"
+    }
+    zh_cn={
+        "100关"="达到100关很激动吧? 试试这个:"
+        "混合"="如果没有机器人的帮助, 左边第二条道路就出不去"
+    }
+}
+
+perf 72
+
+content 4d[
+    wa wa -- -- wa wa wa wa wa
+    1x 2r -- 2l -- 1b 2l wa --
+    -- wa -- bl wa -- bx -- --
+    -- wa -- bl 2r sp 2u wa --
+    cy wa 2r sp sp 2d 1b 3r 2u
+    wa wa -- bl wa -- wa wa wa
+] 

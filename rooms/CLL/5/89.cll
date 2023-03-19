@@ -1,5 +1,7 @@
 !process-only
 !add ../C_InT.cll
+!gem-def G1 -0
+!gem-def G2 -0
 
 title {
     en="Match the Needs"
@@ -11,15 +13,15 @@ help {
         "Know what to do"="The upper ones seems more important"
     }
     zh_cn={
-        "知道要做的事"="-"
+        "知道要做的事"="上面的看起来更重要"
     }
 }
 
 perf 34
 
 content 4d[
-    1b -- wa -- wa 1x
-    1x wa -- -- bx cy
+    1b G1 wa -- wa 1x
+    1x wa G2 -- bx cy
     -- -- bx -- bl cy
     wa wa wa -- wa wa
 ]

@@ -1,5 +1,3 @@
-.idea
-
 cmake-build-*
 
 user
@@ -15,3 +13,5 @@ rooms/run_conv.py
 rooms/.vscode
 
 release
+
+**/cl-ml

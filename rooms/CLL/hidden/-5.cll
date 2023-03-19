@@ -1,0 +1,27 @@
+!process-only
+!add ../C_InT.cll
+!imi-def WA wa ud
+!imi-def BX bx ud
+!imi-def CY cy ud
+!imi-def G1 gem ud -2
+!unvanish cv
+!unvanish dir_up
+!unvanish dir_lt
+!unvanish dir_dw
+!unvanish dir_rt
+!imi-def 2U cv ud dir_up
+!imi-def 2L cv ud dir_lt
+!imi-def 2D cv ud dir_dw
+!imi-def 2R cv ud dir_rt
+
+next 101
+
+perf 12
+
+content 4d[
+    WA -- -- -- CY
+    WA 2D BX 2R BX
+    -- -- -- 2D --
+    WA 1x WA -- G1
+    WA WA WA WA WA
+]

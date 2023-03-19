@@ -1,0 +1,26 @@
+!process-only
+!add ../C_InT.cll
+
+title {
+    en="Enthusiast"
+    zh_cn="爱好者"
+}
+
+help {
+    en={
+        "It's a matter of order"="Boxes block the ways. Try to figure it out then"
+    }
+    zh_cn={
+        "这是顺序问题"="箱子挡路. 这样就可以找到解法"
+    }
+}
+
+perf 87
+
+content 4d[
+    wa 1x 1x 2d -- cy
+    wa -- bx bx -- 2l
+    wa 2r bx bx -- wa
+    -- 1x 1x wa -- --
+    wa wa wa wa 2d wa
+]

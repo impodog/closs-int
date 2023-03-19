@@ -91,27 +91,29 @@ RoomType create_room(const json &room_json) {
     room->m_is_second_play = is_second_play();
     room->m_is_perf_play = is_perf_play();
     room->m_is_gem_play = is_gem_play();
+    room->m_box_no_serial = room_json.at(ROOM_K_BOX_NO_SERIAL);
     return room;
 }
 
 void load_json_space(const json &json_space, const TilePos &pos, SpaceType space) {
     space->clear();
     for (auto &json_tile: json_space) {
-        tile_types code, type_arg;
-        if (json_tile.is_number_integer())
-            type_arg = code = json_tile;
-        else {
+        tile_types code;
+        type_arg_t args;
+        if (json_tile.is_number_integer()) {
+            code = json_tile;
+            args = {tile_undefined};
+        } else {
             if (json_tile.size() != 2)
-                throw closs_room_error("arrayed(typed) tiles are only allowed to be sized size of 2");
+                throw closs_room_error("arrayed(typed) tiles are only allowed to be sized 2");
             code = json_tile[0];
-            type_arg = json_tile[1];
+            args = json_tile[1].get<type_arg_t>();
         }
 
         if (code == 0) continue;
 
         try {
-            space->push_back(
-                    tile_type_map.at(code)(pos, types_img_map.at(code), type_arg));
+            space->push_back(NEW_TILE(pos, code, args));
         } catch (const out_of_range &) {
             throw closs_room_error("invalid type code " + to_string(code));
         }

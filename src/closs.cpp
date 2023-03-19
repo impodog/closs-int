@@ -15,6 +15,9 @@
 #define ROOM_EDGE_VERTICAL (pair.first->m_shift_sym.w>0?pair.first->m_shift.w*m_each>ROOM_RIGHT:-pair.first->m_shift.w*m_each>ROOM_UP)
 #define ROOM_EDGE_HORIZONTAL (pair.first->m_shift_sym.h>0?pair.first->m_shift.h*m_each>ROOM_DOWN:-pair.first->m_shift.h*m_each>ROOM_LEFT)
 
+#define BOX_CAN_RESPOND (req.sender->get_type() == tile_cyan || !public_room->m_box_no_serial)
+#define BOX_RESPONSE (BOX_CAN_RESPOND ? req.direction : -1)
+
 public_code_t public_code = 0;
 
 RoomType public_room;
@@ -34,10 +37,9 @@ closs_page_error::closs_page_error(const string &arg) : runtime_error(arg) {}
 
 closs_page_error::closs_page_error(const char *arg) : runtime_error(arg) {}
 
-Tile::Tile(TilePos pos, SDL_Surface *img) {
+Tile::Tile(TilePos pos, SDL_Surface *img, type_arg_ref type_arg) : m_pos(pos), m_img(img), m_type_arg(type_arg),
+                                                                   m_primary(arg(0)) {
     m_pubCode = get_public_code();
-    m_pos = pos;
-    m_img = img;
 }
 
 SDL_Rect Tile::srcrect() const {
@@ -75,7 +77,11 @@ void Tile::react_to_movement_result(bool result) {}
 
 bool Tile::suppress_request(const Movement_Request &req) { return false; }
 
-Room::Room(int each, TilePos size) {
+int &Tile::arg(size_t i) {
+    return m_type_arg.at(i);
+}
+
+Room::Room(int each, TilePos size) : m_each(each), m_size(size) {
     for (size_t h = 0; h != size.h; h++) {
         auto lane = new Lane;
 
@@ -84,12 +90,23 @@ Room::Room(int each, TilePos size) {
 
         m_distribute.push_back(lane);
     }
-    m_each = each;
-    m_size = size;
     m_display_size = {(int) (m_each * m_size.w), (int) (m_each * m_size.h)};
 }
 
+Room::Room(const Room *room) : Room(*room) {
+    m_pending_move.clear();
+    m_pending_series.clear();
+    m_animating.clear();
+    m_is_moving = m_is_end_of_animation = m_can_move_flag = false;
+    m_parsing_index = 0;
+    copy_distribute(room);
+}
+
 Room::~Room() {
+    delete_distribute();
+}
+
+void Room::delete_distribute() {
     for (auto lane: m_distribute) {
         for (auto space: *lane) {
             for (auto tile: *space)
@@ -97,6 +114,36 @@ Room::~Room() {
             delete space;
         }
         delete lane;
+    }
+    m_distribute.clear();
+    m_dest.clear();
+    m_gems.clear();
+}
+
+void Room::copy_distribute(const Room *room) {
+    m_distribute.clear();
+    delete_distribute();
+    for (auto lane: room->m_distribute) {
+        auto this_lane = new vector<SpaceType>;
+        m_distribute.push_back(this_lane);
+        for (auto space: *lane) {
+            auto this_space = new vector<TileType>;
+            this_lane->push_back(this_space);
+            for (auto tile: *space) {
+                auto new_tile = copy_tile(tile);
+                this_space->push_back(new_tile);
+                switch (new_tile->get_type()) {
+                    case tile_destination:
+                        m_dest.push_back(new_tile);
+                        break;
+                    case tile_gem:
+                        m_gems.push_back(new_tile);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
     }
 }
 
@@ -165,8 +212,7 @@ bool Room::send_req_from(TileType tile, direction_t dir, list<TileType> *infinit
         if (dest_dir > 0) result &= send_req_from(dest_tile, dest_dir, infinite_prevention);
         else if (result && dest_dir < 0) result = false;
     }
-    for (auto dest_tile: *space)
-        tile->react_to_movement_result(result);
+    tile->react_to_movement_result(result);
     if (result) pending_move(tile, dir);
     if (is_first) delete infinite_prevention;
     return result;
@@ -247,7 +293,7 @@ void Room::detect_gems() {
         }
         for (auto gem_tile: pending_collection) {
             auto gem = (Gem *) gem_tile;
-            if (gem->m_addition >= 0 || m_steps > -gem->m_addition) m_steps += gem->m_addition;
+            if (gem->m_primary >= 0 || m_steps > -gem->m_primary) m_steps += gem->m_primary;
             else m_steps = 0;
             m_gems.erase(std::find(m_gems.begin(), m_gems.end(), gem));
             destroy(gem);
@@ -372,79 +418,70 @@ dest_img_info *get_dest_surf(SDL_Renderer *renderer, tile_types type) {
     return &dest_img.at(type);
 }
 
-Destination::Destination(TilePos pos, SDL_Surface *img, int type) : Tile(pos, img) {
-    m_req = (tile_types) type;
+TileType copy_tile(const Tile *src) {
+    auto code = src->get_type();
+    return NEW_TILE(src->m_pos, code, src->m_type_arg);
 }
 
-tile_types Destination::get_type() const { return tile_destination; }
-
-bool Destination::detect_requirement(SpaceConst space) const {
-    bool satisfied = false;
-    for (auto tile: *space) {
-        if (tile->get_type() == m_req) {
-            satisfied = true;
-            break;
-        }
-    }
-    return satisfied;
-}
-
-void Destination::show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
-                                  long double stretch_ratio) {
-    if (m_info == nullptr) m_info = get_dest_surf(renderer, m_req);;
-    auto is_bright = ((m_counter += 1) %= DEST_COUNTER_MAX) <= DEST_COUNTER_LIM;
-    DisplayPos show_pos = {(int) (center.w - m_info->srcrect.w * stretch_ratio / 2),
-                           (int) (center.h - m_info->srcrect.h * stretch_ratio / 2)};
-    auto dstrect = get_dstrect(show_pos, m_info->srcrect, stretch_ratio);
-    SDL_RenderCopy(renderer, is_bright ? m_info->bright : m_info->dark, nullptr, &dstrect);
-}
-
-TileType construct_undefined(TilePos pos, SDL_Surface *img, int) {
+TileType construct_undefined(TilePos pos, SDL_Surface *img, type_arg_ref) {
     return new Tile(pos, img);
 }
 
-TileType construct_cyan(TilePos pos, SDL_Surface *img, int) {
+TileType construct_cyan(TilePos pos, SDL_Surface *img, type_arg_ref) {
     return new Cyan(pos, img);
 }
 
-TileType construct_box(TilePos pos, SDL_Surface *img, int) {
+TileType construct_box(TilePos pos, SDL_Surface *img, type_arg_ref) {
     return new Box(pos, img);
 }
 
-TileType construct_wall(TilePos pos, SDL_Surface *img, int) {
+TileType construct_wall(TilePos pos, SDL_Surface *img, type_arg_ref) {
     return new Wall(pos, img);
 }
 
-TileType construct_dest(TilePos pos, SDL_Surface *img, int type) {
-    return new Destination(pos, img, type);
+TileType construct_dest(TilePos pos, SDL_Surface *img, type_arg_ref args) {
+    return new Destination(pos, img, args);
 }
 
-TileType construct_gem(TilePos pos, SDL_Surface *img, int addition) {
-    return new Gem(pos, img, addition);
+TileType construct_gem(TilePos pos, SDL_Surface *img, type_arg_ref args) {
+    return new Gem(pos, img, args);
 }
 
-TileType construct_picture(TilePos pos, SDL_Surface *, int type) {
-    return new Picture(pos, types_img_map[(tile_types) type]);
+TileType construct_picture(TilePos pos, SDL_Surface *, type_arg_ref args) {
+    return new Picture(pos, types_img_map[(tile_types) args.at(0)]);
 }
 
-TileType construct_go_to(TilePos pos, SDL_Surface *img, int level) {
-    return new Go_To(pos, img, level);
+TileType construct_go_to(TilePos pos, SDL_Surface *img, type_arg_ref args) {
+    return new Go_To(pos, img, args);
 }
 
-TileType construct_blue(TilePos pos, SDL_Surface *img, int) {
+TileType construct_blue(TilePos pos, SDL_Surface *img, type_arg_ref) {
     return new Blue(pos, img);
 }
 
-TileType construct_spike(TilePos pos, SDL_Surface *img, int) {
+TileType construct_spike(TilePos pos, SDL_Surface *img, type_arg_ref) {
     return new Spike(pos, img);
 }
 
-TileType construct_conveyor(TilePos pos, SDL_Surface *img, int dir) {
-    return new Conveyor(pos, img, dir);
+TileType construct_conveyor(TilePos pos, SDL_Surface *img, type_arg_ref args) {
+    return new Conveyor(pos, img, args);
 }
 
-TileType construct_robot(TilePos pos, SDL_Surface *img, int dir) {
-    return new Robot(pos, img, dir);
+TileType construct_robot(TilePos pos, SDL_Surface *img, type_arg_ref args) {
+    return new Robot(pos, img, args);
+}
+
+TileType construct_imitate(TilePos pos, SDL_Surface *, type_arg_ref args) {
+    if (args.at(0) == tile_imitate)
+        throw runtime_error("Imitate tiles cannot be used to imitate itself");
+    else {
+        try {
+            type_arg_t args_copy(++ ++args.begin(), args.end());
+            return tile_type_map.at((tile_types) args.at(0))(pos, types_img_map[(tile_types) args.at(1)], args_copy);
+        } catch (const out_of_range &) {
+            throw runtime_error("Imitate tile must be followed with a proper tile type");
+        }
+    }
 }
 
 tile_types_map_t tile_type_map = {
@@ -459,8 +496,35 @@ tile_types_map_t tile_type_map = {
         {tile_blue,        construct_blue},
         {tile_spike,       construct_spike},
         {tile_conveyor,    construct_conveyor},
-        {tile_robot,       construct_robot}
+        {tile_robot,       construct_robot},
+        {tile_imitate,     construct_imitate}
 };
+
+
+Destination::Destination(TilePos pos, SDL_Surface *img, type_arg_ref args) : Tile(pos, img, args) {}
+
+tile_types Destination::get_type() const { return tile_destination; }
+
+bool Destination::detect_requirement(SpaceConst space) const {
+    bool satisfied = false;
+    for (auto tile: *space) {
+        if (tile->get_type() == m_primary) {
+            satisfied = true;
+            break;
+        }
+    }
+    return satisfied;
+}
+
+void Destination::show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
+                                  long double stretch_ratio) {
+    if (m_info == nullptr) m_info = get_dest_surf(renderer, (tile_types) m_primary);;
+    auto is_bright = ((m_counter += 1) %= DEST_COUNTER_MAX) <= DEST_COUNTER_LIM;
+    DisplayPos show_pos = {(int) (center.w - m_info->srcrect.w * stretch_ratio / 2),
+                           (int) (center.h - m_info->srcrect.h * stretch_ratio / 2)};
+    auto dstrect = get_dstrect(show_pos, m_info->srcrect, stretch_ratio);
+    SDL_RenderCopy(renderer, is_bright ? m_info->bright : m_info->dark, nullptr, &dstrect);
+}
 
 Cyan::Cyan(TilePos pos, SDL_Surface *img) : Tile(pos, img) {}
 
@@ -481,7 +545,7 @@ Box::Box(TilePos pos, SDL_Surface *img) : Tile(pos, img) {}
 tile_types Box::get_type() const { return tile_box; }
 
 direction_t Box::acq_req(Movement_Request req) {
-    return req.direction;
+    return BOX_RESPONSE;
 }
 
 Wall::Wall(TilePos pos, SDL_Surface *img) : Tile(pos, img) {}
@@ -492,9 +556,7 @@ direction_t Wall::acq_req(Movement_Request req) {
     return -1;
 }
 
-Gem::Gem(TilePos pos, SDL_Surface *img, int addition) : Tile(pos, img) {
-    m_addition = addition;
-}
+Gem::Gem(TilePos pos, SDL_Surface *img, type_arg_ref args) : Tile(pos, img, args) {}
 
 tile_types Gem::get_type() const {
     return tile_gem;
@@ -503,8 +565,8 @@ tile_types Gem::get_type() const {
 void Gem::show_additional(SDL_Renderer *renderer, const DisplayPos &pos, const DisplayPos &center,
                           long double stretch_ratio) {
     auto surface = RENDER_TEXT(consolas->sized(FONT_SIZE(DESTINATION_SIZE)),
-                               to_string(m_addition).c_str(),
-                               m_addition <= 0 ? GREEN : RED);
+                               to_string(m_primary).c_str(),
+                               m_primary <= 0 ? GREEN : RED);
     DisplayPos show_pos = {center.w - surface->w / 2, center.h - surface->h / 2};
     auto texture = SDL_CreateTextureFromSurface(renderer, surface);
     auto dstrect = get_dstrect(show_pos, surface);
@@ -517,15 +579,13 @@ Picture::Picture(TilePos pos, SDL_Surface *img) : Tile(pos, img) {}
 
 tile_types Picture::get_type() const { return tile_picture; }
 
-Go_To::Go_To(TilePos pos, SDL_Surface *img, int level) : Tile(pos, img) {
-    m_level = level;
-}
+Go_To::Go_To(TilePos pos, SDL_Surface *img, type_arg_ref args) : Tile(pos, img, args) {}
 
 tile_types Go_To::get_type() const { return tile_go_to; }
 
 direction_t Go_To::acq_req(Movement_Request req) {
     if (req.sender->get_type() == tile_cyan) {
-        public_room->m_pending_go_to = m_level;
+        public_room->m_pending_go_to = m_primary;
     }
     return Tile::acq_req(req);
 }
@@ -535,7 +595,7 @@ Blue::Blue(TilePos pos, SDL_Surface *img) : Tile(pos, img) {}
 tile_types Blue::get_type() const { return tile_blue; }
 
 direction_t Blue::acq_req(Movement_Request req) {
-    return req.direction;
+    return BOX_RESPONSE;
 }
 
 Spike::Spike(TilePos pos, SDL_Surface *img) : Tile(pos, img) {}
@@ -550,9 +610,8 @@ void Spike::end_of_step() {
             public_room->destroy(tile);
 }
 
-Conveyor::Conveyor(TilePos pos, SDL_Surface *img, direction_t dir) : Tile(pos, img) {
-    m_dir = dir;
-    m_img = direction_img_conveyor.at(m_dir);
+Conveyor::Conveyor(TilePos pos, SDL_Surface *img, type_arg_ref args) : Tile(pos, img, args), m_is_free(img == nullptr) {
+    if (m_is_free) m_img = direction_img_conveyor.at(m_primary);
 }
 
 tile_types Conveyor::get_type() const {
@@ -564,13 +623,12 @@ direction_t Conveyor::acq_req(Movement_Request req) { return 0; }
 void Conveyor::add_to_parser(pending_series_t &pending_series) {
     for (auto tile: *public_room->at(m_pos))
         if (tile != this) {
-            pending_series.insert({tile, {this, m_dir}});
+            pending_series.insert({tile, {this, m_primary}});
         }
 }
 
-Robot::Robot(TilePos pos, SDL_Surface *img, direction_t dir) : Tile(pos, img) {
-    m_dir = dir;
-    m_img = direction_img_robot.at(m_dir);
+Robot::Robot(TilePos pos, SDL_Surface *img, type_arg_ref args) : Tile(pos, img, args), m_is_free(img == nullptr) {
+    if (m_is_free) m_img = direction_img_robot.at(m_primary);
 }
 
 bool Robot::is_independent() const {
@@ -582,13 +640,15 @@ tile_types Robot::get_type() const {
 }
 
 direction_t Robot::acq_req(Movement_Request req) {
-    change_dir(req.direction);
-    if (req.sender->get_type() == tile_cyan) m_is_moved = true;
-    return m_dir;
+    if (BOX_CAN_RESPOND) {
+        change_dir(req.direction);
+        if (req.sender->get_type() == tile_cyan) m_is_moved = true;
+        return m_primary;
+    } else return -1;
 }
 
 direction_t Robot::respond_keys(key_predicate_t) const {
-    return m_dir;
+    return m_primary;
 }
 
 void Robot::begin_request(direction_t dir) {
@@ -596,9 +656,9 @@ void Robot::begin_request(direction_t dir) {
 }
 
 void Robot::change_dir(direction_t dir) {
-    m_dir = dir;
+    if (m_is_free) m_img = direction_img_robot.at(dir);
+    m_primary = dir;
     m_is_moved = true;
-    m_img = direction_img_robot.at(dir);
 }
 
 void Robot::end_of_step() {
@@ -607,8 +667,9 @@ void Robot::end_of_step() {
 
 void Robot::react_to_movement_result(bool result) {
     if (!result) {
-        change_dir(invert(m_dir));
-        m_is_moved = false;
+        bool was_moved = m_is_moved;
+        change_dir(invert(m_primary));
+        m_is_moved ^= was_moved;
     }
 }
 

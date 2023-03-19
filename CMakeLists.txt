@@ -22,7 +22,7 @@ set(SDL2_TTF_PATH C:/Include/SDL2-mingw/SDL2_ttf-2.20.1/x86_64-w64-mingw32)
 set(SDL2_TTF_INCLUDE ${SDL2_TTF_PATH}/include/SDL2)
 set(SDL2_TTF_LIB ${SDL2_TTF_PATH}/lib)
 
-# json path config
+# nlohmann json path config
 set(nlohmann_INCLUDE C:/Include/nlohmann)
 
 include_directories(
@@ -40,7 +40,7 @@ link_directories(
 
 add_executable(Closs_InT
         main.cpp
-        src/display.cpp src/display.h src/const.cpp src/const.h src/closs.cpp src/closs.h src/loader.cpp src/loader.h src/img.cpp src/img.h)
+        src/display.cpp src/display.h src/const.cpp src/const.h src/closs.cpp src/closs.h src/loader.cpp src/loader.h src/img.cpp src/img.h src/page.cpp src/page.h)
 
 target_link_libraries(Closs_InT
         SDL2
