@@ -65,7 +65,11 @@ if confirm == "p":
     shutil.copytree(src_path,dst_path,ignore=lambda src,name:".git",dirs_exist_ok=True)
     subprocess.run(["git","add","."])
     subprocess.run(["git","commit","-m",repr(message)])
-    subprocess.run(["git","push"])
+    try:
+        subprocess.run(["git","push"])
+        print("Syncing Complete!")
+    except:
+        print("ERROR : Cannot push up to dest repo.")
 elif confirm == "a":
     print("Aborted by user.")
 else:

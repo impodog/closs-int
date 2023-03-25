@@ -33,6 +33,7 @@ using Font_Family_Type = Font_Family *;
 extern Font_Family_Type arial, consolas, simhei, verdana;
 
 using SDL_Surface_ptr = SDL_Surface *;
+extern SDL_Surface_ptr img_robot_default;
 extern SDL_Surface_ptr img_arrow, img_settings, img_Closs_InT, img_help, img_manual, img_levels;
 extern SDL_Surface_ptr img_none, img_icon;
 extern SDL_Surface_ptr img_chapter1, img_chapter2, img_chapter3, img_chapter4, img_chapter5;

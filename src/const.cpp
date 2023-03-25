@@ -57,15 +57,18 @@ type_names_t type_names = {
         {tile_robot,       "Robot"}
 };
 
-unsigned long long debugger_code;
+unsigned int debugger_code;
 
-unsigned long long get_debugger_code() {
+unsigned int get_debugger_code() {
     long long result = 0;
     default_random_engine engine;
     for (size_t i = 0; i < sizeof VERSION / sizeof(char); i++) {
         engine.seed(VERSION[i]);
         for (size_t j = 0; j < VERSION[i]; j++)
-            result += engine();
+            if (j % 3 == 0)
+                result += engine();
+            else
+                result -= engine();
     }
     return result;
 }

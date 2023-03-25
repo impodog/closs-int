@@ -2,6 +2,7 @@
 !add ../C_InT.cll
 !imi-def WA wa ud
 !imi-def BX bx ud
+!imi-def BL bl ud
 !imi-def CY cy ud
 !imi-def G1 gem ud -2
 !unvanish cv
@@ -16,11 +17,11 @@
 
 next 101
 
-perf 12
+perf 27
 
 content 4d[
     WA -- -- -- CY
-    WA 2D BX 2R BX
+    WA 2D BL 2R BX
     -- -- -- 2D --
     WA 1x WA -- G1
     WA WA WA WA WA

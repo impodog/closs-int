@@ -14,7 +14,7 @@ Source Version : Well-tested on Win11 64-bit. Should work on other windows versi
 
 ### External Dependencies
 
-SDL2, SDL2_image, SDL2_ttf : [See SDL website](www.libsdl.org)
+SDL2, SDL2_image, SDL2_ttf, SDL_mixer : [See SDL website](www.libsdl.org)
 
 json.hpp : [nlohmann/json: JSON for Modern C++ (github.com)](https://github.com/nlohmann/json)
 
@@ -24,12 +24,12 @@ C&C++ compiler such as [MinGW-w64](https://www.mingw-w64.org/)
 
 ### Link the Packages (MinGW)
 
-1. Download SDL2, SDL2_image, SDL2_ttf (latest mingw version), json.hpp(which is in the releases)
+1. Download SDL2, SDL2_image, SDL2_ttf, SDL2_mixer (latest mingw version), json.hpp(which is in the releases)
 2. Extract all SDL2 archive to your path (e.g. C:/Include/)
 3. For each SDL2 directory, copy the path of **/[32bit=i686,64bit=x86_64]-w64-mingw32**
-4. Now open this project and modify **/cmakelists.txt**, replace **"SDL2_PATH"**, **"SDL2_IMAGE_PATH"**, **"SDL2_TTF_PATH"** values with the path you copied
+4. Now open this project and modify **/cmakelists.txt**, replace **"SDL2_PATH"**, **"SDL2_IMAGE_PATH"**, **"SDL2_TTF_PATH"**, **"SDL2_MIXER_PATH"** values with the path you copied
 5. Also, copy json.hpp path, and replace **"nlohmann_INCLUDE"** value in /cmakelists.txt
-6. To make the game function, you'll also need to copy the DLL files in each SDL2 directory, which are under **[SDL root]/bin/[SDL2|SDL2_image|SDL2_ttf].dll**, and move it to **C:/Windows/System32**, or optionally under the executable parent folder
+6. To make the game function, you'll also need to copy the DLL files in each SDL2 directory, which are under **[SDL root]/bin/[SDL2|SDL2_image|SDL2_ttf|SDL2_mixer].dll**, and move it to **C:/Windows/System32**, or optionally under the executable parent folder
 
 ### Build with CMake
 
@@ -83,33 +83,34 @@ You don't need to know a lot of CLL to create a level, just follow the steps:
 3. Now, locate "content 4d[ ... ]", that's where your precious level design should be
 4. See other examples, then design the level yourself, the format should be easy, but you'll need to know a few CLL Names:
 
-|   Object Name    |  CLL Name   |    JSON Value    |
-| :--------------: | :---------: | :--------------: |
-|    Undefined     |     ud      |        -1        |
-|      Empty       | --, \*empty |        0         |
-|       Cyan       |     cy      |        1         |
-|       Box        |     bx      |        2         |
-|       Wall       |     wa      |        3         |
-|       Dest       |    \*ds     |        4         |
-|       Gem        |    \*gem    |        5         |
-|     Picture      |    \*pic    |        6         |
-|      Go_To       |    goto     |        7         |
-|       Blue       |  bl, \*bb   |        8         |
-|      Spike       |     sp      |        9         |
-|     Conveyor     |    \*cv     |        10        |
-|      Robot       |    \*rb     |        11        |
-|   Dest + Cyan    |     1c      |      [4, 1]      |
-|    Dest + Box    |     1x      |      [4, 2]      |
-|   Dest + Blue    |     1b      |      [4, 8]      |
-|   Dest + Robot   |     1r      |     [4, 11]      |
-|  Conveyor + Up   |     2u      | [10, 1073741906] |
-| Conveyor + Left  |     2l      | [10, 1073741904] |
-| Conveyor + Down  |     2d      | [10, 1073741905] |
-| Conveyor + Right |     2r      | [10, 1073741903] |
-|    Robot + Up    |     3u      | [11, 1073741906] |
-|   Robot + Left   |     3l      | [11, 1073741904] |
-|   Robot + Down   |     3d      | [11, 1073741905] |
-|  Robot + Right   |     3r      | [11, 1073741903] |
+|   Object Name    |  CLL Name   |     JSON Value     |
+| :--------------: | :---------: | :----------------: |
+|    Undefined     |     ud      |         -1         |
+|      Empty       | --, \*empty |         0          |
+|       Cyan       |     cy      |         1          |
+|       Box        |     bx      |         2          |
+|       Wall       |     wa      |         3          |
+|       Dest       |    \*ds     |         4          |
+|       Gem        |    \*gem    |         5          |
+|     Picture      |    \*pic    |         6          |
+|      Go_To       |    goto     |         7          |
+|       Blue       |  bl, \*bb   |         8          |
+|      Spike       |     sp      |         9          |
+|     Conveyor     |    \*cv     |         10         |
+|      Robot       |    \*rb     |         11         |
+|     Imitate      |    *imi     |         12         |
+|   Dest + Cyan    |     1c      |       [4, 1]       |
+|    Dest + Box    |     1x      |       [4, 2]       |
+|   Dest + Blue    |     1b      |       [4, 8]       |
+|   Dest + Robot   |     1r      |      [4, 11]       |
+|  Conveyor + Up   |     2u      | [10, [1073741906]] |
+| Conveyor + Left  |     2l      | [10, [1073741904]] |
+| Conveyor + Down  |     2d      | [10, [1073741905]] |
+| Conveyor + Right |     2r      | [10, [1073741903]] |
+|    Robot + Up    |     3u      | [11, [1073741906]] |
+|   Robot + Left   |     3l      | [11, [1073741904]] |
+|   Robot + Down   |     3d      | [11, [1073741905]] |
+|  Robot + Right   |     3r      | [11, [1073741903]] |
 
 \* : Not recommended and never used
 

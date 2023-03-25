@@ -20,6 +20,7 @@
 #include "SDL.h"
 #include "SDL_image.h"
 #include "SDL_ttf.h"
+#include "SDL_mixer.h"
 
 struct Screen_Info {
     int w = -1, h = -1;
@@ -48,7 +49,7 @@ void get_scr_info(Screen_Info &info);
 #endif
 
 
-#define VERSION "v0.10.3"
+#define VERSION "v0.11.0"
 
 #define TITLE "Closs : Inside the Tapes " VERSION
 #define SCR_WIDTH 2000
@@ -103,6 +104,9 @@ void get_scr_info(Screen_Info &info);
 #define MAX_LEVEL_NUMBER 2
 #define MIN_LEVEL_NUMBER 1
 
+#define MUSIC_FADE_OUT 500
+#define MUSIC_FADE_IN 1000
+
 #define DEBUGGER_FONT_SIZE 40
 #define DEBUGGER_PROMPT_TIME 1.5e3
 
@@ -132,6 +136,9 @@ void get_scr_info(Screen_Info &info);
 #define SIMHEI_PATH TTF_PATH "simhei.ttf"
 #define VERDANA_PATH TTF_PATH "verdana.ttf"
 
+#define SOUND_PATH PATH_BEGIN "sound/"
+#define SOUND_SCHEMES_PATH SOUND_PATH "schemes.json"
+
 #define I_AM_DEBUGGER USER_PATH "IAmDebugger"
 
 #define ROOM_K_EACH "each"
@@ -158,12 +165,14 @@ void get_scr_info(Screen_Info &info);
 #define USER_K_TEXT_RENDERER "text_renderer"
 #define USER_K_BONUS_LEVELS "bonus_levels"
 #define USER_K_DEBUGGER "debugger"
+#define USER_K_MUS_SCHEME "mus_scheme"
 
 #define SETTINGS_K_LANGUAGE "language"
 #define SETTINGS_K_SENSITIVITY "sensitivity"
 #define SETTINGS_K_FRAMERATE "framerate"
 #define SETTINGS_K_ANIMATION "animation"
 #define SETTINGS_K_TEXT_RENDERER "text_renderer"
+#define SETTINGS_K_MUSIC_SCHEME "music_scheme"
 #define SETTINGS_K_APPLY "apply"
 #define SETTINGS_K_TO_LOBBY "to_lobby"
 #define SETTINGS_K_TO_GAME "to_game"
@@ -325,9 +334,9 @@ extern type_names_t type_names;
 
 extern json empty_json;
 
-extern unsigned long long debugger_code;
+extern unsigned int debugger_code;
 
-unsigned long long get_debugger_code();
+unsigned int get_debugger_code();
 
 SDL_Rect get_srcrect(const SDL_Surface *surface);
 

@@ -19,6 +19,10 @@
     "en": "Text Render Mode [<   >] : ",
     "zh_cn": "文字渲染模式 [<   >] : "
   },
+  "music_scheme": {
+    "en": "Music Scheme [<   >] : ",
+    "zh_cn": "音乐方案 [<   >] : "
+  },
   "apply": {
     "en": "Apply Settings",
     "zh_cn": "应用此设置"

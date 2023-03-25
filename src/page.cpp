@@ -30,13 +30,17 @@ void init_pages() {
                                                    return create_settings_text(SETTINGS_K_TEXT_RENDERER,
                                                                                USER_K_TEXT_RENDERER, b);
                                                },
-                                               [](bool b) { // 6 apply
+                                               [](bool b) { // 6 music scheme
+                                                   return create_settings_text(SETTINGS_K_MUSIC_SCHEME,
+                                                                               USER_K_MUS_SCHEME, b);
+                                               },
+                                               [](bool b) { // 7 apply
                                                    return create_settings_text(SETTINGS_K_APPLY, "", b);
                                                },
-                                               [](bool b) { // 7 to_lobby
+                                               [](bool b) { // 8 to_lobby
                                                    return create_settings_text(SETTINGS_K_TO_LOBBY, "", b);
                                                },
-                                               [](bool b) { // 8 to_game
+                                               [](bool b) { // 9 to_game
                                                    return create_settings_text(SETTINGS_K_TO_GAME, "", b);
                                                }
                                        },
@@ -66,15 +70,21 @@ void init_pages() {
                                                        shift_animation(false);
                                                },
                                                [] { // 5 text renderer
-                                                   if (key_d(KEY_MOVE_RIGHT))
+                                                   if (key_c(KEY_MOVE_RIGHT))
                                                        shift_text_renderer(true);
-                                                   else if (key_d(KEY_MOVE_LEFT))
+                                                   else if (key_c(KEY_MOVE_LEFT))
                                                        shift_text_renderer(false);
                                                },
-                                               [] { // 6 apply
+                                               [] { // 6 music scheme
+                                                   if (key_c(KEY_MOVE_RIGHT))
+                                                       shift_music_scheme(true);
+                                                   else if (key_c(KEY_MOVE_LEFT))
+                                                       shift_music_scheme(false);
+                                               },
+                                               [] { // 7 apply
                                                    if (key_c(KEY_CONFIRM)) display->apply_settings();
                                                },
-                                               [] { // 7 to_lobby
+                                               [] { // 8 to_lobby
                                                    if (key_c(KEY_CONFIRM)) {
                                                        display->apply_settings();
                                                        display->m_page = page_lobby;
@@ -82,7 +92,7 @@ void init_pages() {
                                                        display->clear_room();
                                                    }
                                                },
-                                               [] { // 8 to_game
+                                               [] { // 9 to_game
                                                    if (key_c(KEY_CONFIRM)) {
                                                        display->apply_settings();
                                                        display->return_to_game();

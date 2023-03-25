@@ -11,5 +11,6 @@
   "bonus": [],
   "text_renderer": 1,
   "bonus_levels": 0,
-  "debugger": 0
+  "debugger": 0,
+  "mus_scheme": "None"
 }

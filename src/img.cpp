@@ -30,6 +30,7 @@ FontType Font_Family::sized(int size) {
 
 Font_Family_Type arial, consolas, simhei, verdana;
 
+SDL_Surface_ptr img_robot_default;
 SDL_Surface_ptr img_arrow, img_settings, img_Closs_InT, img_help, img_manual, img_levels;
 SDL_Surface_ptr img_none, img_icon;
 SDL_Surface_ptr img_chapter1, img_chapter2, img_chapter3, img_chapter4, img_chapter5;
@@ -77,6 +78,7 @@ void init_img() {
             img_robot_dw = IMG_Load(IMG_PATH "robot_dw.png"),
             img_robot_rt = IMG_Load(IMG_PATH "robot_rt.png");
     // load global graphics
+    img_robot_default = IMG_Load(IMG_PATH "robot_dw.png");
     img_arrow = IMG_Load(IMG_PATH "arrow.png");
     img_settings = IMG_Load(IMG_PATH "settings.png");
     img_Closs_InT = IMG_Load(IMG_PATH "Closs_InT.png");
@@ -117,6 +119,7 @@ void init_img() {
                                   img_robot_rt,
 
 
+                                  img_robot_default,
                                   img_arrow,
                                   img_settings,
                                   img_Closs_InT,
@@ -148,8 +151,8 @@ void init_img() {
     types_img_map[tile_go_to] = img_go_to;
     types_img_map[tile_blue] = img_blue;
     types_img_map[tile_spike] = img_spike;
-    types_img_map[tile_conveyor] = nullptr;
-    types_img_map[tile_robot] = nullptr;
+    types_img_map[tile_conveyor] = img_none;
+    types_img_map[tile_robot] = img_robot_default;
     types_img_map[tile_imitate] = img_none;
     // direction_img map
     direction_img_conveyor = {

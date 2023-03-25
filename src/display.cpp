@@ -88,7 +88,7 @@ void start_game() {
     try {
         auto room = open_room(get_room_path());
         display->change_room(room);
-        display->m_page = nullptr;
+        display->change_page(nullptr);
     } catch (const std::runtime_error &) {
         current_user.at(USER_K_ROOM) = (int) current_user.at(USER_K_ROOM) - 1;
     }
@@ -112,7 +112,7 @@ Display::Display() {
     SDL_SetWindowIcon(window, img_icon);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     SDL_RenderSetLogicalSize(renderer, SCR_WIDTH, SCR_HEIGHT);
-    m_page = page_lobby;
+    change_page(page_lobby);
     for (auto &debug_room: m_debug_room)
         debug_room = nullptr;
     apply_settings();
@@ -199,7 +199,7 @@ void Display::process_room_winning() {
         }
         refresh_user_game();
         if (chapter_end != nullptr)
-            m_page = chapter_end;
+            change_page(chapter_end);
     } else if (key_c(KEY_NEXT))
         to_shift = USER_ROOM + 1;
     else if (key_c(KEY_BACK))
@@ -237,15 +237,15 @@ void Display::process_room() {
     }
     process_room_winning();
 
-    if (key_d(KEY_HELP)) m_page = create_text_page(img_help, m_room->m_help_map, true);
+    if (key_d(KEY_HELP)) change_page(create_text_page(img_help, m_room->m_help_map, true));
 }
 
 void Display::process_content() {
     if (key_c(KEY_SETTINGS)) {
         apply_settings();
-        if (m_page == nullptr) m_page = page_settings;
-        else if (m_room == nullptr) m_page = page_lobby;
-        else m_page = nullptr;
+        if (m_page == nullptr) change_page(page_settings);
+        else if (m_room == nullptr) change_page(page_lobby);
+        else change_page(nullptr);
     }
 
     if (IS_GAMING) {
@@ -278,6 +278,7 @@ void Display::present() const {
 
 void Display::change_room(RoomType room) {
     clear_room();
+    play_room_music(current_user.at(USER_K_ROOM));
     public_room = m_room = room;
     DisplayPos m_room_edge = {SCR_WIDTH - m_room->m_display_size.w, RESERVED_HEIGHT - m_room->m_display_size.h};
     m_room_min = {min(m_room_edge.w, 0), min(m_room_edge.h, 0)};
@@ -290,6 +291,10 @@ void Display::change_room(RoomType room) {
 }
 
 void Display::change_page(PageType page) {
+    if (page == nullptr)
+        play_room_music(current_user.at(USER_K_ROOM));
+    else
+        Mix_PauseMusic();
     m_page = page;
 }
 
@@ -395,8 +400,8 @@ void Display::clear_room() {
 }
 
 void Display::return_to_game() {
-    if (m_room == nullptr) m_page = page_lobby;
-    else m_page = nullptr;
+    if (m_room == nullptr) change_page(page_lobby);
+    else change_page(nullptr);
 }
 
 img_info &Display::find_info(SDL_Surface *surface) {

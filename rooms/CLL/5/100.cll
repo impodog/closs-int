@@ -1,5 +1,8 @@
 !process-only
 !add ../C_InT.cll
+!goto-def GT -5
+!pic-def PW wa
+!repl Gw GT,PW
 
 next this
 
@@ -22,7 +25,7 @@ help {
 perf 72
 
 content 4d[
-    wa wa -- -- wa wa wa wa wa
+    Gw wa -- -- wa wa wa wa wa
     1x 2r -- 2l -- 1b 2l wa --
     -- wa -- bl wa -- bx -- --
     -- wa -- bl 2r sp 2u wa --

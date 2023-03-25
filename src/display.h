@@ -5,7 +5,7 @@
 #ifndef CLOSS_INT_DISPLAY_H
 #define CLOSS_INT_DISPLAY_H
 
-#include "loader.h"
+#include "mixer.h"
 
 #undef main
 

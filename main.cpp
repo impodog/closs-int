@@ -8,6 +8,7 @@ void do_all_init() {
     load_user();
     init_img();
     init_font();
+    init_mixer();
     init_key_map();
     init_txt();
     init_pages();
@@ -20,6 +21,7 @@ void do_all_free() {
     free_font();
     free_pages();
     free_display();
+    free_mixer();
     IMG_Quit();
     TTF_Quit();
     SDL_Quit();

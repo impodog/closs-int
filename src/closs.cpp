@@ -610,7 +610,7 @@ void Spike::end_of_step() {
             public_room->destroy(tile);
 }
 
-Conveyor::Conveyor(TilePos pos, SDL_Surface *img, type_arg_ref args) : Tile(pos, img, args), m_is_free(img == nullptr) {
+Conveyor::Conveyor(TilePos pos, SDL_Surface *img, type_arg_ref args) : Tile(pos, img, args), m_is_free(img == img_none) {
     if (m_is_free) m_img = direction_img_conveyor.at(m_primary);
 }
 
@@ -627,7 +627,7 @@ void Conveyor::add_to_parser(pending_series_t &pending_series) {
         }
 }
 
-Robot::Robot(TilePos pos, SDL_Surface *img, type_arg_ref args) : Tile(pos, img, args), m_is_free(img == nullptr) {
+Robot::Robot(TilePos pos, SDL_Surface *img, type_arg_ref args) : Tile(pos, img, args), m_is_free(img == img_robot_default) {
     if (m_is_free) m_img = direction_img_robot.at(m_primary);
 }
 

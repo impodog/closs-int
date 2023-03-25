@@ -1,0 +1,27 @@
+!process-only
+!add ../C_InT.cll
+!no-serial
+
+title {
+    en="Leap Within"
+    zh_cn="向内轻跳"
+}
+
+help {
+    en={
+        "Key:Open paths"="Clear paths for your later use"
+    }
+    zh_cn={
+        "关键:打开道路"="清开道路已备后面需要"
+    }
+}
+
+content 4d[
+    wa wa wa wa wa wa wa wa --
+    wa 1x 1x 1x 1x 1x 1x wa --
+    wa -- -- bx -- wa -- wa wa
+    wa -- bx -- wa -- bx -- wa
+    wa wa bx -- bx -- bx -- wa
+    -- wa -- -- cy -- -- -- wa
+    -- wa wa wa wa wa wa wa wa
+]
