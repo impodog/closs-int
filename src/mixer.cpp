@@ -24,44 +24,64 @@ const map<pair<int, int>, music_index> music_chapters = {
 };
 music_index cur_music = mus_none;
 string cur_scheme = SCHEME_NONE;
+json schemes_json;
+
+void free_scheme(const string &scheme) {
+    Mix_HaltMusic();
+    for (auto &music: music_schemes.at(scheme))
+        Mix_FreeMusic(music.second);
+    music_schemes.erase(scheme);
+}
+
+void free_schemes() {
+    for (auto &scheme: music_schemes)
+        for (auto &music: scheme.second)
+            Mix_FreeMusic(music.second);
+    music_schemes.clear();
+}
+
+void load_scheme(const string &scheme) {
+    scheme_names.push_back(scheme);
+    music_schemes.insert({scheme, {}});
+    auto &scheme_map = music_schemes.at(scheme);
+    int number = 1;
+    for (auto &music: schemes_json.at(scheme)) {
+        string music_path = SOUND_PATH + (string) scheme + "/" + (string) music;
+        auto music_ptr = Mix_LoadMUS(music_path.c_str());
+        if (music_ptr == nullptr)
+            throw runtime_error("Cannot open music resource \"" + music_path + "\"");
+        scheme_map.insert({(music_index) number, music_ptr});
+        number += 1;
+    }
+}
 
 void switch_scheme(const string &scheme) {
     Mix_PauseMusic();
     if (scheme == SCHEME_NONE) {
+        free_schemes();
         musics.clear();
         return;
     }
+
+    if (music_schemes.find(scheme) == music_schemes.end())
+        load_scheme(scheme);
     for (auto &music: music_schemes.at(scheme))
         musics[music.first] = music.second;
 }
+
 
 void init_mixer() {
     Mix_Init(MIX_INIT_OGG);
     Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 1024);
     ifstream schemes_file(SOUND_SCHEMES_PATH, ios::in);
-    json schemes;
-    schemes_file >> schemes;
-    for (auto &scheme: schemes.get<map<string, json>>()) {
+    schemes_file >> schemes_json;
+    for (auto &scheme: schemes_json.get<map<string, json>>())
         scheme_names.push_back(scheme.first);
-        music_schemes.insert({scheme.first, {}});
-        auto &scheme_map = music_schemes.at(scheme.first);
-        int number = 1;
-        for (auto &music: scheme.second) {
-            string music_path = SOUND_PATH + (string) scheme.first + "/" + (string) music;
-            auto music_ptr = Mix_LoadMUS(music_path.c_str());
-            if (music_ptr == nullptr)
-                throw runtime_error("Cannot open music resource \"" + music_path + "\"");
-            scheme_map.insert({(music_index) number, music_ptr});
-            number += 1;
-        }
-    }
     switch_scheme(current_user.at(USER_K_MUS_SCHEME));
 }
 
 void free_mixer() {
-    for (auto &scheme: music_schemes)
-        for (auto &music: scheme.second)
-            Mix_FreeMusic(music.second);
+    free_schemes();
     Mix_Quit();
 }
 

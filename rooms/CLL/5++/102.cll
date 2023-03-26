@@ -1,0 +1,31 @@
+!process-only
+!add ../C_InT.cll
+
+title {
+    en="Trembling"
+    zh_cn="颤抖"
+}
+
+help {
+    en={
+        "W/A/S/D"="Move the level itself with these keys"
+        "Marking"="Use the spaces well and not get stuck"
+    }
+    zh_cn={
+        "W/A/S/D"="用这些键来移动关卡本身"
+        "标记"="好好利用空间, 不要被卡住"
+    }
+}
+
+perf 102 
+
+content 4d[
+    wa wa wa wa wa wa wa wa
+    wa -- cy wa 1x -- -- wa
+    wa -- bb -- -- wa -- wa
+    wa 1b wa -- bx 1b -- wa
+    wa -- wa -- bx -- wa wa
+    wa -- bb -- wa wa wa wa
+    wa wa -- -- wa wa wa wa
+    wa wa wa 1x wa wa wa wa
+]

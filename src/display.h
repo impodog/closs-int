@@ -59,7 +59,7 @@ public:
 
     virtual void process() = 0;
 
-    ~Page() = default;
+    virtual ~Page() = default;
 };
 
 using PageType = Page *;

@@ -16,7 +16,7 @@ help {
     }
 }
 
-perf 30
+perf 28
 
 content 4d[
     wa wa wa -- wa 1b
